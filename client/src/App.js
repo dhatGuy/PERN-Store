@@ -1,20 +1,18 @@
+import Home from "pages/Home";
+import Login from "pages/Login";
+import Product from "pages/Product";
+import Register from "pages/Register";
+import { ProtectedRoute } from "protected.route";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Link
 } from "react-router-dom";
+import authService from "services/auth.service";
 
 function App() {
-  const About = () => {
-    return <div>About page</div>
-  }
-  const Home = () => {
-    return <div>Home page</div>
-  }
-  const Users = () => {
-    return <div>Users page</div>
-  }
+
   return (
     <Router>
     <div>
@@ -24,10 +22,10 @@ function App() {
             <Link to="/">Home</Link>
           </li>
           <li>
-            <Link to="/about">About</Link>
+            <Link to="/signup">signup</Link>
           </li>
           <li>
-            <Link to="/users">Users</Link>
+            <Link onClick={()=> authService.logout()} to="/login">logout</Link>
           </li>
         </ul>
       </nav>
@@ -35,14 +33,20 @@ function App() {
       {/* A <Switch> looks through its children <Route>s and
           renders the first one that matches the current URL. */}
       <Switch>
-        <Route path="/about">
-          <About />
-        </Route>
-        <Route path="/users">
-          <Users />
-        </Route>
-        <Route path="/">
+        <ProtectedRoute exact path="/">
           <Home />
+        </ProtectedRoute>
+        <Route path="/signup">
+          <Register />
+        </Route>
+        <Route path="/login">
+          <Login />
+        </Route>
+        <ProtectedRoute path="/products">
+          <Product />
+        </ProtectedRoute>
+        <Route path="*">
+          <h1>404 Error Found</h1>
         </Route>
       </Switch>
     </div>

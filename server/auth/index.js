@@ -15,7 +15,7 @@ const validateUser = (user) => {
   const validPassword =
     typeof user.password == "string" &&
     user.email.trim() != "" &&
-    user.password.trim().length > 6;
+    user.password.trim().length >= 6;
 
   return validEmail && validPassword;
 };
@@ -34,32 +34,31 @@ router.post("/signup", async (req, res, next) => {
           "INSERT INTO users(username, password, email, fullname) VALUES($1, $2, $3, $4) returning *",
           [username, hashedPassword, email, fullname]
         );
-        res.sendStatus(200).json({
+        res.status(200).json({
           status: "success",
           data: results.rows[0],
         });
       } catch (error) {
-        res.sendStatus(500).send(error);
+        res.status(500).send(error);
       }
     } else {
-      res.sendStatus(500).send("Email is in use");
+      res.status(500).send("Email is in use");
     }
   } else {
-    res.sendStatus(500).send("Invalid User");
+    res.status(500).send("Invalid User");
   }
 });
 
 router.post("/login", async (req, res, next) => {
   if (validateUser(req.body)) {
-    const { username, email } = req.body;
+    const { email } = req.body;
     const results = await pool.query("select * from users where email = $1", [
       email,
     ]);
 
     if (results.rows.length > 0) {
       const user = results.rows[0]
-      console.log(user.user_id);
-      const { password } = user;
+      const { password, user_id, email, username, fullname } = user;
       const plainPassword = await bcrypt.compare(req.body.password, password);
 
       if (plainPassword) {
@@ -67,13 +66,20 @@ router.post("/login", async (req, res, next) => {
         res.header('auth-token', token)
         res.json({
           token,
+          user_id,
+          email,
+          username,
+          fullname,
           status: "Login successful 🔓",
         });
       } else {
-        res.sendStatus(400).send("Password incorrect");
+        res.status(400).send("Password incorrect");
       }
     } else {
-      res.sendStatus(404);
+      res.status(403).json({
+        status: 404,
+        error: "User not found"
+      });
     }
   } else {
     next(new Error("Invalid login"));

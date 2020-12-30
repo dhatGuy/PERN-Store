@@ -1,10 +1,11 @@
 const express = require('express')
 const router = express.Router();
 const pool = require('../db');
+const verifyToken = require('../middleware/verifyToken')
 
 router
   .route("/")
-  .get(async (req, res) => {
+  .get(verifyToken, async (req, res) => {
     try {
       const results = await pool.query("select * from products order by product_id asc");
       console.log(results.rows);
@@ -13,7 +14,7 @@ router
       console.log(error);
     }
   })
-  .post(async (req, res) => {
+  .post(verifyToken, async (req, res) => {
     const { name, price, description } = req.body;
 
     try {
@@ -45,7 +46,7 @@ router
       console.log(error);
     }
   })
-  .put(async (req, res) => {
+  .put(verifyToken, async (req, res) => {
     const { name, price, description } = req.body;
     const { id } = req.params;
     try {
@@ -58,7 +59,7 @@ router
       console.log(error)
     }
   })
-  .delete(async (req, res) => {
+  .delete(verifyToken,async (req, res) => {
     const { id } = req.params;
     try {
       const results = await pool.query(
