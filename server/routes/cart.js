@@ -1,61 +1,85 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../db");
+const verifyToken = require("../middleware/verifyToken");
 
 router
-.route("/")
-  .post(async (req, res) => {
-    try {
-      const { cart_id, product_id, quantity } = req.body;
-      const item = await pool.query('select * from cart_item where product_id = $1', [product_id])
-      if(item.rows.length > 0){
-        const update = await pool.query("update cart_item set quantity = quantity + $1 where product_id = $2 returning *",[quantity, product_id])
-        res.json(update.rows[0])
-      } else{
-        const addItem = await pool.query(
-          "insert into cart_item(cart_id, product_id,quantity) values($1, $2, $3) returning *",
-          [cart_id, product_id, quantity]
+  .route("/")
+  .post(verifyToken, async (req, res) => {
+    const userId = req.body.userId;
+    const isCartExist = await pool.query(
+      "SELECT * FROM cart where user_id = $1",
+      [userId]
+    );
+    if (isCartExist.rowCount === 0) {
+      try {
+        const newCart = await pool.query(
+          "INSERT INTO cart(user_id) values($1) returning *",
+          [userId]
         );
-          res.json(addItem.rows[0])
+
+        res.send(newCart.rows[0]);
+      } catch (error) {
+        console.log(error);
       }
-      res.send(item.rows);
-    } catch (error) {
-      res.send(error);
-      throw new Error(error);
+    } else {
+      res.send(isCartExist.rows[0]);
     }
   })
   .put(async (req, res) => {
     try {
-      const {id} = req.body
-      const result = await pool.query("update cart_item set cart_item.quantity = $1 from cart where id = $2")
+      const { id } = req.body;
+      const result = await pool.query(
+        "update cart_item set cart_item.quantity = $1 where cart.id = cart_item.cart_id"
+      );
     } catch (error) {
-      
+      console.log(error);
     }
   })
   .delete(async (req, res) => {
     try {
-      const {id} = req.params
-      const item = await pool.query("delete from cart_item where id = $1 returning *", [id])
-      res.status(500).json(item.rows[0])
-    } catch (error) {
-      throw error
-    }
-  });
-  
-  router.route("/:id").get(async (req, res) => {
-    try {
       const { id } = req.params;
-      const cart = await pool.query(
-        `SELECT users.user_id, cart.*, cart_item.quantity, products.* FROM users join cart on cart.user_id = users.user_id
-          join cart_item on cart.id = cart_item.cart_id JOIN products ON products.product_id = cart_item.product_id
-          where users.user_id = $1`,
+      const item = await pool.query(
+        "delete from cart_item where id = $1 returning *",
         [id]
       );
-      res.json(cart.rows);
+      res.status(500).json(item.rows[0]);
     } catch (error) {
-      res.status(401).send(error);
       throw error;
     }
   });
+
+router.route("/").get(async (req, res) => {
+  try {
+    const { user_id } = req.body;
+    const cart = await pool.query(
+      `SELECT users.user_id, products.*, cart_item.quantity from users 
+      join cart on users.user_id = cart.user_id
+      join cart_item on cart.id = cart_item.cart_id
+      join products on products.product_id = cart_item.product_id
+      where users.user_id = $1
+      `,
+      [user_id]
+    );
+    res.json(cart.rows);
+  } catch (error) {
+    res.status(401).send(error);
+    throw error;
+  }
+});
+
+router.route("/add").post(async (req, res) => {
+  const { cart_id, product_id, quantity } = req.body;
+  try {
+    const cart = await pool.query(
+      "INSERT INTO cart_item(cart_id, product_id, quantity) VALUES($1, $2, $3) returning *",
+      [cart_id, product_id, quantity]
+    );
+    res.json(cart.rows);
+  } catch (error) {
+    res.status(401).send(error);
+    throw error;
+  }
+});
 
 module.exports = router;

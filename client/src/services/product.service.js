@@ -7,6 +7,9 @@ class ProductService {
   getProducts() {
     return axios.get(API_URL, {headers: authHeader()});
   }
+  getProduct(id) {
+    return axios.get(API_URL + "/" +id, {headers: authHeader()});
+  }
 }
 
 export default new ProductService();

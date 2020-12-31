@@ -1,6 +1,8 @@
+import ProductDetails from "components/ProductDetails";
+import Cart from "pages/Cart";
 import Home from "pages/Home";
 import Login from "pages/Login";
-import Product from "pages/Product";
+import Product from "pages/ProductList";
 import Register from "pages/Register";
 import { ProtectedRoute } from "protected.route";
 import {
@@ -30,6 +32,9 @@ function App() {
           <li>
             <Link to="/products">Products</Link>
           </li>
+          <li>
+            <Link to="/cart">Cart</Link>
+          </li>
         </ul>
       </nav>
 
@@ -45,8 +50,14 @@ function App() {
         <Route path="/login">
           <Login />
         </Route>
-        <ProtectedRoute path="/products">
+        <ProtectedRoute exact path="/products">
           <Product />
+        </ProtectedRoute>
+        <ProtectedRoute exact path="/products/:id/">
+          <ProductDetails />
+        </ProtectedRoute>
+        <ProtectedRoute path="/cart">
+          <Cart />
         </ProtectedRoute>
         <Route path="*">
           <h1>404 Error Found</h1>
