@@ -9,7 +9,7 @@ const Home = () => {
   useEffect(() => {
     setUserData(authService.getCurrentUser());
     setIsLoading(false)
-  }, []);
+  }, [setUserData]);
   
   if(isLoading) return <div>loading..</div>
   return (

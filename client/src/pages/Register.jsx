@@ -1,5 +1,7 @@
 import instance from "api/axios.config";
 import React, { useState } from "react";
+import { Redirect, useLocation } from "react-router-dom";
+import authService from "services/auth.service";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -7,6 +9,9 @@ const Register = () => {
   const [name, setName] = useState("");
   const [password, setpassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const {state} = useLocation()
+
+  const user = authService.getCurrentUser();
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -22,6 +27,11 @@ const Register = () => {
       alert("Password doesn't match ")
     }
   };
+
+  if (user?.token) {
+    return <Redirect to={state?.from || '/'} />
+
+} 
   return (
     <div>
       <form onSubmit={onSubmit}>

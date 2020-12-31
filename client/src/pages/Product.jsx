@@ -4,6 +4,7 @@ import ProductService from "../services/product.service";
 const Product = () => {
   const [products, setProducts] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  
   useEffect(() => {
     ProductService.getProducts().then((response) => {
       console.log(response);

@@ -27,6 +27,9 @@ function App() {
           <li>
             <Link onClick={()=> authService.logout()} to="/login">logout</Link>
           </li>
+          <li>
+            <Link to="/products">Products</Link>
+          </li>
         </ul>
       </nav>
 

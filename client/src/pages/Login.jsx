@@ -1,23 +1,20 @@
-import instance from "api/axios.config";
-import { UserContext } from "context/UserContext";
-import React, { useContext, useState } from "react";
-import { Redirect, useHistory, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { Redirect, useLocation } from "react-router-dom";
+import authService from "services/auth.service";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setpassword] = useState("");
   const [redirectToReferrer, setRedirectToReferrer] = React.useState(false);
   const { state } = useLocation();
-  const [userData] = useContext(UserContext)
+
+  const user = authService.getCurrentUser();
 
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await instance.post("/auth/login", {
-        email,
-        password,
-      });
-      localStorage.setItem("user", JSON.stringify(response.data));
+      authService.login(email, password)
+      console.log(state);
       setRedirectToReferrer(true);
     } catch (error) {
       console.log(error);
@@ -27,9 +24,8 @@ const Login = () => {
   if (redirectToReferrer === true) {
     return <Redirect to={state?.from || '/'} />
   }
-    const user = JSON.parse(localStorage.getItem("user"));
     if (user?.token) {
-      return <Redirect to={state?.from || '/'} />
+    return <Redirect to={state?.from || '/'} />
   } 
 
   return (
