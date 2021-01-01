@@ -1,8 +1,9 @@
-import { CartContext } from 'context/CartContext'
-import React, { useContext } from 'react'
+import CartItem from 'components/CartItem'
+import { useCart } from 'context/CartContext'
+import React from 'react'
 
 const Cart = () => {
-  const {cartData} = useContext(CartContext)
+  const {cartData} = useCart()
 
   if(!cartData){
     return <div>loading...</div>
@@ -10,8 +11,11 @@ const Cart = () => {
 
   return (
     <div>
-      {console.log(cartData)}
-      cart page
+      {cartData.items.map(item=>{
+        return(
+          <CartItem item={item} />
+        )
+      })}
     </div>
   )
 }

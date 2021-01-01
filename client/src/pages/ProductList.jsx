@@ -1,12 +1,13 @@
 import Product from "components/Product";
-import { ProductContext } from "context/ProductContext";
-import React, { useContext  } from "react";
+import { useCart } from "context/CartContext";
+import { useProduct } from "context/ProductContext";
+import React from "react";
 import { useHistory } from "react-router-dom";
 
 const ProductList = () => {
-  const {products} = useContext(ProductContext);
+  const {products} = useProduct()
   const history = useHistory()
-
+  const {cartData} = useCart()
 
   const selectProduct = (id) =>{
     return history.push(`products/${id}`)
@@ -19,7 +20,7 @@ const ProductList = () => {
     <>
     {products.map(prod=>(
       <div  key={prod.product_id} onClick={() => selectProduct(prod.product_id)}>
-      <Product product={prod} />
+      <Product cartId={cartData.cartId} product={prod}/>
       </div>
     ))}
     </>

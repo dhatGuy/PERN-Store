@@ -21,7 +21,12 @@
 -- select * from cart_item;
 -- select * from products;
 
-SELECT users.user_id, products.*, cart_item.quantity from users 
-      join cart on users.user_id = cart.user_id
-      join cart_item on cart.id = cart_item.cart_id
-      join products on products.product_id = cart_item.product_id
+SELECT id FROM cart where user_id = 13;
+
+-- SELECT cart.id cart_id, products.*, cart_item.quantity from users 
+--       join cart on users.user_id = cart.user_id
+--       join cart_item on cart.id = cart_item.cart_id
+--       join products on products.product_id = cart_item.product_id
+--       where users.user_id = 13;
+
+-- SELECT users.user_id, products.*, cart_item.quantity, cart.* as cart_id from users join cart on users.user_id = cart.user_id join cart_item on cart.id = cart_item.cart_id join products on products.product_id = cart_item.product_id where users.user_id = 11

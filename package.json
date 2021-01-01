@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
-    "concurrently": "^5.3.0"
+    "concurrently": "^5.3.0",
+    "react-hot-toast": "^1.0.1"
   },
   "devDependencies": {},
   "scripts": {

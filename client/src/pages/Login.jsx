@@ -14,8 +14,8 @@ const Login = () => {
     e.preventDefault();
     try {
       authService.login(email, password)
-      console.log(state);
       setRedirectToReferrer(true);
+      
     } catch (error) {
       console.log(error);
     }
