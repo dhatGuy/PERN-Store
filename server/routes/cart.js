@@ -39,7 +39,7 @@ router.route("/").post(async (req, res) => {
       [userId]
     );
     const cart = await pool.query(
-      `SELECT cart.id cart_id, products.*, cart_item.quantity from users 
+      `SELECT products.*, cart_item.quantity from users 
       join cart on users.user_id = cart.user_id
       join cart_item on cart.id = cart_item.cart_id
       join products on products.product_id = cart_item.product_id
@@ -56,7 +56,6 @@ router.route("/").post(async (req, res) => {
 
 router.route("/add").post(async (req, res) => {
   const { cart_id, product_id, quantity } = req.body;
-console.log(req.body)
   try {
     const isProductExist = await pool.query(
       "SELECT * FROM cart_item WHERE cart_id = $1 AND product_id = $2",
@@ -83,5 +82,27 @@ console.log(req.body)
     throw error;
   }
 });
+
+router.route("/delete").delete(async(req, res, next)=>{
+  const {cart_id, product_id} = req.body
+  console.log(cart_id, product_id);
+  try {
+    const result = await pool.query("delete from cart_item where cart_id = $1 AND product_id = $2 returning *", [cart_id,product_id])
+    console.log(result.rows);
+    res.status(200).json(result.rows)
+  } catch (error) {
+    console.log(error)
+    res.status(401).send(error)
+  }
+})
+
+router.route("/increment").put(async(req, res, next)=>{
+  const {id} = req.body
+  const result = await pool.query("update cart_item set quantity = quantity + 1 where cart_item.id = $1", [id])
+})
+router.route("/decrement").put(async(req, res, next)=>{
+  const {id} = req.body
+  const result = await pool.query("update cart_item set quantity = quantity + 1 where cart_item.id = $1", [id])
+})
 
 module.exports = router;

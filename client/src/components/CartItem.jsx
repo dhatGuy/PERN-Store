@@ -1,15 +1,22 @@
-import React from 'react'
+import { useCart } from "context/CartContext";
+import React from "react";
 
-const CartItem = ({item}) => {
+const CartItem = ({ item }) => {
+  const {deleteItem} = useCart()
+  // console.log(item)
   return (
-    <div key={item.product_id}>
+    <div>
       <h1>Product Name: {item.name}</h1>
       <p>Description: {item.description}</p>
       <p>Price: ${item.price}</p>
-      <p>Quantity: {item.quantity}</p>
+      <p>
+        <button>-</button>
+        Quantity: {item.quantity}
+        <button>+</button>
+      </p>
+      <button onClick={()=>deleteItem(item.product_id)}>Remove</button>
     </div>
-  )
-}
+  );
+};
 
-export default CartItem
-
+export default CartItem;
