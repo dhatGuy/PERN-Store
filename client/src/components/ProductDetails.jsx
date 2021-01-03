@@ -1,9 +1,9 @@
 import { useCart } from 'context/CartContext'
 import React, {useEffect, useState } from 'react'
+import { Toaster } from 'react-hot-toast'
 import { useParams } from 'react-router-dom'
 import productService from 'services/product.service'
 import Product from './Product'
-import toast, { Toaster } from 'react-hot-toast';
 
 const ProductDetails = () => {
   const {id} = useParams()
@@ -23,7 +23,9 @@ const ProductDetails = () => {
   }
   return (
     <div>
-    <Product cartId={cartData.cartId} product={product}/>
+    <Product cartId={cartData?.cartId} product={product}/>
+    <Toaster position="bottom-right" />
+
     </div>
   )
 }

@@ -8,7 +8,6 @@ router
   .get(verifyToken, async (req, res) => {
     try {
       const results = await pool.query("select * from products order by product_id asc");
-      console.log(results.rows);
       res.status(200).json(results.rows);
     } catch (error) {
       console.log(error);
@@ -40,7 +39,6 @@ router
         "select * from products where product_id = $1",
         [id]
       );
-      console.log(results.rows);
       res.status(200).json(results.rows);
     } catch (error) {
       console.log(error);

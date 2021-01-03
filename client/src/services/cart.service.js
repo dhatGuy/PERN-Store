@@ -39,7 +39,23 @@ class CartService {
   async removeFromCart(cart_id, product_id) {
     return await axios.delete(
       API_URL + "delete",
-      { data: { cart_id:Number(cart_id), product_id: Number(product_id) } },
+      { data: { cart_id: Number(cart_id), product_id: Number(product_id) } },
+      { headers: authHeader() }
+    );
+  }
+
+  async increment(cart_id, product_id) {
+    return axios.put(
+      API_URL + "increment",
+      { cart_id, product_id },
+      { headers: authHeader() }
+    );
+  }
+
+  async decrement(cart_id, product_id) {
+    return axios.put(
+      API_URL + "decrement",
+      { cart_id, product_id },
       { headers: authHeader() }
     );
   }

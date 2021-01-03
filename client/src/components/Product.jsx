@@ -1,9 +1,9 @@
 import React from 'react'
-import cartService from 'services/cart.service'
-import toast, { Toaster } from 'react-hot-toast';
-
+import toast from 'react-hot-toast';
+import { useCart } from 'context/CartContext';
 
 const Product = ({cartId, product}) => {
+  const {addItem} = useCart()
   const notify = (data) => {
     return toast.promise(data, {
       loading: 'Adding to cart',
@@ -13,7 +13,7 @@ const Product = ({cartId, product}) => {
   }
   const addToCart = async(e) => {
     e.stopPropagation()
-    const add = cartService.addToCart(cartId,product.product_id, 1)
+    const add = addItem(cartId,product.product_id, 1)
     notify(add)
   }
   return (
@@ -23,7 +23,6 @@ const Product = ({cartId, product}) => {
         <li>price: {product.price}</li>
         <li>description: {product.description}</li>
         <button onClick={e=> addToCart(e)}>Add to cart</button>
-        <Toaster position="bottom-right" />
       </ul>
   )
 }
