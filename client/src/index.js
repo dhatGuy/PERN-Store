@@ -1,4 +1,5 @@
 import { CartProvider } from "context/CartContext";
+import { OrderProvider } from "context/OrderContext";
 import { ProductProvider } from "context/ProductContext";
 import { UserProvider } from "context/UserContext";
 import React from "react";
@@ -11,7 +12,9 @@ ReactDOM.render(
     <UserProvider>
       <ProductProvider>
         <CartProvider>
-          <App />
+          <OrderProvider>
+            <App />
+          </OrderProvider>
         </CartProvider>
       </ProductProvider>
     </UserProvider>

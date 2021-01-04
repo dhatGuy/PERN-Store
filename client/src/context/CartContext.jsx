@@ -34,13 +34,14 @@ const CartProvider = ({ children }) => {
   }
 
   useEffect(() => {
+    if(user_id)
     cartService
       .createCart()
-      .then(() => {
+      .then((res) => {
         return cartService.getCart(user_id);
       })
       .then((res) => {
-        setCartData(res.data);
+        setCartData(res?.data);
       });
   }, [user_id]);
 

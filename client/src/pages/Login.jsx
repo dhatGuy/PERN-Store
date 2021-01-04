@@ -14,8 +14,10 @@ const Login = () => {
     e.preventDefault();
     try {
       authService.login(email, password)
-      setRedirectToReferrer(true);
-      
+      .then(()=>{
+        setRedirectToReferrer(true)
+        window.location.reload()
+      })
     } catch (error) {
       console.log(error);
     }

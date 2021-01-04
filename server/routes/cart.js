@@ -29,30 +29,30 @@ router.route("/create").post(verifyToken, async (req, res) => {
       data: isCartExist.rows[0],
     });
   }
-  
+
   router.route("/").post(async (req, res) => {
+    const { userId } = req.body;
+    try {
+        const cartId = await pool.query("select id from cart where user_id = $1", [
+          userId,
+        ]);
+        const cart = await pool.query(
+          `SELECT products.*, cart_item.quantity, round((products.price * cart_item.quantity)::numeric, 2) as subtotal from users 
+          join cart on users.user_id = cart.user_id
+          join cart_item on cart.id = cart_item.cart_id
+          join products on products.product_id = cart_item.product_id
+          where users.user_id = $1
+          `,
+          [userId]
+        );
+        res.json({ items: cart.rows, cartId: cartId.rows[0].id });
+      } catch (error) {
+        res.status(401).send(error);
+        throw error;
+      }
+    });
 });
 
-  try {
-    const { userId } = req.body;
-    const cartId = await pool.query("select id from cart where user_id = $1", [
-      userId,
-    ]);
-    const cart = await pool.query(
-      `SELECT products.*, cart_item.quantity, round((products.price * cart_item.quantity)::numeric, 2) as subtotal from users 
-      join cart on users.user_id = cart.user_id
-      join cart_item on cart.id = cart_item.cart_id
-      join products on products.product_id = cart_item.product_id
-      where users.user_id = $1
-      `,
-      [userId]
-    );
-    res.json({ items: cart.rows, cartId: cartId.rows[0].id });
-  } catch (error) {
-    res.status(401).send(error);
-    throw error;
-  }
-});
 
 router.route("/add").post(verifyToken, async (req, res) => {
   const { cart_id, product_id, quantity } = req.body;

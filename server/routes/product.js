@@ -5,7 +5,7 @@ const verifyToken = require('../middleware/verifyToken')
 
 router
   .route("/")
-  .get(verifyToken, async (req, res) => {
+  .get(async (req, res) => {
     try {
       const results = await pool.query("select * from products order by product_id asc");
       res.status(200).json(results.rows);
