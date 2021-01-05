@@ -1,3 +1,4 @@
+import { Input, Label } from "@windmill/react-ui";
 import React, { useState } from "react";
 import { Redirect, useLocation } from "react-router-dom";
 import authService from "services/auth.service";
@@ -31,16 +32,17 @@ const Login = () => {
   } 
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
+    <div >
+      <form className="flex" onSubmit={onSubmit}>
         <div>
-          <label htmlFor="email">Email</label>
-          <input
+          <Label htmlFor="email">Email</Label>
+          <Input
             type="email"
             name="email"
             required
             id="email"
             value={email}
+            placeholder="Enter a valid email"
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>

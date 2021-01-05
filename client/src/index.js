@@ -6,18 +6,22 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { Windmill } from "@windmill/react-ui";
+import "./tailwind.output.css";
 
 ReactDOM.render(
   <React.StrictMode>
-    <UserProvider>
-      <ProductProvider>
-        <CartProvider>
-          <OrderProvider>
-            <App />
-          </OrderProvider>
-        </CartProvider>
-      </ProductProvider>
-    </UserProvider>
+    <Windmill>
+      <UserProvider>
+        <ProductProvider>
+          <CartProvider>
+            <OrderProvider>
+              <App />
+            </OrderProvider>
+          </CartProvider>
+        </ProductProvider>
+      </UserProvider>
+    </Windmill>
   </React.StrictMode>,
   document.getElementById("root")
 );
