@@ -7,7 +7,6 @@ const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1)
-  console.log(page)
   
   useEffect(() => {
     setIsLoading(true);

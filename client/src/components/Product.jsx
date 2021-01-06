@@ -1,7 +1,7 @@
 import React from "react";
 import toast from "react-hot-toast";
 import { useCart } from "context/CartContext";
-import { Button, Card, CardBody } from "@windmill/react-ui";
+import { Button, CardBody } from "@windmill/react-ui";
 
 const Product = ({ cartId, product }) => {
   const { addItem } = useCart();

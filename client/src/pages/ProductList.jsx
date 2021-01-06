@@ -13,7 +13,7 @@ const ProductList = () => {
   const { cartData } = useCart();
 
   const handleChange = (page) => {
-    setPage(page)
+    setPage(page);
   };
 
   const selectProduct = (id) => {
@@ -23,11 +23,15 @@ const ProductList = () => {
   };
 
   if (!products) {
-    return <div>Loading</div>;
+    return (
+      <Layout>
+        <div>Loading</div>
+      </Layout>
+    );
   }
   return (
     <Layout>
-      <div className="flex flex-wrap h-full mx-2">
+      <Card className="flex flex-wrap h-full mx-2">
         {products.map((prod) => (
           <div
             className="w-full flex flex-col justify-between sm:w-1/2 md:w-1/3 lg:w-1/4 my-2 px-2 box-border"
@@ -38,7 +42,7 @@ const ProductList = () => {
           </div>
         ))}
         <Toaster position="bottom-right" />
-      </div>
+      </Card>
       <Pagination
         totalResults={20}
         resultsPerPage={12}

@@ -43,7 +43,7 @@ const Nav = () => {
               </li>
               <li>
                 <Button layout="link">
-                  <Link to="/products">Home</Link>
+                  <Link to="/">Home</Link>
                 </Button>
               </li>
               <li>
