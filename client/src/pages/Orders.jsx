@@ -11,14 +11,19 @@ import {
 import OrderItem from "components/OrderItem";
 import { useOrders } from "context/OrderContext";
 import Layout from "layout/Layout";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import orderService from "services/order.service";
 
 const Orders = () => {
   const { orders, setOrders } = useOrders();
-
+  const [currentPage, setCurrentPage] = useState(1)
   const history = useHistory();
+
+  const handlePage = (num)=>{
+    console.log(orders.length);
+    setCurrentPage(num)
+  }
   const goToDetails = (order) => {
     history.push({
       pathname: `orders/${order.order_id}`,
@@ -26,8 +31,8 @@ const Orders = () => {
     });
   };
   useEffect(() => {
-    orderService.getAllOrders().then((res) => setOrders(res.data));
-  }, [setOrders]);
+    orderService.getAllOrders(currentPage).then((res) => setOrders(res.data));
+  }, [currentPage, setOrders]);
 
   if(!orders){
     return (
@@ -65,7 +70,7 @@ const Orders = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {orders?.map((order) => (
+            {orders?.items.map((order) => (
               <TableRow className="cursor-pointer" onClick={() => goToDetails(order)} key={order.order_id}>
                 <OrderItem order={order} />
               </TableRow>
@@ -73,7 +78,7 @@ const Orders = () => {
           </TableBody>
         </Table>
         <TableFooter>
-        <Pagination totalResults={10} resultsPerPage={10} onChange={() => {}} label="Table navigation" />
+        <Pagination totalResults={orders.total} resultsPerPage={5} onChange={handlePage} label="Table navigation" />
         </TableFooter>
       </TableContainer>
     </Layout>

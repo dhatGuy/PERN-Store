@@ -1,1 +1,2 @@
-GET http://localhost:9000/api/products?page=1 HTTP/1.1
+GET http://localhost:9000/api/orders?userId=11&page=1 HTTP/1.1
+

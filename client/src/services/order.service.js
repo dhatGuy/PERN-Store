@@ -14,9 +14,9 @@ class OrderService {
       { headers: authHeader() }
     );
   }
-  getAllOrders() {
+  getAllOrders(page) {
     return axios.get(
-      API_URL + `?userId=${userId}`, 
+      API_URL + `?userId=${userId}&page=${page}`, 
       { userId }, 
       { headers: authHeader() }
       );

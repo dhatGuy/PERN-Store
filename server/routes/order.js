@@ -33,12 +33,19 @@ router.route("/create").post(async (req, res, next) => {
 });
 
 router.route("/").get(async (req, res, next) => {
+  const { page, userId } = req.query;
+  const limit = 5;
+  const offset = (page - 1) * limit;
   try {
-    const orders = await pool.query(
+    const rows = await pool.query(
       "SELECT * from orders WHERE orders.user_id = $1",
-      [req.query.userId]
+      [userId]
     );
-    res.json(orders.rows);
+    const orders = await pool.query(
+      "SELECT * from orders WHERE orders.user_id = $1 order by order_id desc limit $2 offset $3",
+      [userId, limit, offset]
+    );
+    res.json({ items: orders.rows, total: rows.rowCount });
   } catch (error) {
     console.log(error);
   }
