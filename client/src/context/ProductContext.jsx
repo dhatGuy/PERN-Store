@@ -6,18 +6,20 @@ const ProductContext = createContext();
 const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(1)
+  console.log(page)
   
   useEffect(() => {
     setIsLoading(true);
-    productService.getProducts().then((response) => {
+    productService.getProducts(page).then((response) => {
       setProducts(response.data);
       setIsLoading(false);
     });
-  }, []);
+  }, [page]);
 
   return (
     <ProductContext.Provider
-      value={{ products, setProducts, isLoading, setIsLoading }}
+      value={{ products, setProducts, isLoading, setIsLoading, page, setPage }}
     >
       {children}
     </ProductContext.Provider>

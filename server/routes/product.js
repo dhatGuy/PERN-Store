@@ -6,8 +6,11 @@ const verifyToken = require('../middleware/verifyToken')
 router
   .route("/")
   .get(async (req, res) => {
+    const {page} = req.query
+    const limit = 12
     try {
-      const results = await pool.query("select * from products order by product_id asc");
+      const offset = (page - 1) * limit
+      const results = await pool.query("select * from products order by product_id asc limit $1 offset $2 ", [limit, offset]);
       res.status(200).json(results.rows);
     } catch (error) {
       console.log(error);

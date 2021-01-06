@@ -1,4 +1,4 @@
-import { Card } from "@windmill/react-ui";
+import { Card, Pagination } from "@windmill/react-ui";
 import Product from "components/Product";
 import { useCart } from "context/CartContext";
 import { useProduct } from "context/ProductContext";
@@ -8,9 +8,13 @@ import { Toaster } from "react-hot-toast";
 import { useHistory } from "react-router-dom";
 
 const ProductList = () => {
-  const { products } = useProduct();
+  const { products, setPage } = useProduct();
   const history = useHistory();
   const { cartData } = useCart();
+
+  const handleChange = (page) => {
+    setPage(page)
+  };
 
   const selectProduct = (id) => {
     return history.push({
@@ -35,6 +39,12 @@ const ProductList = () => {
         ))}
         <Toaster position="bottom-right" />
       </div>
+      <Pagination
+        totalResults={20}
+        resultsPerPage={12}
+        onChange={handleChange}
+        label="Page navigation"
+      />
     </Layout>
   );
 };
