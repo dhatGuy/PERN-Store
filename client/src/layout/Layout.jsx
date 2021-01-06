@@ -44,7 +44,7 @@ const Layout = ({ children, title }) => {
     `}</style>
       </Helmet>
       <Nav />
-      <div className="container mx-auto px-56">
+      <div className="mx-auto px-2 lg:px-56">
         <main>{children}</main>
       </div>
     </>

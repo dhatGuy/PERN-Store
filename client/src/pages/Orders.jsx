@@ -1,37 +1,83 @@
-import { useOrders } from 'context/OrderContext'
-import React, { useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
-import orderService from 'services/order.service'
+import {
+  Pagination,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableFooter,
+  TableHeader,
+  TableRow,
+} from "@windmill/react-ui";
+import OrderItem from "components/OrderItem";
+import { useOrders } from "context/OrderContext";
+import Layout from "layout/Layout";
+import React, { useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import orderService from "services/order.service";
 
 const Orders = () => {
-  const {orders, setOrders} = useOrders()
-  const history = useHistory()
-  useEffect(()=>{
-    orderService.getAllOrders().then(res=> setOrders(res.data))
-  },[setOrders])
-  const goToDetails = (order) =>{
+  const { orders, setOrders } = useOrders();
 
-      history.push({
-        pathname: `orders/${order.order_id}`,
-        state: {order}
-      })
+  const history = useHistory();
+  const goToDetails = (order) => {
+    history.push({
+      pathname: `orders/${order.order_id}`,
+      state: { order },
+    });
+  };
+  useEffect(() => {
+    orderService.getAllOrders().then((res) => setOrders(res.data));
+  }, [setOrders]);
+
+  if(!orders){
+    return (
+      <Layout>
+        <div>Loading...</div>
+      </Layout>
+    )
   }
+
+  if(orders.length === 0 ){
+    return (
+      <Layout>
+        <h1 className="my-10 text-center text-4xl font-semibold">
+        Orders
+      </h1>
+        <p>You are yet to place an order</p>
+      </Layout>
+    )
+  }
+
   return (
-    <div>
-      {orders?.map(order=>{
-        return (
-          <div onClick={()=> goToDetails(order)} key={order.order_id}>
-              <p>Order id: #{order.order_id}</p>
-              <p>No. of Item: {order.total || "Not available"}</p>
-              <p>Order Status: {order.status}</p>
-              <p>Total amount: ${order.amount}</p>
-              <p>Order Date: {order.date}</p>
-            </div>
-        )
-      })}
-    </div>
-  )
-}
+    <Layout>
+      <h1 className="my-10 text-center text-4xl font-semibold">
+        Orders
+      </h1>
+      <TableContainer>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableCell>ID</TableCell>
+              <TableCell>No. of items</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Amount</TableCell>
+              <TableCell>Date</TableCell>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {orders?.map((order) => (
+              <TableRow className="cursor-pointer" onClick={() => goToDetails(order)} key={order.order_id}>
+                <OrderItem order={order} />
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <TableFooter>
+        <Pagination totalResults={10} resultsPerPage={10} onChange={() => {}} label="Table navigation" />
+        </TableFooter>
+      </TableContainer>
+    </Layout>
+  );
+};
 
-export default Orders
-
+export default Orders;

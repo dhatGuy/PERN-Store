@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import productService from "services/product.service";
-import Product from "../components/Product";
 
 const ProductDetails = () => {
   const { id } = useParams();

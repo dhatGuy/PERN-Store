@@ -11,10 +11,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Avatar,
-  Badge,
   TableFooter,
-  Pagination,
   Button,
 } from "@windmill/react-ui";
 
