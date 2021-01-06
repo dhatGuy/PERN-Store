@@ -7,7 +7,6 @@ import OrderDetails from "pages/OrderDetails";
 import Orders from "pages/Orders";
 import Product from "pages/ProductList";
 import Register from "pages/Register";
-import Nav from "components/Nav";
 import { ProtectedRoute } from "protected.route";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
@@ -15,7 +14,6 @@ function App() {
   
   return (
     <Router>
-      <Nav/>
       <div>
         <Switch>
           <ProtectedRoute exact path="/profile">

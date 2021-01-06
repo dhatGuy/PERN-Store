@@ -1,5 +1,6 @@
 
 import { UserContext } from "context/UserContext";
+import Layout from "layout/Layout";
 import React, { useContext, useEffect, useState } from "react";
 import authService from "services/auth.service";
 
@@ -14,9 +15,9 @@ const Home = () => {
   
   if(isLoading) return <div>loading..</div>
   return (
-    <div className="container">
+    <Layout title="Home" className="container">
       home
-      <header className="jumbotron">
+      <header>
         <h3>
           <strong>{userData.username}</strong>'s Profile
         </h3>
@@ -31,7 +32,7 @@ const Home = () => {
       <p>
         <strong>Email:</strong> {userData.email}
       </p>
-    </div>
+    </Layout>
   );
 };
 

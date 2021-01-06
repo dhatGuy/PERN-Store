@@ -8,20 +8,23 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Windmill } from "@windmill/react-ui";
 import "./tailwind.output.css";
+import { HelmetProvider } from "react-helmet-async";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Windmill>
-      <UserProvider>
-        <ProductProvider>
-          <CartProvider>
-            <OrderProvider>
-              <App />
-            </OrderProvider>
-          </CartProvider>
-        </ProductProvider>
-      </UserProvider>
-    </Windmill>
+    <HelmetProvider>
+      <Windmill>
+        <UserProvider>
+          <ProductProvider>
+            <CartProvider>
+              <OrderProvider>
+                <App />
+              </OrderProvider>
+            </CartProvider>
+          </ProductProvider>
+        </UserProvider>
+      </Windmill>
+    </HelmetProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

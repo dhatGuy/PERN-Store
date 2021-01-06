@@ -39,13 +39,15 @@ router.post("/signup", async (req, res, next) => {
           data: results.rows[0],
         });
       } catch (error) {
-        res.status(500).send(error);
+        console.log(error)
+        res.status(500).json(error);
       }
     } else {
-      res.status(500).send("Email is in use");
+      console.log("Email in use")
+      res.status(500).json("Email is in use");
     }
   } else {
-    res.status(500).send("Invalid User");
+    res.status(500).json("Invalid User");
   }
 });
 
