@@ -21,7 +21,6 @@ const Orders = () => {
   const history = useHistory();
 
   const handlePage = (num)=>{
-    console.log(orders.length);
     setCurrentPage(num)
   }
   const goToDetails = (order) => {

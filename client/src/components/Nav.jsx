@@ -1,6 +1,6 @@
-import { Button } from "@windmill/react-ui";
+import { Badge, Button, Dropdown, DropdownItem } from "@windmill/react-ui";
 import { useCart } from "context/CartContext";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import authService from "services/auth.service";
 
@@ -10,37 +10,31 @@ const Nav = () => {
   const cartQuantity = cartData?.items.reduce((acc, cur) => {
     return acc + Number(cur.quantity);
   }, 0);
+  const name = user?.fullname.split(" ")[0] + " " + user?.fullname.split(" ")[1];
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   return (
     <nav>
-      <nav className="flex items-center justify-between px-6 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 shadow-lg">
-        <span className="text-gray-700 dark:text-gray-400">
-          {/* <Logo className="w-6 h-6 text-purple-600" /> */}
+      <nav className="flex items-center justify-between lg:px-36 py-2 bg-gray-50 shadow-lg">
+        <span className="text-gray-700 text-2xl font-bold dark:text-gray-400">
           <p>PERN Store</p>
         </span>
         <ul className="flex space-x-4">
-            {!user && (
-              <>
-                <li>
-                  <Button layout="link">
-                    <Link to="/signup">signup</Link>
-                  </Button>
-                </li>
-                <li>
-                  <Button layout="link">
-                    <Link to="/login">login</Link>
-                  </Button>
-                </li>
-              </>
-            )}
-          {user && (
+          {!user && (
             <>
               <li>
                 <Button layout="link">
-                  <Link onClick={() => authService.logout()} to="/login">
-                    logout
-                  </Link>
+                  <Link to="/signup">signup</Link>
                 </Button>
               </li>
+              <li>
+                <Button layout="link">
+                  <Link to="/login">login</Link>
+                </Button>
+              </li>
+            </>
+          )}
+          {user && (
+            <>
               <li>
                 <Button layout="link">
                   <Link to="/">Home</Link>
@@ -48,19 +42,40 @@ const Nav = () => {
               </li>
               <li>
                 <Button layout="link">
-                  <Link to="/orders">Orders</Link>
+                  <Link to="/cart">
+                    Cart <Badge type="danger">{cartQuantity || 0}</Badge>{" "}
+                  </Link>
                 </Button>
               </li>
-              <li>
-                <Button layout="link">
-                  <Link to="/cart">Cart ({cartQuantity || 0})</Link>
+              <li className="relative">
+                <Button
+                  layout="link"
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                >
+                  Account
                 </Button>
+                <Dropdown align="right" isOpen={isDropdownOpen}>
+                  <DropdownItem className="curosr-not-allowed text-gray-400 border-b flex flex-col items-start justify-start">
+                    <p className="self-start">{name}</p>
+                    <p className="self-start">@{user.username}</p>
+                  </DropdownItem>
+                  <DropdownItem tag="a">
+                    <Link className="w-full" to="/profile">
+                      Profile
+                    </Link>
+                  </DropdownItem>
+                  <DropdownItem tag="a">
+                    <Link className="w-full" to="/orders">
+                      Orders
+                    </Link>
+                  </DropdownItem>
+                  <DropdownItem tag="a" className="border-t">
+                    <Link onClick={() => authService.logout()} to="/login">
+                      Logout
+                    </Link>
+                  </DropdownItem>
+                </Dropdown>
               </li>
-              <li>
-              <Button layout="link">
-                <Link to="/profile">Profile</Link>
-              </Button>
-            </li>
             </>
           )}
         </ul>

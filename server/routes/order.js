@@ -42,9 +42,11 @@ router.route("/").get(async (req, res, next) => {
       [userId]
     );
     const orders = await pool.query(
-      "SELECT * from orders WHERE orders.user_id = $1 order by order_id desc limit $2 offset $3",
+      `SELECT order_id, user_id, status, date::date, amount, total 
+      from orders WHERE orders.user_id = $1 order by order_id desc limit $2 offset $3`,
       [userId, limit, offset]
     );
+    console.log(orders.rows)
     res.json({ items: orders.rows, total: rows.rowCount });
   } catch (error) {
     console.log(error);
