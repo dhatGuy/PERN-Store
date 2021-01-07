@@ -1,7 +1,7 @@
 import axios from "axios";
 import authHeader from "./authHeader";
 
-const API_URL = "http://localhost:9000/api/cart/";
+const API_URL = "https://nameless-journey-88760.herokuapp.com/api/cart/";
 
 const userId = JSON.parse(localStorage.getItem("user"))?.user_id;
 

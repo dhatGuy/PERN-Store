@@ -2,7 +2,7 @@ import axios from "axios";
 import authService from "./auth.service";
 import authHeader from "./authHeader";
 
-const API_URL = "http://localhost:9000/api/orders/";
+const API_URL = "https://nameless-journey-88760.herokuapp.com/api/orders/";
 
 const userId = authService.getCurrentUser()?.user_id;
 

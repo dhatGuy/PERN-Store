@@ -1,7 +1,7 @@
 import axios from "axios";
 import authHeader from "./authHeader";
 
-const API_URL = "http://localhost:9000/api/products";
+const API_URL = "https://nameless-journey-88760.herokuapp.com/api/products";
 
 class ProductService {
   getProducts(page, limit) {

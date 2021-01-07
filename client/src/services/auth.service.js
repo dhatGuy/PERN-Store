@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:9000/api/auth/";
+const API_URL = "https://nameless-journey-88760.herokuapp.com/api/auth/";
 
 class AuthService {
   async login(email, password) {
