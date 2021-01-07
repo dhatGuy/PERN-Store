@@ -31,24 +31,26 @@ const ProductList = () => {
   }
   return (
     <Layout>
-      <Card className="flex flex-wrap h-full mx-2">
-        {products.map((prod) => (
-          <div
-            className="w-full flex flex-col justify-between sm:w-1/2 md:w-1/3 lg:w-1/4 my-2 px-2 box-border"
-            key={prod.product_id}
-            onClick={() => selectProduct(prod.product_id)}
-          >
-            <Product cartId={cartData?.cartId} product={prod} />
-          </div>
-        ))}
-        <Toaster position="bottom-right" />
-      </Card>
-      <Pagination
-        totalResults={20}
-        resultsPerPage={12}
-        onChange={handleChange}
-        label="Page navigation"
-      />
+      <div className="py-20">
+        <Card className="flex flex-wrap h-full mx-2">
+          {products.map((prod) => (
+            <div
+              className="w-full flex flex-col justify-between sm:w-1/2 md:w-1/3 lg:w-1/4 my-2 px-2 box-border"
+              key={prod.product_id}
+              onClick={() => selectProduct(prod.product_id)}
+            >
+              <Product cartId={cartData?.cartId} product={prod} />
+            </div>
+          ))}
+          <Toaster position="bottom-right" />
+        </Card>
+        <Pagination
+          totalResults={20}
+          resultsPerPage={12}
+          onChange={handleChange}
+          label="Page navigation"
+        />
+      </div>
     </Layout>
   );
 };

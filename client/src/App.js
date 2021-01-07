@@ -14,7 +14,7 @@ function App() {
   
   return (
     <Router>
-      <div>
+      <>
         <Switch>
           <ProtectedRoute exact path="/profile">
             <Home />
@@ -47,7 +47,7 @@ function App() {
             <h1>404 Error Found</h1>
           </Route>
         </Switch>
-      </div>
+      </>
     </Router>
   );
 }

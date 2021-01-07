@@ -37,5 +37,6 @@
 -- select * from cart_item where cart_item.cart_id = 3 AND cart_item.product_id = 3 
 
 -- SELECT order_item.*, products.* from orders join order_item on order_item.order_id = orders.order_id join products on products.product_id = order_item.product_id WHERE orders.order_id = 50
-SELECT products.*, order_item.* from orders join order_item on order_item.order_id = orders.order_id join products on products.product_id = order_item.product_id where orders.order_id = 20
+-- SELECT products.*, order_item.* from orders join order_item on order_item.order_id = orders.order_id join products on products.product_id = order_item.product_id where orders.order_id = 20
 
+SELECT order_id, user_id, status, date::date, date::timestamp, amount, total from orders WHERE orders.user_id = 11
