@@ -1,4 +1,5 @@
 import { Card, CardBody } from "@windmill/react-ui";
+import Spinner from "components/Spinner";
 import { UserContext } from "context/UserContext";
 import Layout from "layout/Layout";
 import React, { useContext, useEffect, useState } from "react";
@@ -16,7 +17,7 @@ const Home = () => {
   if (isLoading)
     return (
       <Layout title="Home">
-        <div>loading..</div>
+        <Spinner size={40} loading={isLoading}/>
       </Layout>
     );
   return (

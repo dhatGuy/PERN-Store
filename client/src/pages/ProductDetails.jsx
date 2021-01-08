@@ -1,4 +1,5 @@
 import { Button, Card, CardBody } from "@windmill/react-ui";
+import Spinner from "components/Spinner";
 import { useCart } from "context/CartContext";
 import Layout from "layout/Layout";
 import React, { useEffect, useState } from "react";
@@ -34,7 +35,9 @@ const ProductDetails = () => {
   if (!product) {
     return (
       <Layout>
-        <div>loading</div>
+        <div className="h-full flex items-center justify-center">
+          <Spinner size={150} loading={!product} />
+        </div>
       </Layout>
     );
   }

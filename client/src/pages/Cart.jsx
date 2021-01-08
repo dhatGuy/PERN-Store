@@ -14,6 +14,7 @@ import {
   TableFooter,
   Button,
 } from "@windmill/react-ui";
+import Spinner from "components/Spinner";
 
 const Cart = () => {
   const { cartData, setCartData } = useCart();
@@ -45,7 +46,9 @@ const Cart = () => {
   if (!cartData) {
     return (
       <Layout>
-        <div>Loading</div>
+        <div className="h-full flex items-center justify-center">
+          <Spinner size={150} loading={!cartData} />
+        </div>
       </Layout>
     );
   }

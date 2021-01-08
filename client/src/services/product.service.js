@@ -6,7 +6,7 @@ class ProductService {
     return API.get(`/products/?page=${page}`);
   }
   getProduct(id) {
-    return API.get( `/${id}`, {headers: authHeader()});
+    return API.get( `/products/${id}`, {headers: authHeader()});
   }
 }
 

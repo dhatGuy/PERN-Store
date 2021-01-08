@@ -38,14 +38,14 @@ const Layout = ({ children, title }) => {
         <meta name="twitter:title" content="PERN Store" />
         <meta name="twitter:image" content="yourimage.png" />
         <style type="text/css">{`
-        html,body {
+        html,body, #root {
             height: 100%;
         }
     `}</style>
       </Helmet>
       <Nav />
-      <div className="text-gray-700 mx-auto px-2 lg:px-56">
-        <main>{children}</main>
+      <div className="text-gray-700 h-full mx-auto px-2 lg:px-56">
+        <main className="h-full">{children}</main>
       </div>
     </>
   );

@@ -15,7 +15,7 @@ const validateUser = (user) => {
   const validPassword =
     typeof user.password == "string" &&
     user.email.trim() != "" &&
-    user.password.trim().length > 6;
+    user.password.trim().length >= 6;
 
   return validEmail && validPassword;
 };
@@ -45,7 +45,7 @@ router.post("/signup", async (req, res, next) => {
       res.status(500).json("Email is in use");
     }
   } else {
-    res.status(500).json("Password must be greater than 6 characters.");
+    res.status(500).json("Password must be greater than 5 characters.");
   }
 });
 
