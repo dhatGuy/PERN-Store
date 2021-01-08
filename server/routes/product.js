@@ -13,7 +13,7 @@ router
       const results = await pool.query("select * from products order by product_id asc limit $1 offset $2 ", [limit, offset]);
       res.status(200).json(results.rows);
     } catch (error) {
-      console.log(error);
+      res.status(500).json(error);
     }
   })
   .post(verifyToken, async (req, res) => {
@@ -29,7 +29,7 @@ router
         data: results.rows[0],
       });
     } catch (error) {
-      console.log(error);
+      res.status(500).json(error);
     }
   });
 
@@ -44,7 +44,7 @@ router
       );
       res.status(200).json(results.rows);
     } catch (error) {
-      console.log(error);
+      res.status(500).json(error);
     }
   })
   .put(verifyToken, async (req, res) => {
@@ -57,7 +57,7 @@ router
       );
       res.status(200).json(results.rows[0]);
     } catch (error) {
-      console.log(error)
+      res.status(500).json(error)
     }
   })
   .delete(verifyToken,async (req, res) => {
@@ -69,7 +69,7 @@ router
       );
       res.status(200).json(results.rows[0]);
     } catch (error) {
-      console.log(error)
+      res.status(500).json(error)
     }
   });
 

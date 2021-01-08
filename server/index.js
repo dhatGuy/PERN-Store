@@ -28,20 +28,16 @@ app.use("/api/cart", cart);
 
 app.get("/api", async (req, res, next) => {
   try {
-    const results = await pool.query("select * from users");
-    console.log(results.rows);
+    res.send("<h1>This is the home route</h1>")
   } catch (error) {
     console.log(error);
   }
-  res.json({
-    status: "success",
-  });
 });
 
 app.use((error, req, res, next) => {
   res
     .status(error.status || 500)
-    .json({ status: error.status, stack: error.stack, message: error.message });
+    .json({ status: error.status, message: error.message });
 });
 
 app.listen(PORT, () => console.log("Magic happening on port:", +PORT));

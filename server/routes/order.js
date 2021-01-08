@@ -28,7 +28,7 @@ router.route("/create").post(async (req, res, next) => {
 
     res.json(order.rows[0]);
   } catch (error) {
-    console.log(error);
+    res.status(500).json(error)
   }
 });
 
@@ -46,10 +46,9 @@ router.route("/").get(async (req, res, next) => {
       from orders WHERE orders.user_id = $1 order by order_id desc limit $2 offset $3`,
       [userId, limit, offset]
     );
-    console.log(orders.rows)
     res.json({ items: orders.rows, total: rows.rowCount });
   } catch (error) {
-    console.log(error);
+    res.status(500).json(error);
   }
 });
 
@@ -69,7 +68,7 @@ router.route("/:id").get(async (req, res, next) => {
     );
     res.json(order.rows);
   } catch (error) {
-    console.log(error);
+    res.status(500).json(error);
   }
 });
 

@@ -21,7 +21,7 @@ router.route("/create").post(verifyToken, async (req, res) => {
         data: newCart.rows[0],
       });
     } catch (error) {
-      console.log(error);
+      res.status(500).json(error)
     }
   } else {
     res.status(201).json({
@@ -84,12 +84,10 @@ router.route("/add").post(verifyToken, async (req, res) => {
         "Select products.*, cart_item.quantity, round((products.price * cart_item.quantity)::numeric, 2) as subtotal from cart_item join products on cart_item.product_id = products.product_id where cart_item.cart_id = $1",
         [cart_id]
       );
-      console.log(product.rows);
       res.status(200).json({ data: product.rows });
     }
   } catch (error) {
     res.status(401).send(error);
-    throw error;
   }
 });
 
@@ -102,7 +100,6 @@ router.route("/delete").delete(async (req, res, next) => {
     );
     res.status(200).json(result.rows);
   } catch (error) {
-    console.log(error);
     res.status(401).send(error);
   }
 });
@@ -138,7 +135,6 @@ router.route("/decrement").put(async (req, res, next) => {
     );
     res.json(product.rows);
   } catch (error) {
-    console.log(error);
     res.status(404).json(error)
   }
 });

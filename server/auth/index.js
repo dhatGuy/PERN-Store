@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const pool = require("../db");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
 router.get("/", (req, res) => {
   res.json({
@@ -15,7 +15,7 @@ const validateUser = (user) => {
   const validPassword =
     typeof user.password == "string" &&
     user.email.trim() != "" &&
-    user.password.trim().length >= 6;
+    user.password.trim().length > 6;
 
   return validEmail && validPassword;
 };
@@ -39,36 +39,33 @@ router.post("/signup", async (req, res, next) => {
           data: results.rows[0],
         });
       } catch (error) {
-        console.log(error)
         res.status(500).json(error);
       }
     } else {
-      console.log("Email in use")
       res.status(500).json("Email is in use");
     }
   } else {
-    res.status(500).json("Invalid User");
+    res.status(500).json("Password must be greater than 6 characters.");
   }
 });
 
 router.post("/login", async (req, res, next) => {
   try {
-    
     if (validateUser(req.body)) {
       const { email } = req.body;
       const results = await pool.query("select * from users where email = $1", [
         email,
       ]);
-  
+
       if (results.rows.length > 0) {
-        const user = results.rows[0]
+        const user = results.rows[0];
         const { password, user_id, email, username, fullname } = user;
         const plainPassword = await bcrypt.compare(req.body.password, password);
-  
+
         if (plainPassword) {
-          const token = jwt.sign({id: user.user_id}, process.env.SECRET)
-          res.header('auth-token', token)
-          res.json({
+          const token = jwt.sign({ id: user.user_id }, process.env.SECRET);
+          res.header("auth-token", token);
+          res.status(200).json({
             token,
             user_id,
             email,
@@ -77,19 +74,16 @@ router.post("/login", async (req, res, next) => {
             status: "Login successful 🔓",
           });
         } else {
-          res.status(400).json("Password incorrect");
+          next(new Error("Password incorrect"));
         }
       } else {
-        res.status(400).json({
-          status: 404,
-          error: "User not found"
-        });
+        next(new Error("User not found"));
       }
     } else {
       next(new Error("Invalid login"));
     }
   } catch (error) {
-    console.log(error)
+    next(new Error(error));
   }
 });
 

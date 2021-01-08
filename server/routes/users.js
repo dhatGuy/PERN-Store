@@ -7,10 +7,9 @@ router
   .get(async (req, res) => {
     try {
       const results = await pool.query("select * from users");
-      console.log(results.rows);
       res.status(200).json(results.rows);
     } catch (error) {
-      console.log(error);
+      res.status(500).json(error);
     }
   })
   .post(async (req, res) => {
@@ -26,7 +25,7 @@ router
         data: results.rows[0],
       });
     } catch (error) {
-      console.log(error);
+      res.status(500).json(error);
     }
   });
 
@@ -39,10 +38,9 @@ router
         "select * from users where user_id = $1",
         [id]
       );
-      console.log(results.rows);
       res.status(200).json(results.rows);
     } catch (error) {
-      console.log(error);
+      res.status(500).json(error);
     }
   })
   .put(async (req, res) => {
@@ -55,7 +53,7 @@ router
       );
       res.status(200).json(results.rows[0]);
     } catch (error) {
-      console.log(error)
+      res.status(500).json(error)
     }
   })
   .delete(async (req, res) => {
@@ -67,7 +65,7 @@ router
       );
       res.status(200).json(results.rows[0]);
     } catch (error) {
-      console.log(error)
+      res.status(500).json(error)
     }
   });
 

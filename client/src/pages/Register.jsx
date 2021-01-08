@@ -1,5 +1,6 @@
-import { Button, Input, Label } from "@windmill/react-ui";
+import { Button, HelperText, Input, Label } from "@windmill/react-ui";
 import instance from "api/axios.config";
+import Spinner from "components/Spinner";
 import Layout from "layout/Layout";
 import React, { useState } from "react";
 import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
@@ -11,24 +12,33 @@ const Register = () => {
   const [name, setName] = useState("");
   const [password, setpassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const { state } = useLocation();
-  const history = useHistory()
+  const history = useHistory();
 
   const user = authService.getCurrentUser();
 
   const onSubmit = (e) => {
     e.preventDefault();
+    setError('')
     if (password === confirmPassword) {
-      instance.post("/auth/signup", {
-        username,
-        email,
-        password,
-        fullname: name,
-      })
-      .then(()=> history.push("/login"))
-      .catch(error=>{
-        console.log(error)
-      })
+      setIsLoading(!isLoading);
+      instance
+        .post("/auth/signup", {
+          username,
+          email,
+          password,
+          fullname: name,
+        })
+        .then(() => {
+          history.push("/login");
+          setIsLoading(!isLoading);
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          setError(error.response.data);
+        });
     } else {
       alert("Password doesn't match ");
     }
@@ -44,7 +54,7 @@ const Register = () => {
           className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col md:w-1/2 "
           onSubmit={onSubmit}
         >
-          <h1 className="text-center">Create Account</h1>
+          <h1 className="text-center text-4xl">Create Account</h1>
           <div className="mb-4">
             <Label className="block text-grey-darker text-sm font-bold mb-2">
               <span>Username</span>
@@ -116,11 +126,18 @@ const Register = () => {
               id="password2"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-            />
+              />
+              {error && <HelperText valid={false}>{error}</HelperText>}
           </div>
-          <Button type="submit">Create account</Button>
+          <Button type="submit">
+            {isLoading ? (
+              <Spinner size={20} loading={isLoading} />
+            ) : (
+              "Create Account"
+            )}
+          </Button>
           <p className="text-sm mt-4">
-            Have an account? <Link to="/login">Login</Link>
+            Have an account? <Link to="/login" className="font-bold">Login</Link>
           </p>
         </form>
       </div>
