@@ -2,7 +2,7 @@ import CartItem from "components/CartItem";
 import { useCart } from "context/CartContext";
 import Layout from "layout/Layout";
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import OrderService from "services/order.service";
 import {
   TableContainer,
@@ -15,6 +15,7 @@ import {
   Button,
 } from "@windmill/react-ui";
 import Spinner from "components/Spinner";
+import { ShoppingCart } from "react-feather";
 
 const Cart = () => {
   const { cartData, setCartData } = useCart();
@@ -59,7 +60,13 @@ const Cart = () => {
         <h1 className="my-10 text-center text-4xl font-semibold">
           Shopping Cart
         </h1>
-        <p>Cart is empty</p>
+        <div className="h-full flex flex-col justify-center items-center">
+          <ShoppingCart size={150} />
+          <p>Cart is empty</p>
+          <Link to="/">
+            <Button tag="a">Continue shopping</Button>
+          </Link>
+        </div>
       </Layout>
     );
   }

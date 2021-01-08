@@ -3,6 +3,7 @@ import { useCart } from "context/CartContext";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import authService from "services/auth.service";
+import {Home, ShoppingCart, User} from "react-feather"
 
 const Nav = () => {
   const { cartData } = useCart();
@@ -22,9 +23,11 @@ const Nav = () => {
           {!user && (
             <>
               <li>
+                  <Link to="/signup">
                 <Button layout="link">
-                  <Link to="/signup">signup</Link>
+                    signup
                 </Button>
+                    </Link>
               </li>
               <li>
                 <Button layout="link">
@@ -36,23 +39,29 @@ const Nav = () => {
           {user && (
             <>
               <li>
+                  <Link to="/">
                 <Button layout="link">
-                  <Link to="/">Home</Link>
+                  <span className="lg:block hidden">Home</span>
+                    <Home className="lg:hidden"/>
                 </Button>
+                    </Link>
               </li>
               <li>
-                <Button layout="link">
                   <Link to="/cart">
-                    Cart <Badge type="danger">{cartQuantity || 0}</Badge>{" "}
-                  </Link>
+                <Button layout="link">
+                    <span className="lg:block hidden">Cart</span>
+                    <ShoppingCart className="lg:hidden"/>
+                     <Badge className="ml-2" type="danger">{cartQuantity || 0}</Badge>{" "}
                 </Button>
+                  </Link>
               </li>
               <li className="relative">
                 <Button
                   layout="link"
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 >
-                  Account
+                  <span className="lg:block hidden">Account</span>
+                  <User className="lg:hidden"/>
                 </Button>
                 <Dropdown align="right" isOpen={isDropdownOpen}>
                   <DropdownItem className="curosr-not-allowed text-gray-400 border-b flex flex-col items-start justify-start">

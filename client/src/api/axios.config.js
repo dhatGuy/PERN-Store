@@ -1,8 +1,10 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: 'https://nameless-journey-88760.herokuapp.com/api',
-  // baseURL: 'http://localhost:9000/api',
+  baseURL:
+    process.env.NODE_ENV === "production"
+      ? "https://nameless-journey-88760.herokuapp.com/api"
+      : "http://localhost:9000/api",
 });
 
 export default API;
