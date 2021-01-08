@@ -52,39 +52,44 @@ router.post("/signup", async (req, res, next) => {
 });
 
 router.post("/login", async (req, res, next) => {
-  if (validateUser(req.body)) {
-    const { email } = req.body;
-    const results = await pool.query("select * from users where email = $1", [
-      email,
-    ]);
-
-    if (results.rows.length > 0) {
-      const user = results.rows[0]
-      const { password, user_id, email, username, fullname } = user;
-      const plainPassword = await bcrypt.compare(req.body.password, password);
-
-      if (plainPassword) {
-        const token = jwt.sign({id: user.user_id}, process.env.SECRET)
-        res.header('auth-token', token)
-        res.json({
-          token,
-          user_id,
-          email,
-          username,
-          fullname,
-          status: "Login successful 🔓",
-        });
+  try {
+    
+    if (validateUser(req.body)) {
+      const { email } = req.body;
+      const results = await pool.query("select * from users where email = $1", [
+        email,
+      ]);
+  
+      if (results.rows.length > 0) {
+        const user = results.rows[0]
+        const { password, user_id, email, username, fullname } = user;
+        const plainPassword = await bcrypt.compare(req.body.password, password);
+  
+        if (plainPassword) {
+          const token = jwt.sign({id: user.user_id}, process.env.SECRET)
+          res.header('auth-token', token)
+          res.json({
+            token,
+            user_id,
+            email,
+            username,
+            fullname,
+            status: "Login successful 🔓",
+          });
+        } else {
+          res.status(400).send("Password incorrect");
+        }
       } else {
-        res.status(400).send("Password incorrect");
+        res.status(403).json({
+          status: 404,
+          error: "User not found"
+        });
       }
     } else {
-      res.status(403).json({
-        status: 404,
-        error: "User not found"
-      });
+      next(new Error("Invalid login"));
     }
-  } else {
-    next(new Error("Invalid login"));
+  } catch (error) {
+    console.log(error)
   }
 });
 

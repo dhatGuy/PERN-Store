@@ -5,6 +5,10 @@ const pool = require("./db");
 const morgan = require("morgan");
 
 const PORT = process.env.PORT || 8080;
+const isProduction = process.env.NODE_ENV === 'production'
+const origin = {
+  origin: isProduction ? 'https://nameless-journey-88760.herokuapp.com' : '*',
+}
 
 const users = require("./routes/users");
 const product = require("./routes/product");
@@ -14,9 +18,9 @@ const auth = require("./auth");
 
 const app = express();
 
+app.use(cors(origin));
 app.use(express.json());
 
-app.use(cors());
 
 app.use(morgan("dev"));
 
