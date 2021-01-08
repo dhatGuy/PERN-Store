@@ -1,14 +1,12 @@
-import axios from "axios";
-import authHeader from "./authHeader";
-
-const API_URL = "https://nameless-journey-88760.herokuapp.com/api/cart/";
+import API from "../api/axios.config";
+import authHeader from "./authHeader"
 
 const userId = JSON.parse(localStorage.getItem("user"))?.user_id;
 
 class CartService {
   createCart() {
-    return axios.post(
-      API_URL + "create",
+    return API.post(
+      "/cart/create",
       {
         userId: Number(userId),
       },
@@ -18,8 +16,8 @@ class CartService {
     );
   }
   getCart(user_id) {
-    return axios.post(
-      API_URL,
+    return API.post(
+      "/cart",
       {
         userId: Number(user_id),
       },
@@ -29,32 +27,32 @@ class CartService {
     );
   }
   addToCart(cart_id, product_id, quantity) {
-    return axios.post(
-      API_URL + "add",
+    return API.post(
+      "/cart/add",
       { cart_id, product_id, quantity },
       { headers: authHeader() }
     );
   }
 
   async removeFromCart(cart_id, product_id) {
-    return await axios.delete(
-      API_URL + "delete",
+    return await API.delete(
+      "/cart/delete",
       { data: { cart_id: Number(cart_id), product_id: Number(product_id) } },
       { headers: authHeader() }
     );
   }
 
   async increment(cart_id, product_id) {
-    return axios.put(
-      API_URL + "increment",
+    return API.put(
+      "/cart/increment",
       { cart_id, product_id },
       { headers: authHeader() }
     );
   }
 
   async decrement(cart_id, product_id) {
-    return axios.put(
-      API_URL + "decrement",
+    return API.put(
+      "/cart/decrement",
       { cart_id, product_id },
       { headers: authHeader() }
     );

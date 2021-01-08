@@ -77,10 +77,10 @@ router.post("/login", async (req, res, next) => {
             status: "Login successful 🔓",
           });
         } else {
-          res.status(400).send("Password incorrect");
+          res.status(400).json("Password incorrect");
         }
       } else {
-        res.status(403).json({
+        res.status(400).json({
           status: 404,
           error: "User not found"
         });

@@ -1,11 +1,9 @@
-import axios from "axios";
-
-const API_URL = "https://nameless-journey-88760.herokuapp.com/api/auth/";
+import API from "api/axios.config";
 
 class AuthService {
   async login(email, password) {
-    const response = await axios
-      .post(API_URL + "login", {
+    const response = await API
+      .post("/auth/login", {
         email,
         password
       });
@@ -20,7 +18,7 @@ class AuthService {
   }
 
   register(username, email, password) {
-    return axios.post(API_URL + "signup", {
+    return API.post("/signup", {
       username,
       email,
       password
