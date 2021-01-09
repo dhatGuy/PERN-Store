@@ -27,7 +27,6 @@ const Home = () => {
       <Card className="w-1/2 mt-32">
         <CardBody>
           <header>
-            <img src="./images/Apple - Custard.jpg" />
             <h3>{userData.username}'s Profile</h3>
           </header>
           <p>Email:{userData.email}</p>
