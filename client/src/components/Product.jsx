@@ -21,9 +21,9 @@ const Product = ({ cartId, product }) => {
     <>
       <img className="w-full h-56" src={`${product.image_url}/${product.name}.jpg`} alt={product.name} />
       <CardBody className="flex flex-col justify-between items-stretch">
-        <p>{product.name}</p>
-        <p>$ {product.price}</p>
-        <Button className="" onClick={(e) => addToCart(e)}>
+        <p className="font-bold text-xl">{product.name}</p>
+        <p className="font-medium">₦ {product.price}</p>
+        <Button className="mt-4" onClick={(e) => addToCart(e)}>
           Add to cart
         </Button>
       </CardBody>

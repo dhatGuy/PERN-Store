@@ -79,8 +79,8 @@ const Nav = () => {
                     </Link>
                   </DropdownItem>
                   <DropdownItem tag="a" className="border-t">
-                    <Link onClick={() => authService.logout()} to="/login">
-                      Logout
+                    <Link className="w-full" onClick={() => authService.logout()} to="/login">
+                      <Button block>Logout</Button>
                     </Link>
                   </DropdownItem>
                 </Dropdown>

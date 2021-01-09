@@ -14,7 +14,7 @@ const CartItem = ({ item }) => {
   return (
     <>
       <TableCell>{item.name}</TableCell>
-      <TableCell>${item.price}</TableCell>
+      <TableCell>₦{item.price}</TableCell>
       <TableCell className="flex items-center">
         <Button size="small" layout="outline" disabled={item.quantity === 1} onClick={() => decrease()}>
           -
@@ -24,7 +24,7 @@ const CartItem = ({ item }) => {
           +
         </Button>
       </TableCell>
-      <TableCell>${item.subtotal}</TableCell>
+      <TableCell>₦{item.subtotal}</TableCell>
       <TableCell>
         <Button layout="Link" onClick={() => deleteItem(item.product_id)}><span>X</span></Button>
       </TableCell>

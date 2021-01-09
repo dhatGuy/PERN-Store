@@ -45,7 +45,7 @@ const ProductList = () => {
               <Product cartId={cartData?.cartId} product={prod} />
             </div>
           ))}
-          <Toaster position="bottom-right" />
+          <Toaster position="top-right" />
         </Card>
         <Pagination
           totalResults={20}

@@ -22,7 +22,7 @@ const ProductDetails = () => {
 
   const addToCart = async (e) => {
     e.stopPropagation();
-    const add = addItem(cartData?.cartId, product.product_id, 1);
+    const add = await addItem(cartData?.cartId, product.product_id, 1);
     notify(add);
   };
 
@@ -43,18 +43,18 @@ const ProductDetails = () => {
   }
   return (
     <Layout title={product.name}>
-      <Card className="flex border border-black">
-        <img className="w-2/3 object-cover h-56" src="" alt="" />
-        <CardBody className="flex flex-col justify-between items-start">
-          <p>{product.name}</p>
-          <p>$ {product.price}</p>
-          <p>{product.description}</p>
-          <Button className="" onClick={(e) => addToCart(e)}>
+      <Card className="flex border mt-20">
+      <img className="w-1/3 object-cover" src={`../${product.image_url}/${product.name}.jpg`} alt={product.name} />
+        <CardBody className="flex flex-col items-start">
+          <p className="text-4xl font-semibold text-gray-600">{product.name}</p>
+          <p className="mb-4">₦ {product.price}</p>
+          <p className="text-gray-600">{product.description}</p>
+          <Button className="mt-4" onClick={(e) => addToCart(e)}>
             Add to cart
           </Button>
         </CardBody>
       </Card>
-      <Toaster position="bottom-right" />
+      <Toaster position="top-right" />
     </Layout>
   );
 };

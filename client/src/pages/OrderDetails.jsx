@@ -2,6 +2,7 @@ import { Badge, Card, CardBody } from "@windmill/react-ui";
 import Layout from "layout/Layout";
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
+import {format, parseISO} from "date-fns"
 import orderService from "services/order.service";
 
 const OrderDetails = () => {
@@ -14,33 +15,31 @@ const OrderDetails = () => {
   }, [id]);
   return (
     <Layout>
-      <div>
-        <h1>Order Details</h1>
+      <div className="my-4">
+        <h1 className="font-bold text-2xl">Order Details</h1>
         <p>Order no: #{state.order.order_id}</p>
         <p>{`${state.order.total || "Not available"} items`}</p>
         <p>
           Status: <Badge type="success">{state.order.status}</Badge>
         </p>
-        <p>Total: ₦{state.order.amount}</p>
-        <p>Placed on: {state.order.date}</p>
-        <div>
-          <h1>Items in your order</h1>
+        <p>Total Amount: ₦{state.order.amount}</p>
+        <p>Placed on: {format(parseISO(state.order.date),'d MMM, yyyy')}</p>
+        <div className="border-t-2">
+          <h1 className="font-bold text-xl">Items in your order</h1>
           {items?.map((item) => (
-            <Card key={item.product_id} className="flex h-48">
+            <Card key={item.product_id} className="flex my-4 p-2">
               <img
-                className="object-cover w-1/3"
-                alt="img"
-                src="/img/forest.jpeg"
+                className="w-1/3 h-64 object-cover"
+                src={`../${item.image_url}/${item.name}.jpg`}
+                alt={item.name}
               />
               <CardBody>
-                <h1 className="mb-4 font-semibold text-gray-600 dark:text-gray-300">
-                  Product Name: {item.name}
-                </h1>
+                <h1 className="font-semibold text-gray-600">{item.name}</h1>
+                <p className="mb-2">₦{item.price}</p>
                 <p className="text-gray-600 dark:text-gray-400">
-                  Description: {item.description}
+                  {item.description}
                 </p>
-                <p>Price: ${item.price}</p>
-                <p>Quantity: {item.quantity}</p>
+                <p className="mt-2">Quantity: {item.quantity}</p>
               </CardBody>
             </Card>
           ))}

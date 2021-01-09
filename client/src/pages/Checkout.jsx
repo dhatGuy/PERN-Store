@@ -1,6 +1,7 @@
 import { Button } from "@windmill/react-ui";
 import Layout from "layout/Layout";
 import React from "react";
+import {format, parseISO} from "date-fns"
 import { Link, useLocation } from "react-router-dom";
 
 const Checkout = () => {
@@ -11,7 +12,7 @@ const Checkout = () => {
         <h1>It's ordered!</h1>
         <p>Your order has been recieved.</p>
         <p>Order No.: #{state.detail.order_id}</p>
-        <p>Order Date: {state.detail.date}</p>
+        <p>Order Date: {format(parseISO(state.detail.date),'d MMM, yyyy')}</p>
         <p>No. of items: {state.detail.total}</p>
         <p>Amount: ${state.detail?.amount}</p>
         <Button layout="outline">
