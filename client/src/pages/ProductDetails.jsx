@@ -43,8 +43,8 @@ const ProductDetails = () => {
   }
   return (
     <Layout title={product.name}>
-      <Card className="flex border mt-20">
-      <img className="w-1/3 object-cover" src={`../${product.image_url}/${product.name}.jpg`} alt={product.name} />
+      <Card className="flex lg:flex-row flex-col border mt-20">
+      <img className="sm:w-full md:w-1/2 lg:w-1/3 object-cover" src={`../${product.image_url}/${product.name}.jpg`} alt={product.name} />
         <CardBody className="flex flex-col items-start">
           <p className="text-4xl font-semibold text-gray-600">{product.name}</p>
           <p className="mb-4">₦ {product.price}</p>
