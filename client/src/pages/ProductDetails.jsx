@@ -10,6 +10,7 @@ import productService from "services/product.service";
 const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const [reviews, setReviews] = useState(null);
   const { cartData, addItem } = useCart();
 
   const notify = (data) => {
@@ -22,13 +23,13 @@ const ProductDetails = () => {
 
   const addToCart = (e) => {
     e.stopPropagation();
-    ;
     notify(addItem(cartData?.cartId, product.product_id, 1));
   };
 
   useEffect(() => {
     productService.getProduct(id).then((res) => {
-      setProduct(res.data[0]);
+      console.log(res)
+      setProduct(res.data.product);
     });
   }, [id]);
 
