@@ -98,7 +98,7 @@ const Cart = () => {
           </TableBody>
         </Table>
         <TableFooter className="flex flex-col justify-end items-end">
-          <div className="mb-2">Total: ${total.toFixed(2)}</div>
+          <div className="mb-2">Total: ₦{total.toFixed(2)}</div>
           <Button onClick={() => checkout()}>Checkout</Button>
         </TableFooter>
       </TableContainer>

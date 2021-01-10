@@ -20,10 +20,10 @@ const ProductDetails = () => {
     });
   };
 
-  const addToCart = async (e) => {
+  const addToCart = (e) => {
     e.stopPropagation();
-    const add = await addItem(cartData?.cartId, product.product_id, 1);
-    notify(add);
+    ;
+    notify(addItem(cartData?.cartId, product.product_id, 1));
   };
 
   useEffect(() => {

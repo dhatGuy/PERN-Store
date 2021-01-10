@@ -23,7 +23,7 @@ const Account = () => {
   return (
     <Layout title="Account">
       <div className="flex items-center justify-center">
-        <Card className="lg:w-1/2 mt-2">
+        <Card className="mt-2">
           <CardBody>
             <h1 className="text-4xl font-bold">Account</h1>
             <p className="my-6">Username: {userData.username}</p>
