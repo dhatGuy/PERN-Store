@@ -10,7 +10,7 @@ import productService from "services/product.service";
 const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
-  const [reviews, setReviews] = useState(null);
+  // const [reviews, setReviews] = useState(null);
   const { cartData, addItem } = useCart();
 
   const notify = (data) => {
