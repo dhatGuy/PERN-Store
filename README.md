@@ -17,16 +17,14 @@
   <h1 align="center">PERN Store</h1>
 
   <p align="center">
-    A minimal full-stack e-commerce project built with Postgres, Express, React and Node.
-    <br />
-    <a href="https://github.com/dhatguy/PERN-Store"><strong>Explore the docs »</strong></a>
+    A small full-stack e-commerce project built with Postgres, Express, React and Node.
     <br />
     <br />
     <a href="https://pern-store.netlify.app">View Demo</a>
     ·
-    <a href="https://github.com/shatguy/PERN-Store/issues">Report Bug</a>
+    <a href="https://github.com/dhatguy/PERN-Store/issues">Report Bug</a>
     ·
-    <a href="https://github.com/shatguy/PERN-Store/issues">Request Feature</a>
+    <a href="https://github.com/dhatguy/PERN-Store/issues">Request Feature</a>
   </p>
 </p>
 
@@ -63,7 +61,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot](https://user-images.githubusercontent.com/51405947/104136952-a3509100-5399-11eb-94a6-0f9b07fbf1a2.png)
+![Product Name Screen Shot](https://user-images.githubusercontent.com/51405947/104136952-a3509100-5399-11eb-94a6-0f9b07fbf1a2.png)
 
 
 ### Built With
@@ -115,9 +113,9 @@ Use this space to show useful examples of how a project can be used. Additional 
 ## Contributing
 
 1. Fork the Project
-2. Create your Feature Branch 
-3. Commit your Changes 
-4. Push to the Branch
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
 
