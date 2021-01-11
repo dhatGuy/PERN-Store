@@ -130,7 +130,7 @@ Use this space to show useful examples of how a project can be used. Additional 
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@_odunsi_](https://twitter.com/_odunsi_) - odunsiolakunbi@gmail.com
+Joseph Odunsi - [@_odunsi_](https://twitter.com/_odunsi_) - odunsiolakunbi@gmail.com
 
 Project Link: [https://github.com/dhatguy/PERN-Store](https://github.com/dhatguy/PERN-Store)
 
