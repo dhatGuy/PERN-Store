@@ -28,7 +28,6 @@ const ProductDetails = () => {
 
   useEffect(() => {
     productService.getProduct(id).then((res) => {
-      console.log(res)
       setProduct(res.data.product);
     });
   }, [id]);
