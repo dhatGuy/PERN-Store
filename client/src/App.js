@@ -25,9 +25,9 @@ function App() {
           <Route path="/login">
             <Login />
           </Route>
-          <ProtectedRoute exact path={["/", "/products"]}>
+          <Route exact path={["/", "/products"]}>
             <Product />
-          </ProtectedRoute>
+          </Route>
           <ProtectedRoute exact path="/products/:id/">
             <ProductDetails />
           </ProtectedRoute>

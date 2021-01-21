@@ -1,16 +1,19 @@
-const express = require('express')
+const express = require("express");
 const router = express.Router();
-const pool = require('../db');
-const verifyToken = require('../middleware/verifyToken')
+const pool = require("../db");
+const verifyToken = require("../middleware/verifyToken");
 
 router
   .route("/")
   .get(async (req, res) => {
-    const {page} = req.query
-    const limit = 12
+    const { page } = req.query;
+    const limit = 12;
     try {
-      const offset = (page - 1) * limit
-      const results = await pool.query("select * from products order by product_id asc limit $1 offset $2 ", [limit, offset]);
+      const offset = (page - 1) * limit;
+      const results = await pool.query(
+        "select * from products order by product_id asc limit $1 offset $2 ",
+        [limit, offset]
+      );
       res.status(200).json(results.rows);
     } catch (error) {
       res.status(500).json(error);
@@ -33,7 +36,7 @@ router
     }
   });
 
-  router
+router
   .route("/:id")
   .get(async (req, res) => {
     const { id } = req.params;
@@ -42,7 +45,9 @@ router
         "select * from products where product_id = $1",
         [id]
       );
-      res.status(200).json(results.rows);
+      res.status(200).json({
+        product: results.rows[0]
+      });
     } catch (error) {
       res.status(500).json(error);
     }
@@ -57,10 +62,10 @@ router
       );
       res.status(200).json(results.rows[0]);
     } catch (error) {
-      res.status(500).json(error)
+      res.status(500).json(error);
     }
   })
-  .delete(verifyToken,async (req, res) => {
+  .delete(verifyToken, async (req, res) => {
     const { id } = req.params;
     try {
       const results = await pool.query(
@@ -69,8 +74,8 @@ router
       );
       res.status(200).json(results.rows[0]);
     } catch (error) {
-      res.status(500).json(error)
+      res.status(500).json(error);
     }
   });
 
-module.exports = router
+module.exports = router;
