@@ -2,9 +2,14 @@ import React from "react";
 import toast from "react-hot-toast";
 import { useCart } from "context/CartContext";
 import { Button, CardBody } from "@windmill/react-ui";
+import authService from "services/auth.service";
+import { useHistory } from "react-router-dom";
 
 const Product = ({ cartId, product }) => {
+  const user = authService.getCurrentUser();
+  const history = useHistory();
   const { addItem } = useCart();
+  
   const notify = (data) => {
     return toast.promise(data, {
       loading: "Adding to cart",
@@ -14,12 +19,19 @@ const Product = ({ cartId, product }) => {
   };
   const addToCart = async (e) => {
     e.stopPropagation();
-    const add = addItem(cartId, product.product_id, 1);
-    notify(add);
+    if (user !== null) {
+      notify(addItem(cartId, product.product_id, 1));
+    } else {
+      history.push("/login");
+    }
   };
   return (
     <>
-      <img className="w-full h-56" src={`${product.image_url}/${product.name}.jpg`} alt={product.name} />
+      <img
+        className="w-full h-56"
+        src={`${product.image_url}/${product.name}.jpg`}
+        alt={product.name}
+      />
       <CardBody className="flex flex-col justify-between items-stretch">
         <p className="font-bold text-xl">{product.name}</p>
         <p className="font-medium">₦ {product.price}</p>

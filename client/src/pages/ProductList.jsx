@@ -47,12 +47,14 @@ const ProductList = () => {
           ))}
           <Toaster position="top-right" />
         </Card>
-        <Pagination
-          totalResults={20}
-          resultsPerPage={12}
-          onChange={handleChange}
-          label="Page navigation"
-        />
+        <a href="# ">
+          <Pagination
+            totalResults={20}
+            resultsPerPage={12}
+            onChange={handleChange}
+            label="Page navigation"
+          />
+        </a>
       </div>
     </Layout>
   );
