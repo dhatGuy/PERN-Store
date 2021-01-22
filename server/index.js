@@ -1,7 +1,6 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const pool = require("./db");
 const morgan = require("morgan");
 
 const PORT = process.env.PORT || 8080;
@@ -10,6 +9,7 @@ const users = require("./routes/users");
 const product = require("./routes/product");
 const order = require("./routes/order");
 const cart = require("./routes/cart");
+const reviews = require("./routes/reviews");
 const auth = require("./auth");
 
 const app = express();
@@ -25,6 +25,7 @@ app.use("/api/users", users);
 app.use("/api/products", product);
 app.use("/api/orders", order);
 app.use("/api/cart", cart);
+app.use("/api/reviews", reviews);
 
 app.get("/api", async (req, res, next) => {
   try {
