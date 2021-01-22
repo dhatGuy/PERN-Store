@@ -29,7 +29,7 @@ const Product = ({ cartId, product }) => {
     <>
       <img
         className="w-full h-56"
-        src={`${product.image_url}/${product.name}.jpg`}
+        src={product.image_url}
         alt={product.name}
       />
       <CardBody className="flex flex-col justify-between items-stretch">

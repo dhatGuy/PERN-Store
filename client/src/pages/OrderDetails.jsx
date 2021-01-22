@@ -27,10 +27,10 @@ const OrderDetails = () => {
         <div className="border-t-2">
           <h1 className="font-bold text-xl">Items in your order</h1>
           {items?.map((item) => (
-            <Card key={item.product_id} className="flex my-4 p-2">
+            <Card key={item.product_id} className="flex my-4 p-2 md:flex-row flex-col">
               <img
-                className="w-1/3 h-64 object-cover"
-                src={`../${item.image_url}/${item.name}.jpg`}
+                className="sm:w-full md:w-1/2 lg:w-1/3 object-cover"
+                src={item.image_url}
                 alt={item.name}
               />
               <CardBody>
