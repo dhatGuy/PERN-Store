@@ -9,6 +9,7 @@ import reportWebVitals from "./reportWebVitals";
 import { Windmill } from "@windmill/react-ui";
 import "./tailwind.output.css";
 import { HelmetProvider } from "react-helmet-async";
+import { ReviewProvider } from "context/ReviewContext";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -16,11 +17,13 @@ ReactDOM.render(
       <Windmill>
         <UserProvider>
           <ProductProvider>
-            <CartProvider>
-              <OrderProvider>
-                <App />
-              </OrderProvider>
-            </CartProvider>
+            <ReviewProvider>
+              <CartProvider>
+                <OrderProvider>
+                  <App />
+                </OrderProvider>
+              </CartProvider>
+            </ReviewProvider>
           </ProductProvider>
         </UserProvider>
       </Windmill>
