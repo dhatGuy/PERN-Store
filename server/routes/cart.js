@@ -30,8 +30,8 @@ router.route("/create").post(verifyToken, async (req, res) => {
     });
   }
 
-  router.route("/").post(async (req, res) => {
-    const { userId } = req.body;
+  router.route("/").get(async (req, res) => {
+    const { userId } = req.query;
     try {
         const cartId = await pool.query("select id from cart where user_id = $1", [
           userId,

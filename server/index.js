@@ -2,6 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
+const swaggerUi = require('swagger-ui-express'),
+swaggerDocument = require('./swagger.json');
 
 const PORT = process.env.PORT || 8080;
 
@@ -26,6 +28,7 @@ app.use("/api/products", product);
 app.use("/api/orders", order);
 app.use("/api/cart", cart);
 app.use("/api/reviews", reviews);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get("/api", async (req, res, next) => {
   try {
