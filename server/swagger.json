@@ -1,5 +1,12 @@
 {
   "swagger": "2.0",
+  "securityDefinitions": {
+    "JWT": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "auth-token"
+    }
+  },
   "info": {
     "version": "1.0.0",
     "title": "PERN-Store",
@@ -14,7 +21,23 @@
   "tags": [
     {
       "name": "Users",
-      "description": "API for users in the system"
+      "description": "API for users"
+    },
+    {
+      "name": "Products",
+      "description": "API for products"
+    },
+    {
+      "name": "Orders",
+      "description": "API for orders"
+    },
+    {
+      "name": "Cart",
+      "description": "API for cart"
+    },
+    {
+      "name": "Reviews",
+      "description": "API for reviews"
     }
   ],
   "schemes": [
@@ -61,9 +84,6 @@
               "$ref": "#/definitions/User"
             }
           }
-        ],
-        "produces": [
-          "application/json"
         ],
         "responses": {
           "200": {
@@ -132,6 +152,11 @@
         "tags": [
           "Users"
         ],
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
         "parameters": [
           {
             "name": "user",
@@ -153,6 +178,11 @@
       },
       "delete": {
         "summary": "Delete user with given ID",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
         "tags": [
           "Users"
         ],
@@ -177,6 +207,52 @@
           }
         }
       }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Login into the system",
+        "summary": "Login",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "Login details",
+            "schema": {
+              "$ref": "#/definitions/login"
+            }
+          }
+        ],
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Create an account",
+        "summary": "Sign up",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "Login details",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Account created"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -197,6 +273,18 @@
         "username": {
           "type": "string",
           "example": "johnny"
+        }
+      }
+    },
+    "login": {
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "johndoe@person.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "^@wra@m+SrNs!lS"
         }
       }
     }

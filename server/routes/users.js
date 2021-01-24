@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../db");
+const verifyToken = require("../middleware/verifyToken");
 
 router
   .route("/")
@@ -12,7 +13,7 @@ router
       res.status(500).json(error);
     }
   })
-  .post(async (req, res) => {
+  .post(verifyToken, async (req, res) => {
     const { username, password, email, fullname } = req.body;
 
     try {
@@ -43,7 +44,7 @@ router
       res.status(500).json(error);
     }
   })
-  .put(async (req, res) => {
+  .put(verifyToken, async (req, res) => {
     const { username, password, email, fullname } = req.body;
     const { id } = req.params;
     try {
@@ -53,10 +54,10 @@ router
       );
       res.status(200).json(results.rows[0]);
     } catch (error) {
-      res.status(500).json(error)
+      res.status(500).json(error);
     }
   })
-  .delete(async (req, res) => {
+  .delete(verifyToken, async (req, res) => {
     const { id } = req.params;
     try {
       const results = await pool.query(
@@ -65,7 +66,7 @@ router
       );
       res.status(200).json(results.rows[0]);
     } catch (error) {
-      res.status(500).json(error)
+      res.status(500).json(error);
     }
   });
 
