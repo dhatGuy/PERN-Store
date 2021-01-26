@@ -3,6 +3,7 @@ const router = express.Router();
 const pool = require("../db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const mail = require("../utils/mail")
 
 router.get("/", (req, res) => {
   res.json({
@@ -38,6 +39,7 @@ router.post("/signup", async (req, res, next) => {
           status: "success",
           data: results.rows[0],
         });
+        mail.signupMail(email, fullname.split(" ")[0])
       } catch (error) {
         res.status(500).json(error);
       }
