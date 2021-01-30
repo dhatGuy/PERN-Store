@@ -1,22 +1,33 @@
 import { Card, CardBody } from "@windmill/react-ui";
+import { format, parseISO } from "date-fns";
 import React from "react";
 import ReactStars from "react-rating-stars-component";
 
-const ReviewCard = ({ review }) => {
+const ReviewCard = ({ reviews }) => {
+  if(reviews.length === 0){
+    return <div>No reviews yet</div>
+  }
   return (
-    <Card colored className="bg-purple-600 w-64 mx-2">
+    <>
+    {reviews.map(review=>(
+      <Card colored className="bg-purple-600 w-64 mx-2 mt-2" key={review.id}>
       <CardBody>
-        <p className="font-semibold text-white">{review.name}</p>
         <ReactStars
           count={5}
           size={24}
           edit={false}
           value={review.rating}
           activeColor="#ffd700"
-        />
-        <p className="text-white leading-tight">{review.content}</p>
+          />
+        <p className="text-white leading-tight my-4">{review.content}</p>
+        <p className="text-white text-opacity-60">{`${format(
+          parseISO(review.date),
+          "dd-MM-yy"
+          )} by ${review.name}`}</p>
       </CardBody>
     </Card>
+      ))}
+      </>
   );
 };
 

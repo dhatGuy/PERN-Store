@@ -1,5 +1,5 @@
 import API from "../api/axios.config";
-import authHeader from "./authHeader"
+import authHeader from "./authHeader";
 
 const userId = JSON.parse(localStorage.getItem("user"))?.user_id;
 
@@ -16,10 +16,12 @@ class CartService {
     );
   }
   getCart(user_id) {
-    return API.post(
+    return API.get(
       "/cart",
       {
-        userId: Number(user_id),
+        params: {
+          userId: Number(user_id),
+        },
       },
       {
         headers: authHeader(),

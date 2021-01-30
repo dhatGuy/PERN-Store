@@ -11,7 +11,10 @@ router
     try {
       const offset = (page - 1) * limit;
       const results = await pool.query(
-        "select * from products order by product_id asc limit $1 offset $2 ",
+        `select products.*, trunc(avg(reviews.rating)) as avg_rating, count(reviews.*) from products
+        LEFT JOIN reviews
+        ON products.product_id = reviews.product_id
+        group by products.product_id limit $1 offset $2 `,
         [limit, offset]
       );
       results.rows = [...results.rows].sort(()=> Math.random() - 0.5)
@@ -43,7 +46,11 @@ router
     const { id } = req.params;
     try {
       const results = await pool.query(
-        "select * from products where product_id = $1",
+        `select products.*, trunc(avg(reviews.rating),1) as avg_rating, count(reviews.*) from products
+        LEFT JOIN reviews
+        ON products.product_id = reviews.product_id
+        where products.product_id = $1
+        group by products.product_id`,
         [id]
       );
       res.status(200).json({

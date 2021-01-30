@@ -6,6 +6,7 @@ import { useReview } from "context/ReviewContext";
 import Layout from "layout/Layout";
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import ReactStars from "react-rating-stars-component";
 import { useParams } from "react-router-dom";
 import productService from "services/product.service";
 import reviewService from "services/review.service";
@@ -52,6 +53,7 @@ const ProductDetails = () => {
       </Layout>
     );
   }
+
   return (
     <Layout title={product.name}>
       <Card className="flex lg:flex-row flex-col border mt-20">
@@ -61,20 +63,30 @@ const ProductDetails = () => {
           alt={product.name}
         />
         <CardBody className="flex flex-col items-start">
-          <p className="text-4xl font-semibold text-gray-600">{product.name}</p>
-          <p className="mb-4">₦ {product.price}</p>
+          <p className="text-4xl text-gray-600">{product.name}</p>
+          <p className="mt-2 font-bold text-2xl">₦ {product.price}</p>
+          <span className="flex items-center">
+            <ReactStars
+              count={5}
+              size={24}
+              edit={false}
+              value={+product.avg_rating}
+              activeColor="#ffd700"
+            />
+            {""}({+product.count > 0 ? `${+product.count} ratings` : "No ratings available"})
+          </span>
           <p className="text-gray-600">{product.description}</p>
           <Button className="mt-4" onClick={(e) => addToCart(e)}>
             Add to cart
           </Button>
         </CardBody>
       </Card>
-      <div className="flex">
-
-      {reviews.reviews.map((review) => (
-        <ReviewCard review={review} key={review.id} />
-        ))}
+      <div className="">
+        <h1 className="font-bold text-2xl">Product Reviews</h1>
+        <div className="flex wrap">
+          <ReviewCard reviews={reviews.reviews} />
         </div>
+      </div>
       <Toaster position="top-right" />
     </Layout>
   );
