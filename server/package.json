@@ -21,6 +21,7 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
+    "nodemailer": "^6.4.17",
     "pg": "^8.5.1",
     "swagger-ui-express": "^4.1.6"
   }

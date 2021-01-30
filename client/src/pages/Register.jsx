@@ -1,5 +1,5 @@
 import { Button, HelperText, Input, Label } from "@windmill/react-ui";
-import instance from "api/axios.config";
+import API from "api/axios.config";
 import Spinner from "components/Spinner";
 import Layout from "layout/Layout";
 import React, { useState } from "react";
@@ -24,7 +24,7 @@ const Register = () => {
     setError('')
     if (password === confirmPassword) {
       setIsLoading(!isLoading);
-      instance
+      API
         .post("/auth/signup", {
           username,
           email,

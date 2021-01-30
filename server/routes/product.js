@@ -14,6 +14,7 @@ router
         "select * from products order by product_id asc limit $1 offset $2 ",
         [limit, offset]
       );
+      results.rows = [...results.rows].sort(()=> Math.random() - 0.5)
       res.status(200).json(results.rows);
     } catch (error) {
       res.status(500).json(error);
