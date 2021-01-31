@@ -18,6 +18,35 @@ class ReviewService {
       }
     );
   }
+  addReview(product_id, rating, content) {
+    return API.post(
+      "/reviews",
+      {
+        user_id,
+        product_id,
+        rating,
+        content,
+      },
+      {
+        headers: authHeader(),
+      }
+    );
+  }
+
+  updateReview(id, product_id, content, rating) {
+    return API.put(
+      "/reviews",
+      {
+        id,
+        content,
+        rating,
+        product_id
+      },
+      {
+        headers: authHeader(),
+      }
+    );
+  }
 }
 
 export default new ReviewService();

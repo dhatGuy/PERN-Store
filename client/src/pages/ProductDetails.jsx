@@ -1,5 +1,6 @@
-import { Button, Card, CardBody } from "@windmill/react-ui";
+import { Backdrop, Button, Card, CardBody } from "@windmill/react-ui";
 import ReviewCard from "components/ReviewCard";
+import ReviewModal from "components/ReviewModal";
 import Spinner from "components/Spinner";
 import { useCart } from "context/CartContext";
 import { useReview } from "context/ReviewContext";
@@ -16,6 +17,7 @@ const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   const { reviews, setReviews } = useReview(null);
   const { cartData, addItem } = useCart();
+  const [isOpen, setIsOpen] = useState(false)
 
   const notify = (data) => {
     return toast.promise(data, {
@@ -56,6 +58,7 @@ const ProductDetails = () => {
 
   return (
     <Layout title={product.name}>
+      {isOpen && <Backdrop />}
       <Card className="flex lg:flex-row flex-col border mt-20">
         <img
           className="sm:w-full md:w-1/2 lg:w-1/3 object-cover"
@@ -85,6 +88,7 @@ const ProductDetails = () => {
         <h1 className="font-bold text-2xl">Product Reviews</h1>
         <div className="flex wrap">
           <ReviewCard reviews={reviews.reviews} />
+      <ReviewModal isOpen={isOpen} setIsOpen={setIsOpen} product_id={product.product_id} reviews={reviews}/>
         </div>
       </div>
       <Toaster position="top-right" />

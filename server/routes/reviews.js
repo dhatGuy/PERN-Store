@@ -17,16 +17,14 @@ router.route("/").get(async (req, res, next) => {
       [product_id]
     );
     res.status(200).json({
+      // does current user's review available
       reviewExist: reviewExist.rowCount !== 0,
       reviews: reviews.rows,
     });
   } catch (error) {
     res.status(500).json(error);
   }
-});
-
-router
-  .route("/add")
+})
   .post(async (req, res) => {
     const { user_id, product_id, content, rating } = req.body;
 
@@ -39,12 +37,11 @@ router
       );
       res.json(result.rows);
     } catch (error) {
-      console.log(error);
-      res.status(500).json(error);
+      res.status(500).json(error.detail);
     }
   })
   .put(async (req, res) => {
-    const { id, content, rating } = req.body;
+    const { content, rating, id } = req.body;
 
     try {
       const result = await pool.query(

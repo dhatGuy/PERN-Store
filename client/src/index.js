@@ -12,7 +12,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { ReviewProvider } from "context/ReviewContext";
 
 ReactDOM.render(
-  <React.StrictMode>
+  <>
     <HelmetProvider>
       <Windmill>
         <UserProvider>
@@ -28,7 +28,8 @@ ReactDOM.render(
         </UserProvider>
       </Windmill>
     </HelmetProvider>
-  </React.StrictMode>,
+  </>
+  ,
   document.getElementById("root")
 );
 
