@@ -17,7 +17,6 @@ const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   const { reviews, setReviews } = useReview(null);
   const { cartData, addItem } = useCart();
-  const [isOpen, setIsOpen] = useState(false)
 
   const notify = (data) => {
     return toast.promise(data, {
@@ -58,7 +57,6 @@ const ProductDetails = () => {
 
   return (
     <Layout title={product.name}>
-      {isOpen && <Backdrop />}
       <Card className="flex lg:flex-row flex-col border mt-20">
         <img
           className="sm:w-full md:w-1/2 lg:w-1/3 object-cover"
@@ -76,7 +74,11 @@ const ProductDetails = () => {
               value={+product.avg_rating}
               activeColor="#ffd700"
             />
-            {""}({+product.count > 0 ? `${+product.count} ratings` : "No ratings available"})
+            {""}(
+            {+product.count > 0
+              ? `${+product.count} ratings`
+              : "No ratings available"}
+            )
           </span>
           <p className="text-gray-600">{product.description}</p>
           <Button className="mt-4" onClick={(e) => addToCart(e)}>
@@ -84,12 +86,15 @@ const ProductDetails = () => {
           </Button>
         </CardBody>
       </Card>
-      <div className="">
+      <div className="mt-10">
         <h1 className="font-bold text-2xl">Product Reviews</h1>
         <div className="flex wrap">
           <ReviewCard reviews={reviews.reviews} />
-      <ReviewModal isOpen={isOpen} setIsOpen={setIsOpen} product_id={product.product_id} reviews={reviews}/>
         </div>
+          <ReviewModal
+            product_id={product.product_id}
+            reviews={reviews}
+          />
       </div>
       <Toaster position="top-right" />
     </Layout>

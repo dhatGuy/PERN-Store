@@ -6,30 +6,24 @@ import {
   ModalFooter,
   Button,
   Label,
-  Input,
   Textarea,
   HelperText,
+  Backdrop,
 } from "@windmill/react-ui";
 import reviewService from "services/review.service";
 import authService from "services/auth.service";
 import toast from "react-hot-toast";
 import { useHistory } from "react-router-dom";
+import ReactStars from "react-rating-stars-component";
 
 const { user_id } = authService.getCurrentUser();
-const ReviewModal = ({ isOpen, setIsOpen, product_id, reviews }) => {
+const ReviewModal = ({ product_id, reviews }) => {
   const review = reviews.reviews.find((elm) => elm.user_id === user_id);
   const { reviewExist } = reviews;
   const [rating, setRating] = useState(1);
   const [content, setContent] = useState("");
+  const [isOpen, setIsOpen] = useState(false)
   const history = useHistory()
-
-  // const notify = (msg) =
-
-  const handleRating = (e) => {
-    let { value, min, max } = e.target;
-    value = Math.max(Number(min), Math.min(Number(max), Number(value)));
-    setRating(value);
-  };
 
   const addReview = () => {
     reviewService
@@ -74,6 +68,7 @@ const ReviewModal = ({ isOpen, setIsOpen, product_id, reviews }) => {
 
   return (
     <>
+    {isOpen && <Backdrop/>}
       <div>
         <Button onClick={toggleModal}>
           {reviewExist ? "Edit Review" : "Add Review"}
@@ -84,32 +79,28 @@ const ReviewModal = ({ isOpen, setIsOpen, product_id, reviews }) => {
         <ModalBody>
           <form>
             <Label>
-              <span>Rating</span>
-              <Input
-                type="number"
-                name="rating"
-                value={rating}
-                className="mt-1"
-                onChange={handleRating}
-                min={1}
-                max={5}
-                maxLength={1}
-              />
-              <HelperText valid={false}>
-                Rating must be between 1 and 5
-              </HelperText>
+              <span className="font-semibold">Rating</span>
+              <ReactStars
+              count={5}
+              size={24}
+              value={rating}
+              onChange={newRating=> setRating(newRating)}
+              activeColor="#ffd700"
+            />
             </Label>
-            <Label>
-              <span>Content</span>
+            <Label className="mt-2">
+              <span className="font-semibold">Content</span>
               <Textarea
-                className="mt-1"
+                className="mt-1 border px-2"
                 name="content"
                 rows="3"
                 value={content}
+                valid={content.trim().length >= 10}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="What do you think about this product?"
               />
             </Label>
+            <HelperText valid={content.trim().length >= 10}>Content must have more than 10 characters</HelperText>
           </form>
         </ModalBody>
         <ModalFooter>
@@ -120,7 +111,7 @@ const ReviewModal = ({ isOpen, setIsOpen, product_id, reviews }) => {
           >
             Cancel
           </Button>
-          <Button onClick={handleSubmit} className="w-full sm:w-auto">
+          <Button onClick={handleSubmit} className="w-full sm:w-auto" disabled={content.trim().length < 10}>
             {reviewExist ? "Save" : "Add"}
           </Button>
         </ModalFooter>
