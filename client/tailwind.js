@@ -2,7 +2,14 @@ const colors = require('tailwindcss/colors')
 const windmill = require('@windmill/react-ui/config')
 
 module.exports = windmill({
-  purge: [],
+  purge: {
+    enabled: process.env.NODE_ENV === 'production',
+    content: [
+      'src/**/*.js',
+      'src/**/*.jsx',
+      'public/**/*.html',
+    ]
+},
   presets: [],
   darkMode: false, // or 'media' or 'class'
   theme: {
