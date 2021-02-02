@@ -91,10 +91,9 @@ const ProductDetails = () => {
         <div className="flex wrap">
           <ReviewCard reviews={reviews.reviews} />
         </div>
-          <ReviewModal
-            product_id={product.product_id}
-            reviews={reviews}
-          />
+        <div className="my-2 ml-2">
+          <ReviewModal product_id={product.product_id} reviews={reviews} />
+        </div>
       </div>
       <Toaster position="top-right" />
     </Layout>
