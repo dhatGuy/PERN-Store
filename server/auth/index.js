@@ -1,22 +1,16 @@
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
 const pool = require("../db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const mail = require("../utils/mail")
-
-router.get("/", (req, res) => {
-  res.json({
-    message: "🔐",
-  });
-});
+const mail = require("../utils/mail");
+const crypto = require("crypto");
+const moment = require("moment");
+const curDate = moment().format();
 
 const validateUser = (user) => {
   const validEmail = typeof user.email == "string" && user.email.trim() != "";
   const validPassword =
-    typeof user.password == "string" &&
-    user.email.trim() != "" &&
-    user.password.trim().length >= 6;
+    typeof user.password == "string" && user.password.trim().length >= 6;
 
   return validEmail && validPassword;
 };
@@ -39,7 +33,7 @@ router.post("/signup", async (req, res, next) => {
           status: "success",
           data: results.rows[0],
         });
-        mail.signupMail(email, fullname.split(" ")[0])
+        mail.signupMail(email, fullname.split(" ")[0]);
       } catch (error) {
         res.status(500).json(error);
       }
@@ -86,6 +80,151 @@ router.post("/login", async (req, res, next) => {
     }
   } catch (error) {
     next(new Error(error));
+  }
+});
+
+router.post("/forgot-password", async (req, res) => {
+  const { email } = req.body;
+  const userExist = await pool.query(
+    "SELECT EXISTS (SELECT * from users where email = $1)",
+    [email]
+  );
+
+  if (userExist.rows[0].exists) {
+    try {
+      await pool.query(
+        `update public."resetTokens" set used = $1 where email = $2`,
+        [true, email]
+      );
+
+      //Create a random reset token
+      var fpSalt = crypto.randomBytes(64).toString("base64");
+
+      //token expires after one hour
+      var expireDate = moment().add(1, "h").format();
+
+      try {
+        await pool.query(
+          `insert into public."resetTokens" (email, expiration, token) values ($1, $2, $3)`,
+          [email, expireDate, fpSalt]
+        );
+
+        mail
+          .resetPasswordMail(fpSalt, email)
+          .then(() => {
+            return res.json({ status: "OK" });
+          })
+          .catch((err) => console.log(err));
+      } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  } else {
+    res.status(500).send("Email not found!");
+  }
+});
+
+router.get("/reset-password", async (req, res) => {
+  const { token, email } = req.query;
+  try {
+    await pool.query(
+      `delete from public."resetTokens" where expiration <= $1`,
+      [curDate]
+    );
+
+    try {
+      const result = await pool.query(
+        `
+        select * from public."resetTokens" 
+        where token = $1 AND email = $2 AND expiration > $3 AND used = $4
+      `,
+        [token, email, curDate, false]
+      );
+
+      if (result.rowCount < 1) {
+        res.json({
+          message: "Token has expired. Please try password reset again.",
+          showForm: false,
+        });
+      } else {
+        res.json({
+          result: result.rows[0],
+          showForm: true,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      res.json(error);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.post("/reset-password", async (req, res) => {
+  const { password, confirmPassword, token, email } = req.body;
+
+  const isValidPassword =
+    typeof password == "string" && password.trim().length >= 6;
+
+  if (password !== confirmPassword)
+    res.json({ message: "Password do not match.", status: "error" });
+
+  if (!isValidPassword)
+    res.json({
+      status: "errror",
+      message: "Password length must be more than 5 characters",
+    });
+
+  try {
+    const result = await pool.query(
+      `
+        select * from public."resetTokens" 
+        where token = $1 AND email = $2 AND expiration > $3 AND used = $4
+      `,
+      [token, email, curDate, false]
+    );
+
+    if (result.rowCount < 1)
+      return res.json({
+        status: "error",
+        message:
+          "Token not found. Please try the reset password process again.",
+      });
+
+    try {
+      await pool.query(
+        `update public."resetTokens" set used = $1 where email = $2`,
+        [true, email]
+      );
+
+      const salt = await bcrypt.genSalt();
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      try {
+        await pool.query(`update users set password = $1 where email = $2`, [
+          hashedPassword,
+          email,
+        ]);
+        return res.json({
+          status: "ok",
+          message: "Password reset. Please login with your new password.",
+        });
+      } catch (error) {
+        console.log(error);
+        res.json(error);
+      }
+    } catch (error) {
+      console.log(error);
+      res.json(error);
+    }
+  } catch (error) {
+    console.log(error);
+    res.json(error);
   }
 });
 
