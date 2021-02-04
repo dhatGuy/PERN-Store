@@ -17,6 +17,12 @@ class AuthService {
     localStorage.removeItem("user");
   }
 
+  forgotPassword(email){
+    return API.post("/auth/forgot-password", {
+      email
+    })
+  }
+
   register(username, email, password) {
     return API.post("/signup", {
       username,

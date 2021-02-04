@@ -1,4 +1,5 @@
 import { Button, HelperText, Input, Label } from "@windmill/react-ui";
+import ForgotPasswordModal from "components/ForgotPasswordModal";
 import Spinner from "components/Spinner";
 import Layout from "layout/Layout";
 import React, { useState } from "react";
@@ -18,13 +19,13 @@ const Login = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      setIsLoading(!isLoading)
+      setIsLoading(!isLoading);
       await authService.login(email, password);
       setRedirectToReferrer(true);
-      setIsLoading(!isLoading)
+      setIsLoading(!isLoading);
       window.location.reload();
     } catch (error) {
-      setIsLoading(false)
+      setIsLoading(false);
       setError(error.response.data);
     }
   };
@@ -73,12 +74,20 @@ const Login = () => {
               onChange={(e) => setpassword(e.target.value)}
             />
           </div>
+          <ForgotPasswordModal />
           <Button type="submit">
-            {isLoading ? <Spinner size={20} loading={isLoading}/> : "Login"}
+            {isLoading ? <Spinner size={20} loading={isLoading} /> : "Login"}
           </Button>
-          {error && <HelperText className="mt-1 italic" valid={false}>{error.message}</HelperText>}
+          {error && (
+            <HelperText className="mt-1 italic" valid={false}>
+              {error.message}
+            </HelperText>
+          )}
           <p className="text-sm mt-4">
-            Don't have an account? <Link to="/signup" className="font-bold">Sign Up</Link>
+            Don't have an account?{" "}
+            <Link to="/signup" className="font-bold">
+              Sign Up
+            </Link>
           </p>
         </form>
       </div>
