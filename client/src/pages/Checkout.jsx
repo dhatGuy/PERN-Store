@@ -17,7 +17,6 @@ const Checkout = () => {
         <p>Amount: ${state.detail?.amount}</p>
         <Button layout="outline">
         <Link to="/products">Continue shopping</Link>
-
         </Button>
       </div>
     </Layout>

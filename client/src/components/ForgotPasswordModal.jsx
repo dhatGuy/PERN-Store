@@ -11,11 +11,14 @@ import {
 } from "@windmill/react-ui";
 import React, { useState } from "react";
 import authService from "services/auth.service";
+import Spinner from "./Spinner";
 
 const ForgotPasswordModal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [msg, setMsg] = useState("");
+  const [isSending, setIsSending] = useState(false)
+
   const toggleModal = () => {
     setEmail("");
     setIsOpen(!isOpen);
@@ -23,13 +26,17 @@ const ForgotPasswordModal = () => {
 
   const handleSubmit = () => {
     setMsg("");
+    setIsSending(true)
     authService
       .forgotPassword(email)
       .then((data) => {
-        if (data.data.status === "OK")
+        if (data.data.status === "OK"){
+          setIsSending(false)
           setMsg("Email has been sent successfully.");
+        }
       })
       .catch((error) => {
+        setIsSending(false)
         setMsg(error.response.data);
       });
   };
@@ -68,7 +75,7 @@ const ForgotPasswordModal = () => {
               Cancel
             </Button>
             <Button onClick={handleSubmit} className="w-full sm:w-auto">
-              Send mail
+              {isSending ? <Spinner size={20}/> : "Send mail"}
             </Button>
           </ModalFooter>
         </Modal>
