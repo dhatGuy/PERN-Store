@@ -4,7 +4,7 @@ const html = require("./signup");
 
 const url =
   process.env.NODE_ENV === "production"
-    ? "https://nameless-journey-88760.herokuapp.com"
+    ? "https://pern-store.netlify.app"
     : "http://localhost:3000";
 
 var transport = nodemailer.createTransport({
@@ -19,9 +19,9 @@ var transport = nodemailer.createTransport({
 
 const signupMail = async (to, name) => {
   const message = {
-    from: "pernstore.shop@gmail.com", // Sender address
-    to, // List of recipients
-    subject: "Welcome to PERN Store", // Subject line
+    from: "pernstore.shop@gmail.com",
+    to,
+    subject: "Welcome to PERN Store",
     html: html(name),
   };
 
@@ -58,7 +58,7 @@ const forgotPasswordMail = async (token, email) => {
   }
 };
 
-const resetPasswordMail = async(email) =>{
+const resetPasswordMail = async (email) => {
   const message = {
     from: process.env.GMAIL_EMAIL,
     to: email,
@@ -74,10 +74,10 @@ const resetPasswordMail = async(email) =>{
     console.log(error);
     return error;
   }
-}
+};
 
 module.exports = {
   signupMail,
   resetPasswordMail,
-  forgotPasswordMail
+  forgotPasswordMail,
 };
