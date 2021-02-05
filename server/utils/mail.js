@@ -4,8 +4,8 @@ const html = require("./signup");
 
 const url =
   process.env.NODE_ENV === "production"
-    ? "https://nameless-journey-88760.herokuapp.com/api"
-    : "http://localhost:9000/api";
+    ? "https://nameless-journey-88760.herokuapp.com"
+    : "http://localhost:3000";
 
 var transport = nodemailer.createTransport({
   port: 465,
@@ -34,13 +34,13 @@ const signupMail = async (to, name) => {
   }
 };
 
-const resetPasswordMail = async (token, email) => {
+const forgotPasswordMail = async (token, email) => {
   const message = {
     from: process.env.GMAIL_EMAIL,
     to: email,
-    subject: "Reset Password",
+    subject: "Forgot Password",
     html: `<p>To reset your password, please click the link below.
-      <a href="${url}/auth/reset-password?token=${encodeURIComponent(
+      <a href="${url}/reset-password?token=${encodeURIComponent(
       token
     )}&email=${email}"><br/>
       Reset Password
@@ -58,7 +58,26 @@ const resetPasswordMail = async (token, email) => {
   }
 };
 
+const resetPasswordMail = async(email) =>{
+  const message = {
+    from: process.env.GMAIL_EMAIL,
+    to: email,
+    subject: "Password Reset Successful",
+    html: `<p>Your password has been changed successfully.</p>`,
+  };
+
+  try {
+    await transport
+      .sendMail(message)
+      .then((data) => console.log(data.response));
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
 module.exports = {
   signupMail,
   resetPasswordMail,
+  forgotPasswordMail
 };

@@ -110,7 +110,7 @@ router.post("/forgot-password", async (req, res) => {
         );
 
         mail
-          .resetPasswordMail(fpSalt, email)
+          .forgotPasswordMail(fpSalt, email)
           .then(() => {
             return res.json({ status: "OK" });
           })
@@ -128,8 +128,8 @@ router.post("/forgot-password", async (req, res) => {
   }
 });
 
-router.get("/reset-password", async (req, res) => {
-  const { token, email } = req.query;
+router.post("/check-token", async (req, res) => {
+  const { token, email } = req.body;
   try {
     await pool.query(
       `delete from public."resetTokens" where expiration <= $1`,
@@ -158,7 +158,7 @@ router.get("/reset-password", async (req, res) => {
       }
     } catch (error) {
       console.log(error);
-      res.json(error);
+      res.json("Unknown error", error);
     }
   } catch (error) {
     console.log(error);
@@ -166,18 +166,18 @@ router.get("/reset-password", async (req, res) => {
 });
 
 router.post("/reset-password", async (req, res) => {
-  const { password, confirmPassword, token, email } = req.body;
+  const { password, password2, token, email } = req.body;
 
   const isValidPassword =
     typeof password == "string" && password.trim().length >= 6;
 
-  if (password !== confirmPassword)
-    res.json({ message: "Password do not match.", status: "error" });
+  if (password !== password2)
+    return res.json({ message: "Password do not match.", status: "error" });
 
   if (!isValidPassword)
-    res.json({
-      status: "errror",
-      message: "Password length must be more than 5 characters",
+    return res.json({
+      status: "error",
+      message: "Password length must be at least 5 characters",
     });
 
   try {
@@ -210,10 +210,12 @@ router.post("/reset-password", async (req, res) => {
           hashedPassword,
           email,
         ]);
-        return res.json({
-          status: "ok",
-          message: "Password reset. Please login with your new password.",
-        });
+        mail.resetPasswordMail(email).then(() =>
+          res.json({
+            status: "OK",
+            message: "Password reset. Please login with your new password.",
+          })
+        );
       } catch (error) {
         console.log(error);
         res.json(error);
