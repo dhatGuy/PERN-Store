@@ -10,6 +10,7 @@ import {
   ModalHeader,
 } from "@windmill/react-ui";
 import React, { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import authService from "services/auth.service";
 import Spinner from "./Spinner";
 
@@ -17,32 +18,35 @@ const ForgotPasswordModal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [msg, setMsg] = useState("");
-  const [isSending, setIsSending] = useState(false)
+  const [isSending, setIsSending] = useState(false);
 
   const toggleModal = () => {
+    setMsg("");
     setEmail("");
     setIsOpen(!isOpen);
   };
 
   const handleSubmit = () => {
     setMsg("");
-    setIsSending(true)
+    setIsSending(true);
     authService
       .forgotPassword(email)
       .then((data) => {
-        if (data.data.status === "OK"){
-          setIsSending(false)
-          setMsg("Email has been sent successfully.");
+        if (data.data.status === "OK") {
+          setIsSending(false);
+          toast.success("Email has been sent successfully.");
+          setIsOpen(false);
         }
       })
       .catch((error) => {
-        setIsSending(false)
+        setIsSending(false);
         setMsg(error.response.data);
       });
   };
   return (
     <div>
       <>
+        <Toaster />
         {isOpen && <Backdrop />}
         <span
           onClick={() => setIsOpen(!isOpen)}
@@ -68,14 +72,11 @@ const ForgotPasswordModal = () => {
           </ModalBody>
           <ModalFooter>
             <Button
+              onClick={handleSubmit}
+              disabled={email.trim().length < 1}
               className="w-full sm:w-auto"
-              layout="outline"
-              onClick={toggleModal}
             >
-              Cancel
-            </Button>
-            <Button onClick={handleSubmit} className="w-full sm:w-auto">
-              {isSending ? <Spinner size={20}/> : "Send mail"}
+              {isSending ? <Spinner size={20} /> : "Send Email"}
             </Button>
           </ModalFooter>
         </Modal>

@@ -177,7 +177,7 @@ router.post("/reset-password", async (req, res) => {
   if (!isValidPassword)
     return res.json({
       status: "error",
-      message: "Password length must be at least 5 characters",
+      message: "Password length must be at least 6 characters",
     });
 
   try {

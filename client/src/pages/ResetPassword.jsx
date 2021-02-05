@@ -50,32 +50,42 @@ const ResetPassword = () => {
     <Layout title="Reset Password">
       <Toaster />
       {msg.showForm ? (
-        <div>
-          <h1>Reset Password</h1>
-          <form onSubmit={handlePasswordReset}>
-            <Label>
-              <span>Password</span>
-              <Input
-                type="password"
-                inputMode="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Label>
-            <HelperText>{resetmsg.message || ""}</HelperText>
-            <Label>
-              <span>Confirm Password</span>
-              <Input
-                type="password"
-                inputMode="password"
-                value={password2}
-                onChange={(e) => setPassword2(e.target.value)}
-              />
-            </Label>
-            <Button type="submit">
-              {isResetting ? <Spinner size={20} /> : "Reset Password"}
-            </Button>
-          </form>
+        <div className="pt-12">
+          <header className="max-w-lg mx-auto mb-4">
+            <h1 className="text-4xl font-bold text-center">Reset Password</h1>
+          </header>
+          <div className="mx-auto max-w-lg shadow-2xl p-8 md:p-10">
+            <form className="flex flex-col" onSubmit={handlePasswordReset}>
+              <Label className="mb-4">
+                <span className="block text-gray-700 text-sm font-bold mb-2">
+                  Password
+                </span>
+                <Input
+                  className="rounded w-full text-gray-700 focus:outline-none border px-2 py-2 focus:border-purple-600 transition duration-500"
+                  type="password"
+                  inputMode="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <HelperText valid={false}>{resetmsg.message || ""}</HelperText>
+              </Label>
+              <Label className="mb-4">
+                <span className="block text-gray-700 text-sm font-bold mb-2">
+                  Confirm Password
+                </span>
+                <Input
+                  className="rounded w-full text-gray-700 focus:outline-none border px-2 py-2 focus:border-purple-600 transition duration-500"
+                  type="password"
+                  inputMode="password"
+                  value={password2}
+                  onChange={(e) => setPassword2(e.target.value)}
+                />
+              </Label>
+              <Button type="submit">
+                {isResetting ? <Spinner size={20} /> : "Reset Password"}
+              </Button>
+            </form>
+          </div>
         </div>
       ) : (
         <div>{msg.message}</div>
