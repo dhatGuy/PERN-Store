@@ -5,6 +5,7 @@ import Layout from "layout/Layout";
 import React, { useState } from "react";
 import { Link, Redirect, useLocation } from "react-router-dom";
 import authService from "services/auth.service";
+import GoogleLogin from "react-google-login";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -15,6 +16,19 @@ const Login = () => {
   const { state } = useLocation();
 
   const user = authService.getCurrentUser();
+
+  const handleLogin = async (googleData) => {
+    try {
+      setIsLoading(!isLoading);
+      await authService.googleLogin(googleData.tokenId);
+      setRedirectToReferrer(true);
+      setIsLoading(!isLoading);
+      window.location.reload();
+    } catch (error) {
+      setIsLoading(false);
+      setError(error.response.data);
+    }
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -83,6 +97,14 @@ const Login = () => {
               {error.message}
             </HelperText>
           )}
+          <GoogleLogin
+            className="my-4 flex justify-center"
+            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+            buttonText="Log in with Google"
+            onSuccess={handleLogin}
+            onFailure={handleLogin}
+            cookiePolicy={"single_host_origin"}
+          />
           <p className="text-sm mt-4">
             Don't have an account?{" "}
             <Link to="/signup" className="font-bold">

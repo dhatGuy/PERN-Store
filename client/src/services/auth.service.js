@@ -12,6 +12,14 @@ class AuthService {
     return response.data;
   }
 
+  async googleLogin(token) {
+    const res = await API.post("/auth/google", {
+      token,
+    });
+    if (res.data.token) localStorage.setItem("user", JSON.stringify(res.data));
+    return res.data;
+  }
+
   logout() {
     localStorage.removeItem("user");
   }

@@ -6,6 +6,8 @@ const mail = require("../utils/mail");
 const crypto = require("crypto");
 const moment = require("moment");
 const curDate = moment().format();
+const { OAuth2Client } = require("google-auth-library");
+const client = new OAuth2Client(process.env.CLIENT_ID);
 
 const validateUser = (user) => {
   const validEmail = typeof user.email == "string" && user.email.trim() != "";
@@ -80,6 +82,37 @@ router.post("/login", async (req, res, next) => {
     }
   } catch (error) {
     next(new Error(error));
+  }
+});
+
+router.post("/google", async (req, res) => {
+  const { token } = req.body;
+  const ticket = await client.verifyIdToken({
+    idToken: token,
+    audience: process.env.CLIENT_ID,
+  });
+  const { name, email, sub, given_name } = ticket.getPayload();
+
+  try {
+    const results = await pool.query(
+      `INSERT INTO users(google_id,username, email, fullname) 
+        VALUES($1, $2, $3, $4) ON CONFLICT (email) 
+        DO UPDATE SET google_id = $1, fullname = $4 returning *`,
+      [sub, given_name, email, name]
+    );
+    const user = results.rows[0];
+    const token = jwt.sign({ id: user.user_id }, process.env.SECRET);
+    res.header("auth-token", token);
+    res.status(200).json({
+      token,
+      user_id: user.user_id,
+      email,
+      username: given_name,
+      fullname: name,
+      status: "Login successful 🔓",
+    });
+  } catch (error) {
+    console.log(error);
   }
 });
 
