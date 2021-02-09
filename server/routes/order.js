@@ -1,34 +1,39 @@
-const express = require("express");
-const router = express.Router();
+const router = require('express').Router();
 const pool = require("../db");
 
 router.route("/create").post(async (req, res, next) => {
   const { cartId, userId, amount, itemTotal } = req.body;
   try {
+    // create an order
     const order = await pool.query(
       "INSERT INTO orders(user_id, status, amount, total) VALUES($1, 'complete', $2, $3) returning *",
       [userId, amount, itemTotal]
     );
 
+    // get order id of the newly created order data
     const order_id = order.rows[0].order_id;
-    const cartItem = await pool.query(
-      "SELECT product_id, quantity from cart_item where cart_id = $1",
-      [cartId]
-    );
 
-    cartItem.rows.forEach(
-      async (item) =>
-        await pool.query(
-          "INSERT INTO order_item(order_id,product_id, quantity) VALUES($1, $2, $3)",
-          [order_id, item.product_id, item.quantity]
-        )
-    );
+    // copy cart items in the current cart into order items 
+    try {
+      const query = await pool.query(
+        `
+      INSERT INTO order_item(order_id,product_id, quantity) 
+      SELECT $1, product_id, quantity from cart_item where cart_id = $2
+      returning *
+      `,
+        [order_id, cartId]
+      );
 
-    await pool.query("delete from cart_item where cart_id = $1", [cartId]);
+      // delete all items from cart after checking out
+      await pool.query("delete from cart_item where cart_id = $1", [cartId]);
 
-    res.json(order.rows[0]);
+      res.json(order.rows[0]);
+
+    } catch (error) {
+      res.status(500).send(error)
+    }
   } catch (error) {
-    res.status(500).json(error)
+    res.status(500).json(error);
   }
 });
 
