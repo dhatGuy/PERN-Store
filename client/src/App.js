@@ -6,9 +6,9 @@ import Checkout from "pages/Checkout";
 import Login from "pages/Login";
 import Register from "pages/Register";
 import ResetPassword from "pages/ResetPassword";
-import { ProtectedRoute } from "protected.route";
 import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { ProtectedRoute } from "routes/protected.route";
 
 const ProductDetails = lazy(() => import("pages/ProductDetails"));
 const OrderDetails = lazy(() => import("pages/OrderDetails"));

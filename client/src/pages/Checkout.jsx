@@ -14,7 +14,7 @@ const Checkout = () => {
         <p>Order No.: #{state.detail.order_id}</p>
         <p>Order Date: {format(parseISO(state.detail.date),'d MMM, yyyy')}</p>
         <p>No. of items: {state.detail.total}</p>
-        <p>Amount: ${state.detail?.amount}</p>
+        <p>Amount: ₦{state.detail?.amount}</p>
         <Button layout="outline">
         <Link to="/products">Continue shopping</Link>
         </Button>
