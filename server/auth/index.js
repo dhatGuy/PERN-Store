@@ -91,24 +91,28 @@ router.post("/google", async (req, res) => {
     idToken: token,
     audience: process.env.CLIENT_ID,
   });
+
   const { name, email, sub, given_name } = ticket.getPayload();
 
   try {
-    const results = await pool.query(
+    await pool.query(
       `INSERT INTO users(google_id,username, email, fullname) 
         VALUES($1, $2, $3, $4) ON CONFLICT (email) 
         DO UPDATE SET google_id = $1, fullname = $4 returning *`,
       [sub, given_name, email, name]
     );
-    const user = results.rows[0];
-    const token = jwt.sign({ id: user.user_id }, process.env.SECRET);
+
+    const results = await pool.query("select * from users where email = $1", [email])
+    const { user_id, username, fullname } = results.rows[0];
+    const token = jwt.sign({ id: user_id }, process.env.SECRET);
+    
     res.header("auth-token", token);
     res.status(200).json({
       token,
-      user_id: user.user_id,
+      user_id,
       email,
-      username: given_name,
-      fullname: name,
+      username,
+      fullname,
       status: "Login successful 🔓",
     });
   } catch (error) {
