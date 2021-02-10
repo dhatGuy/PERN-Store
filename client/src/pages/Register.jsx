@@ -32,6 +32,7 @@ const Register = () => {
           fullname: name,
         })
         .then(() => {
+          setError("")
           history.push("/login");
           setIsLoading(!isLoading);
         })
@@ -40,7 +41,7 @@ const Register = () => {
           setError(error.response.data);
         });
     } else {
-      alert("Password doesn't match ");
+      setError("Password doesn't match ");
     }
   };
 

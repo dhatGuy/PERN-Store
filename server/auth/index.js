@@ -72,51 +72,61 @@ router.post("/login", async (req, res, next) => {
             status: "Login successful 🔓",
           });
         } else {
-          next(new Error("Password incorrect"));
+          next(new Error("Email or password incorrect."));
         }
       } else {
-        next(new Error("User not found"));
+        next(new Error("Email or password incorrect."));
       }
     } else {
       next(new Error("Invalid login"));
     }
   } catch (error) {
-    next(new Error(error));
+    next(new Error("Something went wrong."));
   }
 });
 
 router.post("/google", async (req, res) => {
   const { token } = req.body;
-  const ticket = await client.verifyIdToken({
-    idToken: token,
-    audience: process.env.CLIENT_ID,
-  });
 
-  const { name, email, sub, given_name } = ticket.getPayload();
+  if(!token) return res.status(401)
 
   try {
-    await pool.query(
-      `INSERT INTO users(google_id,username, email, fullname) 
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.CLIENT_ID,
+    });
+
+    const { name, email, sub, given_name } = ticket.getPayload();
+
+    try {
+      await pool.query(
+        `INSERT INTO users(google_id,username, email, fullname) 
         VALUES($1, $2, $3, $4) ON CONFLICT (email) 
         DO UPDATE SET google_id = $1, fullname = $4 returning *`,
-      [sub, given_name, email, name]
-    );
+        [sub, given_name, email, name]
+      );
 
-    const results = await pool.query("select * from users where email = $1", [email])
-    const { user_id, username, fullname } = results.rows[0];
-    const token = jwt.sign({ id: user_id }, process.env.SECRET);
-    
-    res.header("auth-token", token);
-    res.status(200).json({
-      token,
-      user_id,
-      email,
-      username,
-      fullname,
-      status: "Login successful 🔓",
-    });
+      const results = await pool.query("select * from users where email = $1", [
+        email,
+      ]);
+      const { user_id, username, fullname } = results.rows[0];
+      const token = jwt.sign({ id: user_id }, process.env.SECRET);
+
+      res.header("auth-token", token);
+      res.status(200).json({
+        token,
+        user_id,
+        email,
+        username,
+        fullname,
+        status: "Login successful 🔓",
+      });
+    } catch (error) {
+      res.status(500).send(error);
+    }
   } catch (error) {
     console.log(error);
+    res.status(401).json({msg: "ID token required"});
   }
 });
 

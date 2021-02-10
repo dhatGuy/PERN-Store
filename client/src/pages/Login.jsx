@@ -17,16 +17,15 @@ const Login = () => {
 
   const user = authService.getCurrentUser();
 
-  const handleLogin = async (googleData) => {
+  const handleGoogleLogin = async (googleData) => {
+    console.log(googleData)
     try {
-      setIsLoading(!isLoading);
       await authService.googleLogin(googleData.tokenId);
+      setIsLoading(true);
       setRedirectToReferrer(true);
-      setIsLoading(!isLoading);
       window.location.reload();
     } catch (error) {
       setIsLoading(false);
-      setError(error.response.data);
     }
   };
 
@@ -101,8 +100,8 @@ const Login = () => {
             className="my-4 flex justify-center"
             clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
             buttonText="Log in with Google"
-            onSuccess={handleLogin}
-            onFailure={handleLogin}
+            onSuccess={handleGoogleLogin}
+            onFailure={handleGoogleLogin}
             cookiePolicy={"single_host_origin"}
           />
           <p className="text-sm mt-4">
