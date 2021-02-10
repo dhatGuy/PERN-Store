@@ -57,7 +57,7 @@ const ProductDetails = () => {
 
   return (
     <Layout title={product.name}>
-      <Card className="flex lg:flex-row flex-col border mt-20">
+      <Card className="flex lg:flex-row flex-col border mt-20 mb-12">
         <img
           className="sm:w-full md:w-1/2 lg:w-1/3 object-cover"
           src={product.image_url}
@@ -88,7 +88,7 @@ const ProductDetails = () => {
       </Card>
       <div className="mt-10">
         <h1 className="font-bold text-2xl">Product Reviews</h1>
-        <div className="flex wrap">
+        <div className="flex flex-wrap items-center content-end">
           <ReviewCard reviews={reviews.reviews} />
         </div>
         <div className="my-2 ml-2">

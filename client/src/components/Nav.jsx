@@ -16,7 +16,7 @@ const Nav = () => {
   return (
       <nav className="flex items-center justify-between px-2 lg:px-36 py-2 bg-gray-50 shadow-lg">
         <span className="text-gray-700 text-2xl font-bold dark:text-gray-400">
-          <p>PERN Store</p>
+          <h1>PERN Store</h1>
         </span>
         <ul className="flex space-x-4">
           {!user && (

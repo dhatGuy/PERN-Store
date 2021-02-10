@@ -14,7 +14,7 @@ const ReviewCard = ({ reviews }) => {
   return (
     <>
       {reviews.map((review) => (
-        <Card colored className="bg-purple-600 w-64 mx-2 mt-2" key={review.id}>
+        <Card colored className="bg-purple-600 w-64 mx-2 mt-2 flex-auto md:flex-none" key={review.id}>
           <CardBody>
             <ReactStars
               count={5}
