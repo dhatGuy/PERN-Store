@@ -1,7 +1,8 @@
-const router = require('express').Router();
+const router = require("express").Router();
 const pool = require("../db");
+const verifyToken = require("../middleware/verifyToken");
 
-router.route("/create").post(async (req, res, next) => {
+router.route("/create").post(verifyToken, async (req, res, next) => {
   const { cartId, userId, amount, itemTotal } = req.body;
   try {
     // create an order
@@ -13,9 +14,9 @@ router.route("/create").post(async (req, res, next) => {
     // get order id of the newly created order data
     const order_id = order.rows[0].order_id;
 
-    // copy cart items in the current cart into order items 
+    // copy cart items in the current cart_item table into order_item table
     try {
-      const query = await pool.query(
+      await pool.query(
         `
       INSERT INTO order_item(order_id,product_id, quantity) 
       SELECT $1, product_id, quantity from cart_item where cart_id = $2
@@ -24,20 +25,19 @@ router.route("/create").post(async (req, res, next) => {
         [order_id, cartId]
       );
 
-      // delete all items from cart after checking out
+      // delete all items from cart_items table after checking out
       await pool.query("delete from cart_item where cart_id = $1", [cartId]);
 
       res.json(order.rows[0]);
-
     } catch (error) {
-      res.status(500).send(error)
+      res.status(500).send(error);
     }
   } catch (error) {
     res.status(500).json(error);
   }
 });
 
-router.route("/").get(async (req, res, next) => {
+router.route("/").get(verifyToken, async (req, res, next) => {
   const { page, userId } = req.query;
   const limit = 5;
   const offset = (page - 1) * limit;
@@ -57,7 +57,7 @@ router.route("/").get(async (req, res, next) => {
   }
 });
 
-router.route("/:id").get(async (req, res, next) => {
+router.route("/:id").get(verifyToken, async (req, res, next) => {
   const { id } = req.params;
 
   try {

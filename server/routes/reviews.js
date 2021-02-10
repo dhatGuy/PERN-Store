@@ -2,13 +2,17 @@ const router = require("express").Router();
 const pool = require("../db");
 const verifyToken = require("../middleware/verifyToken");
 
-router.route("/").get(async (req, res, next) => {
+router.route("/")
+  .get(verifyToken, async (req, res, next) => {
   const { product_id, user_id } = req.query;
   try {
+    // check if current logged user review exist for the product
     const reviewExist = await pool.query(
-      "SELECT * FROM reviews where product_id = $1 and user_id = $2",
+      "SELECT EXISTS (SELECT * FROM reviews where product_id = $1 and user_id = $2)",
       [product_id, user_id]
     );
+
+    // get reviews associated with the product
     const reviews = await pool.query(
       `SELECT users.fullname as name, * FROM reviews
         join users 
@@ -17,15 +21,14 @@ router.route("/").get(async (req, res, next) => {
       [product_id]
     );
     res.status(200).json({
-      // does current user's review available
-      reviewExist: reviewExist.rowCount !== 0,
+      reviewExist: reviewExist.rows[0].exists,
       reviews: reviews.rows,
     });
   } catch (error) {
     res.status(500).json(error);
   }
 })
-  .post(async (req, res) => {
+  .post(verifyToken, async (req, res) => {
     const { user_id, product_id, content, rating } = req.body;
 
     try {
@@ -40,7 +43,7 @@ router.route("/").get(async (req, res, next) => {
       res.status(500).json(error.detail);
     }
   })
-  .put(async (req, res) => {
+  .put(verifyToken, async (req, res) => {
     const { content, rating, id } = req.body;
 
     try {
@@ -51,7 +54,6 @@ router.route("/").get(async (req, res, next) => {
       );
       res.json(result.rows);
     } catch (error) {
-      console.log(error);
       res.status(500).json(error);
     }
   });

@@ -6,9 +6,10 @@ const verifyToken = require("../middleware/verifyToken");
 router.route("/create").post(verifyToken, async (req, res) => {
   const userId = req.body.userId;
   const isCartExist = await pool.query(
-    "SELECT * FROM cart where user_id = $1",
+    "SELECT EXISTS (SELECT * FROM cart where user_id = $1)",
     [userId]
   );
+
   if (isCartExist.rowCount === 0) {
     try {
       const newCart = await pool.query(
@@ -21,7 +22,7 @@ router.route("/create").post(verifyToken, async (req, res) => {
         data: newCart.rows[0],
       });
     } catch (error) {
-      res.status(500).json(error)
+      res.status(500).json(error);
     }
   } else {
     res.status(201).json({
@@ -30,29 +31,29 @@ router.route("/create").post(verifyToken, async (req, res) => {
     });
   }
 
-  router.route("/").get(async (req, res) => {
+router.route("/").get(async (req, res) => {
     const { userId } = req.query;
     try {
-        const cartId = await pool.query("select id from cart where user_id = $1", [
-          userId,
-        ]);
-        const cart = await pool.query(
-          `SELECT products.*, cart_item.quantity, round((products.price * cart_item.quantity)::numeric, 2) as subtotal from users 
+      const cartId = await pool.query(
+        "select id from cart where user_id = $1",
+        [userId]
+      );
+      const cart = await pool.query(
+        `SELECT products.*, cart_item.quantity, round((products.price * cart_item.quantity)::numeric, 2) as subtotal from users 
           join cart on users.user_id = cart.user_id
           join cart_item on cart.id = cart_item.cart_id
           join products on products.product_id = cart_item.product_id
           where users.user_id = $1
           `,
-          [userId]
-        );
-        res.json({ items: cart.rows, cartId: cartId.rows[0].id });
-      } catch (error) {
-        res.status(401).send(error);
-        throw error;
-      }
-    });
+        [userId]
+      );
+      res.json({ items: cart.rows, cartId: cartId.rows[0].id });
+    } catch (error) {
+      res.status(401).send(error);
+      throw error;
+    }
+  });
 });
-
 
 router.route("/add").post(verifyToken, async (req, res) => {
   const { cart_id, product_id, quantity } = req.body;
@@ -91,7 +92,7 @@ router.route("/add").post(verifyToken, async (req, res) => {
   }
 });
 
-router.route("/delete").delete(async (req, res, next) => {
+router.route("/delete").delete(verifyToken, async (req, res, next) => {
   const { cart_id, product_id } = req.body;
   try {
     const result = await pool.query(
@@ -104,7 +105,7 @@ router.route("/delete").delete(async (req, res, next) => {
   }
 });
 
-router.route("/increment").put(async (req, res, next) => {
+router.route("/increment").put(verifyToken, async (req, res, next) => {
   const { cart_id, product_id } = req.body;
   try {
     await pool.query(
@@ -121,7 +122,7 @@ router.route("/increment").put(async (req, res, next) => {
   }
 });
 
-router.route("/decrement").put(async (req, res, next) => {
+router.route("/decrement").put(verifyToken, async (req, res, next) => {
   const { cart_id, product_id } = req.body;
 
   try {
@@ -135,7 +136,7 @@ router.route("/decrement").put(async (req, res, next) => {
     );
     res.json(product.rows);
   } catch (error) {
-    res.status(404).json(error)
+    res.status(404).json(error);
   }
 });
 

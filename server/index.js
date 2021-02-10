@@ -13,6 +13,8 @@ const order = require("./routes/order");
 const cart = require("./routes/cart");
 const reviews = require("./routes/reviews");
 const auth = require("./auth");
+const helmet = require('helmet')
+const compression = require('compression')
 
 const app = express();
 
@@ -21,6 +23,8 @@ app.use(express.json());
 
 
 app.use(morgan("dev"));
+app.use(compression())
+app.use(helmet())
 
 app.use("/api/auth", auth);
 app.use("/api/users", users);
