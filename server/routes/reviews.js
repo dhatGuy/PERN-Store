@@ -3,7 +3,7 @@ const pool = require("../db");
 const verifyToken = require("../middleware/verifyToken");
 
 router.route("/")
-  .get(verifyToken, async (req, res, next) => {
+  .get( async (req, res, next) => {
   const { product_id, user_id } = req.query;
   try {
     // check if current logged user review exist for the product
