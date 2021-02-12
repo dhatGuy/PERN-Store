@@ -9,6 +9,7 @@ const Nav = () => {
   const { cartData } = useCart();
   const { isAuthenticated, userData, logout } = useUser();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  console.log((isAuthenticated()))
 
   const cartQuantity = cartData?.items.reduce((acc, cur) => {
     return acc + Number(cur.quantity);
