@@ -9,6 +9,7 @@ const Nav = () => {
   const { cartData } = useCart();
   const { isAuthenticated, userData, logout } = useUser();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  console.log((isAuthenticated()))
 
   const cartQuantity = cartData?.items.reduce((acc, cur) => {
     return acc + Number(cur.quantity);
@@ -22,7 +23,7 @@ const Nav = () => {
         <h1>PERN Store</h1>
       </span>
       <ul className="flex space-x-4">
-        {!isAuthenticated() && (
+        {isAuthenticated() === false && (
           <>
             <li>
               <Link to="/signup">
@@ -36,7 +37,7 @@ const Nav = () => {
             </li>
           </>
         )}
-        {isAuthenticated() && (
+        {isAuthenticated() === true && (
           <>
             <li>
               <Link to="/">
