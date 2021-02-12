@@ -61,7 +61,7 @@ router.post("/login", async (req, res, next) => {
         const plainPassword = await bcrypt.compare(req.body.password, password);
 
         if (plainPassword) {
-          const token = jwt.sign({ id: user.user_id }, process.env.SECRET, { expiresIn: '1hr'});
+          const token = jwt.sign({ id: user.user_id }, process.env.SECRET);
           res.header("auth-token", token);
           res.status(200).json({
             token,
@@ -69,7 +69,6 @@ router.post("/login", async (req, res, next) => {
             email,
             username,
             fullname,
-            exp: Math.floor(Date.now() / 1000) + (60 * 60),
             status: "Login successful 🔓",
           });
         } else {
