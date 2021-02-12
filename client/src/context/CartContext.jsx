@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import cartService from "services/cart.service";
-import authService from "services/auth.service";
+import { useUser } from "./UserContext";
 
 const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
   const [cartData, setCartData] = useState(null);
-  const user_id = authService.getCurrentUser()?.user_id;
+  const {userData, isAuthenticated} = useUser()
 
   const addItem = async (cartId, productId, quantity) => {
     cartService.addToCart(cartId, productId, quantity).then((res) => {
@@ -34,16 +34,16 @@ const CartProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (user_id)
+    if (userData?.user_id)
       cartService
         .createCart()
         .then((res) => {
-          return cartService.getCart(user_id);
+          return cartService.getCart(userData?.user_id);
         })
         .then((res) => {
           setCartData(res?.data);
         });
-  }, [user_id]);
+  }, [userData?.user_id, isAuthenticated]);
 
   return (
     <CartContext.Provider

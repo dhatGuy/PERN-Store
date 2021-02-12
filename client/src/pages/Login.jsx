@@ -28,7 +28,6 @@ const Login = () => {
         setUserState(data);
         setRedirectToReferrer(true);
         setIsLoading(false);
-        window.location.reload();
       }, 1500);
     } catch (error) {
       setIsLoading(false);
@@ -47,7 +46,6 @@ const Login = () => {
         setUserState(data);
         setRedirectToReferrer(true);
         setIsLoading(false);
-        window.location.reload();
       }, 1500);
     } catch (error) {
       setIsLoading(false);
