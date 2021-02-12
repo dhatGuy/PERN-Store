@@ -5,7 +5,6 @@ import { useCart } from "context/CartContext";
 import { useProduct } from "context/ProductContext";
 import Layout from "layout/Layout";
 import React from "react";
-import { Toaster } from "react-hot-toast";
 import { useHistory } from "react-router-dom";
 
 const ProductList = () => {
@@ -45,7 +44,6 @@ const ProductList = () => {
               <Product cartId={cartData?.cartId} product={prod} />
             </div>
           ))}
-          <Toaster position="top-right" />
         </Card>
         <a href="# ">
           <Pagination

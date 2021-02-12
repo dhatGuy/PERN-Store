@@ -1,5 +1,4 @@
 import API from "../api/axios.config";
-import authHeader from "./authHeader";
 
 const user_id = JSON.parse(localStorage.getItem("user"))?.user_id;
 
@@ -12,9 +11,6 @@ class ReviewService {
           product_id,
           user_id,
         },
-      },
-      {
-        headers: authHeader(),
       }
     );
   }
@@ -26,9 +22,6 @@ class ReviewService {
         product_id,
         rating,
         content,
-      },
-      {
-        headers: authHeader(),
       }
     );
   }
@@ -41,9 +34,6 @@ class ReviewService {
         content,
         rating,
         product_id
-      },
-      {
-        headers: authHeader(),
       }
     );
   }

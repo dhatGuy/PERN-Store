@@ -1,26 +1,17 @@
 import API from "api/axios.config";
 import authService from "./auth.service";
-import authHeader from "./authHeader";
 
 const userId = authService.getCurrentUser()?.user_id;
 
 class OrderService {
   createOrder(cartId, amount, itemTotal) {
-    return API.post(
-      "/orders/create",
-      { cartId, userId, amount, itemTotal },
-      { headers: authHeader() }
-    );
+    return API.post("/orders/create", { cartId, userId, amount, itemTotal });
   }
   getAllOrders(page) {
-    return API.get(
-      `/orders/?userId=${userId}&page=${page}`,
-      { userId },
-      { headers: authHeader() }
-    );
+    return API.get(`/orders/?userId=${userId}&page=${page}`, { userId });
   }
   getOrder(id) {
-    return API.get(`/orders/${id}`, { headers: authHeader() });
+    return API.get(`/orders/${id}`);
   }
 }
 

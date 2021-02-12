@@ -10,7 +10,7 @@ import {
   ModalHeader,
 } from "@windmill/react-ui";
 import React, { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import authService from "services/auth.service";
 import Spinner from "./Spinner";
 
@@ -46,7 +46,6 @@ const ForgotPasswordModal = () => {
   return (
     <div>
       <>
-        <Toaster />
         {isOpen && <Backdrop />}
         <span
           onClick={() => setIsOpen(!isOpen)}

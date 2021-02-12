@@ -3,7 +3,7 @@ import Spinner from "components/Spinner";
 import useQuery from "hooks/useQuery";
 import Layout from "layout/Layout";
 import React, { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useHistory } from "react-router-dom";
 import authService from "services/auth.service";
 
@@ -48,7 +48,6 @@ const ResetPassword = () => {
   };
   return (
     <Layout title="Reset Password">
-      <Toaster />
       {msg.showForm ? (
         <div className="pt-12">
           <header className="max-w-lg mx-auto mb-4">

@@ -7,6 +7,7 @@ import Login from "pages/Login";
 import Register from "pages/Register";
 import ResetPassword from "pages/ResetPassword";
 import { lazy, Suspense } from "react";
+import { Toaster } from "react-hot-toast";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { ProtectedRoute } from "routes/protected.route";
 
@@ -28,6 +29,7 @@ function App() {
         }
       >
         <>
+        <Toaster position="top-right"/>
           <Switch>
             <ProtectedRoute exact path="/profile">
               <Account />

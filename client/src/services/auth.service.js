@@ -2,21 +2,17 @@ import API from "api/axios.config";
 
 class AuthService {
   async login(email, password) {
-    const {data} = await API.post("/auth/login", {
+    const { data } = await API.post("/auth/login", {
       email,
       password,
     });
-    if (data.token) {
-      localStorage.setItem("user", JSON.stringify(data));
-    }
     return data;
   }
 
   async googleLogin(token) {
-    const {data} = await API.post("/auth/google", {
+    const { data } = await API.post("/auth/google", {
       token,
     });
-    if (data.token) localStorage.setItem("user", JSON.stringify(data));
     return data;
   }
 

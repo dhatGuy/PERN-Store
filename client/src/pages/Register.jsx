@@ -3,6 +3,7 @@ import API from "api/axios.config";
 import Spinner from "components/Spinner";
 import Layout from "layout/Layout";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
 import authService from "services/auth.service";
 
@@ -21,20 +22,22 @@ const Register = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    setError('')
+    setError("");
     if (password === confirmPassword) {
       setIsLoading(!isLoading);
-      API
-        .post("/auth/signup", {
-          username,
-          email,
-          password,
-          fullname: name,
-        })
+      API.post("/auth/signup", {
+        username,
+        email,
+        password,
+        fullname: name,
+      })
         .then(() => {
-          setError("")
-          history.push("/login");
-          setIsLoading(!isLoading);
+          setError("");
+          toast.success("Account created successfully.")
+          setTimeout(() => {
+            history.push("/login");
+            setIsLoading(!isLoading);
+          }, 1000);
         })
         .catch((error) => {
           setIsLoading(false);
@@ -127,8 +130,8 @@ const Register = () => {
               id="password2"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-              {error && <HelperText valid={false}>{error}</HelperText>}
+            />
+            {error && <HelperText valid={false}>{error}</HelperText>}
           </div>
           <Button type="submit">
             {isLoading ? (
@@ -138,7 +141,10 @@ const Register = () => {
             )}
           </Button>
           <p className="text-sm mt-4">
-            Have an account? <Link to="/login" className="font-bold">Login</Link>
+            Have an account?{" "}
+            <Link to="/login" className="font-bold">
+              Login
+            </Link>
           </p>
         </form>
       </div>

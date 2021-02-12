@@ -1,18 +1,18 @@
 import { Card, CardBody } from "@windmill/react-ui";
 import Spinner from "components/Spinner";
-import { UserContext } from "context/UserContext";
+import { useUser } from "context/UserContext";
 import Layout from "layout/Layout";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import authService from "services/auth.service";
 
 const Account = () => {
-  const [userData, setUserData] = useContext(UserContext);
+  const {userData, setUserState} = useUser();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setUserData(authService.getCurrentUser());
+    setUserState(authService.getCurrentUser());
     setIsLoading(false);
-  }, [setUserData]);
+  }, [setUserState]);
 
   if (isLoading)
     return (

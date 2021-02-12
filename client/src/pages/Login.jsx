@@ -1,13 +1,16 @@
 import { Button, HelperText, Input, Label } from "@windmill/react-ui";
 import ForgotPasswordModal from "components/ForgotPasswordModal";
 import Spinner from "components/Spinner";
+import { useUser } from "context/UserContext";
 import Layout from "layout/Layout";
 import React, { useState } from "react";
+import GoogleLogin from "react-google-login";
+import toast from "react-hot-toast";
 import { Link, Redirect, useLocation } from "react-router-dom";
 import authService from "services/auth.service";
-import GoogleLogin from "react-google-login";
 
 const Login = () => {
+  const { setUserState } = useUser();
   const [email, setEmail] = useState("");
   const [password, setpassword] = useState("");
   const [error, setError] = useState("");
@@ -18,14 +21,18 @@ const Login = () => {
   const user = authService.getCurrentUser();
 
   const handleGoogleLogin = async (googleData) => {
-    console.log(googleData)
     try {
-      await authService.googleLogin(googleData.tokenId);
-      setIsLoading(true);
-      setRedirectToReferrer(true);
-      window.location.reload();
+      const data = await authService.googleLogin(googleData.tokenId);
+      toast.success("Login successful");
+      setTimeout(() => {
+        setUserState(data);
+        setRedirectToReferrer(true);
+        setIsLoading(false);
+        window.location.reload();
+      }, 1500);
     } catch (error) {
       setIsLoading(false);
+      setError(error.response?.data);
     }
   };
 
@@ -33,13 +40,18 @@ const Login = () => {
     e.preventDefault();
     try {
       setIsLoading(!isLoading);
-      await authService.login(email, password);
-      setRedirectToReferrer(true);
-      setIsLoading(!isLoading);
-      window.location.reload();
+      const data = await authService.login(email, password);
+      toast.success("Login successful");
+
+      setTimeout(() => {
+        setUserState(data);
+        setRedirectToReferrer(true);
+        setIsLoading(false);
+        window.location.reload();
+      }, 1500);
     } catch (error) {
       setIsLoading(false);
-      setError(error.response.data);
+      setError(error.response?.data);
     }
   };
 
@@ -73,7 +85,7 @@ const Login = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <div className="mb-4">
+          <div className="">
             <Label className="block text-grey-darker text-sm font-bold mb-2">
               <span>Password</span>
             </Label>
@@ -87,15 +99,17 @@ const Login = () => {
               onChange={(e) => setpassword(e.target.value)}
             />
           </div>
-          <ForgotPasswordModal />
-          <Button type="submit">
-            {isLoading ? <Spinner size={20} loading={isLoading} /> : "Login"}
-          </Button>
           {error && (
             <HelperText className="mt-1 italic" valid={false}>
               {error.message}
             </HelperText>
           )}
+          <div className="mt-4">
+            <ForgotPasswordModal />
+          </div>
+          <Button type="submit">
+            {isLoading ? <Spinner size={20} loading={isLoading} /> : "Login"}
+          </Button>
           <GoogleLogin
             className="my-4 flex justify-center"
             clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}

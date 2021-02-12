@@ -6,7 +6,7 @@ import { useCart } from "context/CartContext";
 import { useReview } from "context/ReviewContext";
 import Layout from "layout/Layout";
 import React, { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import ReactStars from "react-rating-stars-component";
 import { useParams } from "react-router-dom";
 import productService from "services/product.service";
@@ -95,7 +95,6 @@ const ProductDetails = () => {
           <ReviewModal product_id={product.product_id} reviews={reviews} />
         </div>
       </div>
-      <Toaster position="top-right" />
     </Layout>
   );
 };
