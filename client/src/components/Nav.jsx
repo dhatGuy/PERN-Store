@@ -22,7 +22,7 @@ const Nav = () => {
         <h1>PERN Store</h1>
       </span>
       <ul className="flex space-x-4">
-        {!isAuthenticated() && (
+        {isAuthenticated() === false && (
           <>
             <li>
               <Link to="/signup">
@@ -36,7 +36,7 @@ const Nav = () => {
             </li>
           </>
         )}
-        {isAuthenticated() && (
+        {isAuthenticated() === true && (
           <>
             <li>
               <Link to="/">
