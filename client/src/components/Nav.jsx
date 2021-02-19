@@ -6,16 +6,12 @@ import { Home, ShoppingCart, User } from "react-feather";
 import { useUser } from "context/UserContext";
 
 const Nav = () => {
-  const { cartData } = useCart();
-  const { isAuthenticated, userData, logout } = useUser();
+  const { cartQuantity } = useCart();
+  const { isLoggedIn, userData, logout } = useUser();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  console.log((isAuthenticated()))
 
-  const cartQuantity = cartData?.items.reduce((acc, cur) => {
-    return acc + Number(cur.quantity);
-  }, 0);
   const name =
-    userData?.fullname.split(" ")[0] + " " + userData?.fullname.split(" ")[1];
+    userData?.fullname?.split(" ")[0] + " " + userData?.fullname?.split(" ")[1];
   
     return (
     <nav className="flex items-center justify-between px-2 lg:px-36 py-2 bg-gray-50 shadow-lg">
@@ -23,7 +19,7 @@ const Nav = () => {
         <h1>PERN Store</h1>
       </span>
       <ul className="flex space-x-4">
-        {isAuthenticated() === false && (
+        {!isLoggedIn && (
           <>
             <li>
               <Link to="/signup">
@@ -37,7 +33,8 @@ const Nav = () => {
             </li>
           </>
         )}
-        {isAuthenticated() === true && (
+
+        {isLoggedIn && (
           <>
             <li>
               <Link to="/">

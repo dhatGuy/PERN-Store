@@ -8,8 +8,7 @@ router.route("/create").post(verifyToken, async (req, res) => {
   const isCartExist = await pool.query(
     "SELECT EXISTS (SELECT * FROM cart where user_id = $1)",
     [userId]
-  );
-
+    );
   if (isCartExist.rowCount === 0) {
     try {
       const newCart = await pool.query(

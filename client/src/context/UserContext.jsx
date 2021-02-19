@@ -5,26 +5,27 @@ const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  
   useEffect(() => {
     setUserData(JSON.parse(localStorage.getItem("user")));
   }, []);
-
+  
+  useEffect(() => {
+    setUserData(JSON.parse(localStorage.getItem("user")));
+    if(userData?.token) setIsLoggedIn(true)
+  }, [userData?.token]);
+  
   const setUserInfo = (data) => {
-    localStorage.setItem("user", JSON.stringify(data));
     setUserData(data);
-  };
-
-  const isAuthenticated = () => {
-    if (!userData?.token || !userData?.exp) {
-      return false;
-    }
-    return Math.floor(Date.now() / 1000) < userData.exp;
+    localStorage.setItem("user", JSON.stringify(data));
   };
 
   const logout = () => {
     setUserData(null)
     authService.logout()
+    setIsLoggedIn(false)
   }
 
   return (
@@ -32,8 +33,8 @@ const UserProvider = ({ children }) => {
       value={{
         userData,
         setUserState: (data) => setUserInfo(data),
-        isAuthenticated,
-        logout
+        logout,
+        isLoggedIn
       }}
     >
       {children}

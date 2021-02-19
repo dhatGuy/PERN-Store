@@ -28,8 +28,7 @@ ReactDOM.render(
         </UserProvider>
       </Windmill>
     </HelmetProvider>
-  </>
-  ,
+  </>,
   document.getElementById("root")
 );
 

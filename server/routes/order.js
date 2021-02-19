@@ -37,7 +37,7 @@ router.route("/create").post(verifyToken, async (req, res, next) => {
   }
 });
 
-router.route("/").get(async (req, res, next) => {
+router.route("/").get(verifyToken, async (req, res, next) => {
   const { page, userId } = req.query;
   const limit = 5;
   const offset = (page - 1) * limit;

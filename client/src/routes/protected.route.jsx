@@ -1,12 +1,14 @@
+import { useUser } from "context/UserContext";
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
 
 export const ProtectedRoute = ({ children, ...rest }) => {
+  const { isLoggedIn} = useUser()
   return (
     <Route
       {...rest}
       render={({ location }) => {
-        return JSON.parse(localStorage.getItem("user")) ? (
+        return isLoggedIn ? (
           children
         ) : (
           <Redirect

@@ -10,7 +10,7 @@ import { Link, Redirect, useLocation } from "react-router-dom";
 import authService from "services/auth.service";
 
 const Login = () => {
-  const { setUserState } = useUser();
+  const { isLoggedIn, setUserState } = useUser();
   const [email, setEmail] = useState("");
   const [password, setpassword] = useState("");
   const [error, setError] = useState("");
@@ -18,10 +18,9 @@ const Login = () => {
   const [redirectToReferrer, setRedirectToReferrer] = useState(false);
   const { state } = useLocation();
 
-  const user = authService.getCurrentUser();
-
   const handleGoogleLogin = async (googleData) => {
     try {
+      setIsLoading(true);
       const data = await authService.googleLogin(googleData.tokenId);
       toast.success("Login successful");
       setTimeout(() => {
@@ -39,7 +38,7 @@ const Login = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      setIsLoading(!isLoading);
+      setIsLoading(true);
       const data = await authService.login(email, password);
       toast.success("Login successful");
 
@@ -55,10 +54,10 @@ const Login = () => {
     }
   };
 
-  if (redirectToReferrer === true) {
+  if (redirectToReferrer) {
     return <Redirect to={state?.from || "/"} />;
   }
-  if (user?.token) {
+  if (isLoggedIn) {
     return <Redirect to={state?.from || "/"} />;
   }
 

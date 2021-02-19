@@ -5,8 +5,8 @@ import { useUser } from "./UserContext";
 const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
-  const [cartData, setCartData] = useState(null);
-  const {userData, isAuthenticated} = useUser()
+  const [cartData, setCartData] = useState({});
+  const {userData, isLoggedIn} = useUser()
 
   const addItem = async (cartId, productId, quantity) => {
     cartService.addToCart(cartId, productId, quantity).then((res) => {
@@ -21,6 +21,10 @@ const CartProvider = ({ children }) => {
       setCartData({ ...cartData, items: data });
     });
   };
+
+  const cartQuantity = cartData?.items?.reduce((acc, cur) => {
+    return acc + Number(cur.quantity);
+  }, 0);
 
   const increment = async (product_id) => {
     const res = await cartService.increment(cartData.cartId, product_id);
@@ -43,7 +47,7 @@ const CartProvider = ({ children }) => {
         .then((res) => {
           setCartData(res?.data);
         });
-  }, [userData?.user_id, isAuthenticated]);
+  }, [userData?.user_id, isLoggedIn]);
 
   return (
     <CartContext.Provider
@@ -54,6 +58,7 @@ const CartProvider = ({ children }) => {
         deleteItem,
         increment,
         decrement,
+        cartQuantity
       }}
     >
       {children}
