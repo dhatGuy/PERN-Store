@@ -29,7 +29,8 @@ router.route("/")
   }
 })
   .post(verifyToken, async (req, res) => {
-    const { user_id, product_id, content, rating } = req.body;
+    const {product_id, content, rating } = req.body;
+    const user_id = req.user.id;
 
     try {
       const result = await pool.query(

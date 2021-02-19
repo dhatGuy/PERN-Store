@@ -4,29 +4,31 @@ import authService from "services/auth.service";
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
-  const [userData, setUserData] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState({});
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    !!(localStorage.getItem("user"))
+  );
 
-  
   useEffect(() => {
     setUserData(JSON.parse(localStorage.getItem("user")));
+    // setIsLoggedIn(true);
   }, []);
-  
+
   useEffect(() => {
-    setUserData(JSON.parse(localStorage.getItem("user")));
-    if(userData?.token) setIsLoggedIn(true)
-  }, [userData?.token]);
-  
+    localStorage.setItem("user", JSON.stringify(userData))
+    if (userData?.token) setIsLoggedIn(true);
+  }, [userData, userData?.token]);
+
   const setUserInfo = (data) => {
     setUserData(data);
     localStorage.setItem("user", JSON.stringify(data));
   };
 
   const logout = () => {
-    setUserData(null)
-    authService.logout()
-    setIsLoggedIn(false)
-  }
+    setUserData(null);
+    authService.logout();
+    setIsLoggedIn(false);
+  };
 
   return (
     <UserContext.Provider
@@ -34,7 +36,7 @@ const UserProvider = ({ children }) => {
         userData,
         setUserState: (data) => setUserInfo(data),
         logout,
-        isLoggedIn
+        isLoggedIn,
       }}
     >
       {children}
@@ -52,4 +54,3 @@ const useUser = () => {
 };
 
 export { UserProvider, useUser };
-

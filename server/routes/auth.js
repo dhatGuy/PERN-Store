@@ -7,6 +7,7 @@ const crypto = require("crypto");
 const moment = require("moment");
 const curDate = moment().format();
 const { OAuth2Client } = require("google-auth-library");
+const {generateAccessToken, generateRefreshToken} = require("../utils/generateToken");
 const client = new OAuth2Client(process.env.CLIENT_ID);
 
 const validateUser = (user) => {
@@ -57,11 +58,12 @@ router.post("/login", async (req, res, next) => {
 
       if (results.rows.length > 0) {
         const user = results.rows[0];
-        const { password, user_id, email, username, fullname } = user;
+        const { password, user_id, email, username, fullname, roles } = user;
         const plainPassword = await bcrypt.compare(req.body.password, password);
 
         if (plainPassword) {
-          const token = jwt.sign({ id: user.user_id }, process.env.SECRET);
+          const token = generateAccessToken({ id: user.user_id, roles: user.roles });
+          // const refreshToken = generateRefreshToken({ id: user.user_id, roles: user.roles })
           res.header("auth-token", token);
           res.status(200).json({
             token,
@@ -69,6 +71,7 @@ router.post("/login", async (req, res, next) => {
             email,
             username,
             fullname,
+            roles,
             status: "Login successful 🔓",
           });
         } else {
@@ -175,6 +178,7 @@ router.post("/forgot-password", async (req, res) => {
   }
 });
 
+// token for reset password
 router.post("/check-token", async (req, res) => {
   const { token, email } = req.body;
   try {

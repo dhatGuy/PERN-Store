@@ -3,7 +3,8 @@ const pool = require("../db");
 const verifyToken = require("../middleware/verifyToken");
 
 router.route("/create").post(verifyToken, async (req, res, next) => {
-  const { cartId, userId, amount, itemTotal } = req.body;
+  const { cartId, amount, itemTotal } = req.body;
+  const userId = req.user.id;
   try {
     // create an order
     const order = await pool.query(
@@ -38,7 +39,8 @@ router.route("/create").post(verifyToken, async (req, res, next) => {
 });
 
 router.route("/").get(verifyToken, async (req, res, next) => {
-  const { page, userId } = req.query;
+  const { page } = req.query;
+  const userId = req.user.id;
   const limit = 5;
   const offset = (page - 1) * limit;
   try {

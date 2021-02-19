@@ -1,11 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../db");
+const verifyAdmin = require("../middleware/verifyAdmin");
 const verifyToken = require("../middleware/verifyToken");
 
+router.use(verifyToken)
+router.use(verifyAdmin)
 router
   .route("/")
-  .get(verifyToken, async (req, res) => {
+  .get(async (req, res) => {
     try {
       const results = await pool.query("select * from users");
       res.status(200).json(results.rows);
@@ -13,7 +16,7 @@ router
       res.status(500).json(error);
     }
   })
-  .post(verifyToken, async (req, res) => {
+  .post(async (req, res) => {
     const { username, password, email, fullname } = req.body;
 
     try {
@@ -32,7 +35,7 @@ router
 
 router
   .route("/:id")
-  .get(verifyToken, async (req, res) => {
+  .get(async (req, res) => {
     const { id } = req.params;
     try {
       const results = await pool.query(
@@ -44,7 +47,7 @@ router
       res.status(500).json(error);
     }
   })
-  .put(verifyToken, async (req, res) => {
+  .put(async (req, res) => {
     const { username, password, email, fullname } = req.body;
     const { id } = req.params;
     try {
@@ -57,7 +60,7 @@ router
       res.status(500).json(error);
     }
   })
-  .delete(verifyToken, async (req, res) => {
+  .delete(async (req, res) => {
     const { id } = req.params;
     try {
       const results = await pool.query(
