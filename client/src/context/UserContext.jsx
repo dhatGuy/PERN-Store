@@ -4,20 +4,19 @@ import authService from "services/auth.service";
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
-  const [userData, setUserData] = useState({});
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    !!(localStorage.getItem("user"))
-  );
+  const [userData, setUserData] = useState();
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("user"));
 
   useEffect(() => {
     setUserData(JSON.parse(localStorage.getItem("user")));
-    // setIsLoggedIn(true);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("user", JSON.stringify(userData))
-    if (userData?.token) setIsLoggedIn(true);
-  }, [userData, userData?.token]);
+    if (userData?.token) {
+      setIsLoggedIn(true);
+      localStorage.setItem("user", JSON.stringify(userData));
+    }
+  }, [userData]);
 
   const setUserInfo = (data) => {
     setUserData(data);
@@ -25,7 +24,7 @@ const UserProvider = ({ children }) => {
   };
 
   const logout = () => {
-    setUserData(null);
+    setUserData();
     authService.logout();
     setIsLoggedIn(false);
   };

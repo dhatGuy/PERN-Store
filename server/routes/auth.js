@@ -112,8 +112,8 @@ router.post("/google", async (req, res) => {
       const results = await pool.query("select * from users where email = $1", [
         email,
       ]);
-      const { user_id, username, fullname } = results.rows[0];
-      const token = jwt.sign({ id: user_id }, process.env.SECRET);
+      const { user_id, username, fullname, roles } = results.rows[0];
+      const token = jwt.sign({ id: user_id, roles: user.roles }, process.env.SECRET);
 
       res.header("auth-token", token);
       res.status(200).json({
@@ -122,6 +122,7 @@ router.post("/google", async (req, res) => {
         email,
         username,
         fullname,
+        roles,
         status: "Login successful 🔓",
       });
     } catch (error) {

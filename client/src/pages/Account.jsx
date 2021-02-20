@@ -15,14 +15,15 @@ const Account = () => {
       </Layout>
     );
   return (
-    <Layout title="Account">
+    <Layout title="Profile">
       <div className="flex items-center justify-center">
         <Card className="mt-2">
           <CardBody>
-            <h1 className="text-4xl font-bold">Account</h1>
+            <h1 className="text-4xl font-bold">Profile</h1>
             <p className="my-6">Username: {userData.username}</p>
             <p className="my-6">Fullname: {userData.fullname}</p>
-            <p>Email: {userData.email}</p>
+            <p className="my-6">Email: {userData.email}</p>
+            <p>Roles: {userData.roles.toString()}</p>
           </CardBody>
         </Card>
       </div>

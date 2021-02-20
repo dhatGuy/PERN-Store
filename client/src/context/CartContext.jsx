@@ -24,7 +24,6 @@ const CartProvider = ({ children }) => {
           return cartService.getCart(userData?.user_id);
         })
         .then((res) => {
-          console.log(res);
           setCartData(res?.data);
         });
   }, [userData, isLoggedIn]);

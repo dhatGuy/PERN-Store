@@ -22,7 +22,7 @@ const Login = () => {
     try {
       setIsLoading(true);
       const data = await authService.googleLogin(googleData.tokenId);
-      toast.success("Login successful");
+      toast.success(data.status);
       setTimeout(() => {
         setUserState(data);
         setRedirectToReferrer(true);
@@ -40,7 +40,7 @@ const Login = () => {
     try {
       setIsLoading(true);
       const data = await authService.login(email, password);
-      toast.success("Login successful");
+      toast.success(data.status);
 
       setTimeout(() => {
         setUserState(data);
