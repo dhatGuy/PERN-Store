@@ -1,16 +1,38 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import cartService from "services/cart.service";
 import { useUser } from "./UserContext";
 
 const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
-  const [cartData, setCartData] = useState({});
-  const {userData, isLoggedIn} = useUser()
+  const [cartData, setCartData] = useState();
+  const { userData, isLoggedIn } = useUser();
+
+  const notify = (data) => {
+    return toast.promise(data, {
+      loading: "Adding to cart",
+      success: "Item added to cart",
+      error: "An error occured",
+    });
+  };
+  useEffect(() => {
+    if (userData?.token)
+      cartService
+        .createCart()
+        .then((res) => {
+          return cartService.getCart(userData?.user_id);
+        })
+        .then((res) => {
+          console.log(res);
+          setCartData(res?.data);
+        });
+  }, [userData, isLoggedIn]);
 
   const addItem = async (cartId, productId, quantity) => {
-    cartService.addToCart(cartId, productId, quantity).then((res) => {
-      setCartData({ ...cartData, items: res.data.data });
+    const data = cartService.addToCart(cartId, productId, quantity);
+    notify(data).then(({ data }) => {
+      setCartData({ ...cartData, items: data.data });
     });
   };
 
@@ -37,18 +59,6 @@ const CartProvider = ({ children }) => {
     return res;
   };
 
-  useEffect(() => {
-    if (userData?.user_id)
-      cartService
-        .createCart()
-        .then((res) => {
-          return cartService.getCart(userData?.user_id);
-        })
-        .then((res) => {
-          setCartData(res?.data);
-        });
-  }, [userData?.user_id, isLoggedIn]);
-
   return (
     <CartContext.Provider
       value={{
@@ -58,7 +68,7 @@ const CartProvider = ({ children }) => {
         deleteItem,
         increment,
         decrement,
-        cartQuantity
+        cartQuantity,
       }}
     >
       {children}

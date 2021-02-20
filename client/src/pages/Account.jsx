@@ -2,22 +2,16 @@ import { Card, CardBody } from "@windmill/react-ui";
 import Spinner from "components/Spinner";
 import { useUser } from "context/UserContext";
 import Layout from "layout/Layout";
-import React, { useEffect, useState } from "react";
-import authService from "services/auth.service";
 
 const Account = () => {
-  const {userData, setUserState} = useUser();
-  const [isLoading, setIsLoading] = useState(true);
+  const {userData} = useUser();
 
-  useEffect(() => {
-    setUserState(authService.getCurrentUser());
-    setIsLoading(false);
-  }, [setUserState]);
-
-  if (isLoading)
+  if (!userData)
     return (
       <Layout title="Account">
-        <Spinner size={40} loading={isLoading} />
+        <div className="h-full flex items-center justify-center">
+          <Spinner size={150} loading />
+        </div>
       </Layout>
     );
   return (

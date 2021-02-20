@@ -16,6 +16,7 @@ import {
 } from "@windmill/react-ui";
 import Spinner from "components/Spinner";
 import { ShoppingCart } from "react-feather";
+import { formatCurrency } from "helpers";
 
 const Cart = () => {
   const { cartData, setCartData } = useCart();
@@ -45,7 +46,7 @@ const Cart = () => {
     }, 0);
     setTotalItems(items);
     setTotal(Number(data));
-  }, [cartData?.items]);
+  }, [cartData]);
 
   if (!cartData) {
     return (
@@ -57,7 +58,7 @@ const Cart = () => {
     );
   }
 
-  if (cartData.items.length === 0) {
+  if (cartData?.items?.length === 0) {
     return (
       <Layout>
         <h1 className="my-10 text-center text-4xl font-semibold">
@@ -91,7 +92,7 @@ const Cart = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {cartData.items.map((item) => {
+            {cartData?.items?.map((item) => {
               return (
                 <TableRow key={item.product_id}>
                   <CartItem item={item} />
@@ -101,7 +102,7 @@ const Cart = () => {
           </TableBody>
         </Table>
         <TableFooter className="flex flex-col justify-end items-end">
-          <div className="mb-2">Total: ₦{total.toFixed(2)}</div>
+          <div className="mb-2">Total: {formatCurrency(total)}</div>
           <Button onClick={() => checkout()}>{isProcessing ? <Spinner size={20}/> : "Checkout"}</Button>
         </TableFooter>
       </TableContainer>

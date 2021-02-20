@@ -1,8 +1,9 @@
 import { Badge, Card, CardBody } from "@windmill/react-ui";
+import { format, parseISO } from "date-fns";
+import { formatCurrency } from "helpers";
 import Layout from "layout/Layout";
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import {format, parseISO} from "date-fns"
 import orderService from "services/order.service";
 
 const OrderDetails = () => {
@@ -22,12 +23,15 @@ const OrderDetails = () => {
         <p>
           Status: <Badge type="success">{state.order.status}</Badge>
         </p>
-        <p>Total Amount: ₦{state.order.amount}</p>
-        <p>Placed on: {format(parseISO(state.order.date),'d MMM, yyyy')}</p>
+        <p>Total Amount: {formatCurrency(state.order.amount)}</p>
+        <p>Placed on: {format(parseISO(state.order.date), "d MMM, yyyy")}</p>
         <div className="border-t-2">
           <h1 className="font-bold text-xl">Items in your order</h1>
           {items?.map((item) => (
-            <Card key={item.product_id} className="flex my-4 p-2 md:flex-row flex-col">
+            <Card
+              key={item.product_id}
+              className="flex my-4 p-2 md:flex-row flex-col"
+            >
               <img
                 className="sm:w-full md:w-1/2 lg:w-1/3 object-cover"
                 src={item.image_url}
@@ -35,7 +39,7 @@ const OrderDetails = () => {
               />
               <CardBody>
                 <h1 className="font-semibold text-gray-600">{item.name}</h1>
-                <p className="mb-2">₦{item.price}</p>
+                <p className="mb-2">{formatCurrency(item.price)}</p>
                 <p className="text-gray-600 dark:text-gray-400">
                   {item.description}
                 </p>

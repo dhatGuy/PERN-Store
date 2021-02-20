@@ -6,7 +6,6 @@ import { useCart } from "context/CartContext";
 import { useReview } from "context/ReviewContext";
 import Layout from "layout/Layout";
 import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import ReactStars from "react-rating-stars-component";
 import { useParams } from "react-router-dom";
 import productService from "services/product.service";
@@ -18,17 +17,9 @@ const ProductDetails = () => {
   const { reviews, setReviews } = useReview(null);
   const { cartData, addItem } = useCart();
 
-  const notify = (data) => {
-    return toast.promise(data, {
-      loading: "Adding to cart",
-      success: "Item added to cart",
-      error: "An error occured",
-    });
-  };
-
   const addToCart = (e) => {
     e.stopPropagation();
-    notify(addItem(cartData?.cartId, product.product_id, 1));
+    addItem(cartData?.cartId, product.product_id, 1)
   };
 
   useEffect(() => {

@@ -1,5 +1,4 @@
 import React from "react";
-import toast from "react-hot-toast";
 import { useCart } from "context/CartContext";
 import { Button, CardBody } from "@windmill/react-ui";
 import authService from "services/auth.service";
@@ -11,17 +10,10 @@ const Product = ({ cartId, product }) => {
   const history = useHistory();
   const { addItem } = useCart();
 
-  const notify = (data) => {
-    return toast.promise(data, {
-      loading: "Adding to cart",
-      success: "Item added to cart",
-      error: "An error occured",
-    });
-  };
   const addToCart = async (e) => {
     e.stopPropagation();
     if (user !== null) {
-      notify(addItem(cartId, product.product_id, 1));
+      addItem(cartId, product.product_id, 1);
     } else {
       history.push("/login");
     }
