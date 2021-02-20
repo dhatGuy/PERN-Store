@@ -19,6 +19,7 @@ const ProductDetails = () => {
 
   const addToCart = (e) => {
     e.stopPropagation();
+    
     addItem(cartData?.cartId, product.product_id, 1)
   };
 

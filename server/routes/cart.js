@@ -5,19 +5,19 @@ const verifyToken = require("../middleware/verifyToken");
 
 router.route("/create").post(verifyToken, async (req, res) => {
   const userId = req.user.id;
-  const isCartExist = await pool.query(
+  const {rows} = await pool.query(
     "SELECT EXISTS (SELECT * FROM cart where user_id = $1)",
     [userId]
   );
-  if (isCartExist.rowCount === 0) {
+  if (rows[0].exist === false) {
     try {
       const newCart = await pool.query(
         "INSERT INTO cart(user_id) values($1) returning cart.id",
         [userId]
-      );
-
-      res.status(201).json({
-        msg: "Cart created",
+        );
+        
+        res.status(201).json({
+          msg: "Cart created",
         data: newCart.rows[0],
       });
     } catch (error) {
@@ -26,7 +26,7 @@ router.route("/create").post(verifyToken, async (req, res) => {
   } else {
     res.status(201).json({
       msg: "Cart exist already",
-      data: isCartExist.rows[0],
+      data: rows[0],
     });
   }
 });
@@ -38,13 +38,13 @@ router.route("/").get(verifyToken, async (req, res) => {
     ]);
     const cart = await pool.query(
       `SELECT products.*, cart_item.quantity, round((products.price * cart_item.quantity)::numeric, 2) as subtotal from users 
-          join cart on users.user_id = cart.user_id
-          join cart_item on cart.id = cart_item.cart_id
-          join products on products.product_id = cart_item.product_id
-          where users.user_id = $1
-          `,
+      join cart on users.user_id = cart.user_id
+      join cart_item on cart.id = cart_item.cart_id
+      join products on products.product_id = cart_item.product_id
+      where users.user_id = $1
+      `,
       [userId]
-    );
+      );
     res.json({ items: cart.rows, cartId: cartId.rows[0].id });
   } catch (error) {
     res.status(401).send(error);
