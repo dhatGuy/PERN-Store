@@ -113,7 +113,7 @@ router.post("/google", async (req, res) => {
         email,
       ]);
       const { user_id, username, fullname, roles } = results.rows[0];
-      const token = jwt.sign({ id: user_id, roles: user.roles }, process.env.SECRET);
+      const token = jwt.sign({ id: user_id, roles: roles }, process.env.SECRET);
 
       res.header("auth-token", token);
       res.status(200).json({
@@ -126,6 +126,7 @@ router.post("/google", async (req, res) => {
         status: "Login successful 🔓",
       });
     } catch (error) {
+      console.log(error)
       res.status(500).send(error);
     }
   } catch (error) {
