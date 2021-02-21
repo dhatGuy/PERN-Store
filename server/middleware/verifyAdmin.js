@@ -1,4 +1,4 @@
-module.exports = verifyAdmin = (req, res, next) => {
+module.exports = (req, res, next) => {
   const { roles } = req.user;
   if (roles && roles.includes("admin")) {
     return next();

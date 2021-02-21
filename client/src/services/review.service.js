@@ -18,7 +18,6 @@ class ReviewService {
     return API.post(
       "/reviews",
       {
-        user_id,
         product_id,
         rating,
         content,

@@ -61,6 +61,7 @@ router.route("/").get(verifyToken, async (req, res, next) => {
 
 router.route("/:id").get(verifyToken, async (req, res, next) => {
   const { id } = req.params;
+  const userId = req.user.id
 
   try {
     const order = await pool.query(
@@ -70,8 +71,8 @@ router.route("/:id").get(verifyToken, async (req, res, next) => {
       on order_item.order_id = orders.order_id
       join products 
       on products.product_id = order_item.product_id 
-      where orders.order_id = $1`,
-      [id]
+      where orders.order_id = $1 AND orders.user_id = $2`,
+      [id, userId]
     );
     res.json(order.rows);
   } catch (error) {

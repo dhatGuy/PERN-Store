@@ -6,6 +6,7 @@ const UserContext = createContext();
 const UserProvider = ({ children }) => {
   const [userData, setUserData] = useState();
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("user"));
+  const [name, setName] = useState("")
 
   useEffect(() => {
     setUserData(JSON.parse(localStorage.getItem("user")));
@@ -14,6 +15,7 @@ const UserProvider = ({ children }) => {
   useEffect(() => {
     if (userData?.token) {
       setIsLoggedIn(true);
+      setName(userData?.fullname?.split(" ").join(" "))
       localStorage.setItem("user", JSON.stringify(userData));
     }
   }, [userData]);
@@ -33,6 +35,7 @@ const UserProvider = ({ children }) => {
     <UserContext.Provider
       value={{
         userData,
+        name,
         setUserState: (data) => setUserInfo(data),
         logout,
         isLoggedIn,

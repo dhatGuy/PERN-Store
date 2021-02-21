@@ -2,7 +2,9 @@ const express = require("express");
 const router = express.Router();
 const pool = require("../db");
 const verifyToken = require("../middleware/verifyToken");
+const verifyAdmin = require('../middleware/verifyAdmin')
 
+// create a unique cart for the user if cart doesn't exist
 router.route("/create").post(verifyToken, async (req, res) => {
   const userId = req.user.id;
   const {rows} = await pool.query(
@@ -30,6 +32,8 @@ router.route("/create").post(verifyToken, async (req, res) => {
     });
   }
 });
+
+// get cart items
 router.route("/").get(verifyToken, async (req, res) => {
   const userId = req.user.id;
   try {
@@ -52,6 +56,7 @@ router.route("/").get(verifyToken, async (req, res) => {
   }
 });
 
+// add item to cart
 router.route("/add").post(verifyToken, async (req, res) => {
   const { cart_id, product_id, quantity } = req.body;
 
@@ -89,6 +94,7 @@ router.route("/add").post(verifyToken, async (req, res) => {
   }
 });
 
+// delete item from cart
 router.route("/delete").delete(verifyToken, async (req, res, next) => {
   const { cart_id, product_id } = req.body;
   try {
@@ -102,6 +108,7 @@ router.route("/delete").delete(verifyToken, async (req, res, next) => {
   }
 });
 
+// increment item quantity
 router.route("/increment").put(verifyToken, async (req, res, next) => {
   const { cart_id, product_id } = req.body;
   try {
@@ -119,6 +126,7 @@ router.route("/increment").put(verifyToken, async (req, res, next) => {
   }
 });
 
+// decrement item quantity
 router.route("/decrement").put(verifyToken, async (req, res, next) => {
   const { cart_id, product_id } = req.body;
 

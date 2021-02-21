@@ -21,7 +21,7 @@ const CartProvider = ({ children }) => {
       cartService
         .createCart()
         .then((res) => {
-          return cartService.getCart(userData?.user_id);
+          return cartService.getCart();
         })
         .then((res) => {
           setCartData(res?.data);

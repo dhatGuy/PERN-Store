@@ -4,7 +4,7 @@ class CartService {
   createCart() {
     return API.post("/cart/create");
   }
-  getCart(user_id) {
+  getCart() {
     return API.get("/cart");
   }
   addToCart(cart_id, product_id, quantity) {

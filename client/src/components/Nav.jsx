@@ -7,11 +7,8 @@ import { useUser } from "context/UserContext";
 
 const Nav = () => {
   const { cartQuantity } = useCart();
-  const { isLoggedIn, userData, logout } = useUser();
+  const { isLoggedIn, userData, logout, name } = useUser();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  const name =
-    userData?.fullname?.split(" ")[0] + " " + userData?.fullname?.split(" ")[1];
   
     return (
     <nav className="flex items-center justify-between px-2 lg:px-36 py-2 bg-gray-50 shadow-lg">

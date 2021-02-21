@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../db");
+const verifyAdmin = require("../middleware/verifyAdmin");
 const verifyToken = require("../middleware/verifyToken");
 
 router
@@ -23,7 +24,7 @@ router
       res.status(500).json(error);
     }
   })
-  .post(verifyToken, async (req, res) => {
+  .post(verifyToken, verifyAdmin, async (req, res) => {
     const { name, price, description } = req.body;
 
     try {
@@ -60,7 +61,7 @@ router
       res.status(500).json(error);
     }
   })
-  .put(verifyToken, async (req, res) => {
+  .put(verifyToken, verifyAdmin, async (req, res) => {
     const { name, price, description } = req.body;
     const { id } = req.params;
     try {
@@ -73,7 +74,7 @@ router
       res.status(500).json(error);
     }
   })
-  .delete(verifyToken, async (req, res) => {
+  .delete(verifyToken, verifyAdmin, async (req, res) => {
     const { id } = req.params;
     try {
       const results = await pool.query(
