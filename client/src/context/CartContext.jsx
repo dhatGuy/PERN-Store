@@ -19,17 +19,14 @@ const CartProvider = ({ children }) => {
   useEffect(() => {
     if (userData?.token)
       cartService
-        .createCart()
-        .then((res) => {
-          return cartService.getCart();
-        })
+        .getCart()
         .then((res) => {
           setCartData(res?.data);
         });
   }, [userData, isLoggedIn]);
 
-  const addItem = async (cartId, productId, quantity) => {
-    const data = cartService.addToCart(cartId, productId, quantity);
+  const addItem = async ( productId, quantity) => {
+    const data = cartService.addToCart(cartData.cartId, productId, quantity);
     notify(data).then(({ data }) => {
       setCartData({ ...cartData, items: data.data });
     });

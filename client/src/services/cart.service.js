@@ -1,9 +1,6 @@
 import API from "../api/axios.config";
 
 class CartService {
-  createCart() {
-    return API.post("/cart/create");
-  }
   getCart() {
     return API.get("/cart");
   }

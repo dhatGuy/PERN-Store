@@ -2,54 +2,46 @@ const express = require("express");
 const router = express.Router();
 const pool = require("../db");
 const verifyToken = require("../middleware/verifyToken");
-const verifyAdmin = require('../middleware/verifyAdmin')
-
-// create a unique cart for the user if cart doesn't exist
-router.route("/create").post(verifyToken, async (req, res) => {
-  const userId = req.user.id;
-  const {rows} = await pool.query(
-    "SELECT EXISTS (SELECT * FROM cart where user_id = $1)",
-    [userId]
-  );
-  if (rows[0].exists === false) {
-    try {
-      const newCart = await pool.query(
-        "INSERT INTO cart(user_id) values($1) returning cart.id",
-        [userId]
-        );
-        
-        res.status(201).json({
-          msg: "Cart created",
-        data: newCart.rows[0],
-      });
-    } catch (error) {
-      res.status(500).json(error);
-    }
-  } else {
-    res.status(201).json({
-      msg: "Cart exist already",
-      data: rows[0],
-    });
-  }
-});
+const verifyAdmin = require("../middleware/verifyAdmin");
 
 // get cart items
 router.route("/").get(verifyToken, async (req, res) => {
   const userId = req.user.id;
+
+  // check if cart exists
+  const {
+    rows,
+  } = await pool.query(
+    "SELECT EXISTS (SELECT * FROM cart where user_id = $1)",
+    [userId]
+  );
+
   try {
-    const cartId = await pool.query("select id from cart where user_id = $1", [
-      userId,
-    ]);
+    if (!rows[0].exists) {
+      // create cart for user if cart not found
+      await pool.query(
+        "INSERT INTO cart(user_id) values($1) returning cart.id",
+        [userId]
+      );
+    }
+
+    // get cart id
+    const {
+      rows: cartId,
+    } = await pool.query("SELECT id from cart where user_id = $1", [userId]);
+
+    // get cart items
     const cart = await pool.query(
-      `SELECT products.*, cart_item.quantity, round((products.price * cart_item.quantity)::numeric, 2) as subtotal from users 
+      `SELECT products.*, cart_item.quantity, round((products.price * cart_item.quantity)::numeric, 2) as subtotal from users
       join cart on users.user_id = cart.user_id
       join cart_item on cart.id = cart_item.cart_id
       join products on products.product_id = cart_item.product_id
       where users.user_id = $1
       `,
       [userId]
-      );
-    res.json({ items: cart.rows, cartId: cartId.rows[0].id });
+    );
+
+    res.json({ items: cart.rows, cartId: cartId[0].id });
   } catch (error) {
     res.status(401).send(error);
     throw error;
@@ -98,11 +90,11 @@ router.route("/add").post(verifyToken, async (req, res) => {
 router.route("/delete").delete(verifyToken, async (req, res, next) => {
   const { cart_id, product_id } = req.body;
   try {
-    const result = await pool.query(
+    const {rows} = await pool.query(
       "delete from cart_item where cart_id = $1 AND product_id = $2 returning *",
       [cart_id, product_id]
     );
-    res.status(200).json(result.rows);
+    res.status(200).json(rows);
   } catch (error) {
     res.status(401).send(error);
   }
