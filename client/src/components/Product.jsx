@@ -1,18 +1,18 @@
 import React from "react";
 import { useCart } from "context/CartContext";
 import { Button, CardBody } from "@windmill/react-ui";
-import authService from "services/auth.service";
 import { useHistory } from "react-router-dom";
 import ReactStars from "react-rating-stars-component";
+import { useUser } from "context/UserContext";
 
 const Product = ({ cartId, product }) => {
-  const user = authService.getCurrentUser();
+  const {isLoggedIn} = useUser()
   const history = useHistory();
   const { addItem } = useCart();
 
   const addToCart = async (e) => {
     e.stopPropagation();
-    if (user !== null) {
+    if (isLoggedIn) {
       addItem(cartId, product.product_id, 1);
     } else {
       history.push("/login");

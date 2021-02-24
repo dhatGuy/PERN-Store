@@ -16,14 +16,14 @@ import toast from "react-hot-toast";
 import { useHistory } from "react-router-dom";
 import ReactStars from "react-rating-stars-component";
 
-const { user_id } = authService.getCurrentUser();
+const user_id = authService.getCurrentUser()?.user_id;
 const ReviewModal = ({ product_id, reviews }) => {
   const review = reviews.reviews.find((elm) => elm.user_id === user_id);
   const { reviewExist } = reviews;
   const [rating, setRating] = useState(1);
   const [content, setContent] = useState("");
-  const [isOpen, setIsOpen] = useState(false)
-  const history = useHistory()
+  const [isOpen, setIsOpen] = useState(false);
+  const history = useHistory();
 
   const addReview = () => {
     reviewService
@@ -32,22 +32,22 @@ const ReviewModal = ({ product_id, reviews }) => {
         toast.success("Review added successfully");
         setRating(1);
         setContent("");
-        history.go(0)
+        history.go(0);
       })
       .catch((error) => {
         toast.error("Error: ", error.response);
         console.log(error.response);
       });
-    };
-    
-    const updateReview = () => {
-      reviewService
-      .updateReview(review.id,product_id, content, rating)
+  };
+
+  const updateReview = () => {
+    reviewService
+      .updateReview(review.id, product_id, content, rating)
       .then(() => {
         toast.success("Review updated successfully");
         setRating(1);
         setContent("");
-        history.go(0)
+        history.go(0);
       })
       .catch((error) => {
         toast.error("Error: ", error.response);
@@ -68,7 +68,7 @@ const ReviewModal = ({ product_id, reviews }) => {
 
   return (
     <>
-    {isOpen && <Backdrop/>}
+      {isOpen && <Backdrop />}
       <div>
         <Button onClick={toggleModal}>
           {reviewExist ? "Edit Review" : "Add Review"}
@@ -81,12 +81,12 @@ const ReviewModal = ({ product_id, reviews }) => {
             <Label>
               <span className="font-semibold">Rating</span>
               <ReactStars
-              count={5}
-              size={24}
-              value={rating}
-              onChange={newRating=> setRating(newRating)}
-              activeColor="#ffd700"
-            />
+                count={5}
+                size={24}
+                value={rating}
+                onChange={(newRating) => setRating(newRating)}
+                activeColor="#ffd700"
+              />
             </Label>
             <Label className="mt-2">
               <span className="font-semibold">Content</span>
@@ -100,7 +100,9 @@ const ReviewModal = ({ product_id, reviews }) => {
                 placeholder="What do you think about this product?"
               />
             </Label>
-            <HelperText valid={content.trim().length >= 10}>Content must have more than 10 characters</HelperText>
+            <HelperText valid={content.trim().length >= 10}>
+              Content must have more than 10 characters
+            </HelperText>
           </form>
         </ModalBody>
         <ModalFooter>
@@ -111,7 +113,11 @@ const ReviewModal = ({ product_id, reviews }) => {
           >
             Cancel
           </Button>
-          <Button onClick={handleSubmit} className="w-full sm:w-auto" disabled={content.trim().length < 10}>
+          <Button
+            onClick={handleSubmit}
+            className="w-full sm:w-auto"
+            disabled={content.trim().length < 10}
+          >
             {reviewExist ? "Save" : "Add"}
           </Button>
         </ModalFooter>

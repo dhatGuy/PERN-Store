@@ -4,23 +4,29 @@ import ReviewModal from "components/ReviewModal";
 import Spinner from "components/Spinner";
 import { useCart } from "context/CartContext";
 import { useReview } from "context/ReviewContext";
+import { useUser } from "context/UserContext";
 import Layout from "layout/Layout";
 import React, { useEffect, useState } from "react";
 import ReactStars from "react-rating-stars-component";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import productService from "services/product.service";
 import reviewService from "services/review.service";
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const history = useHistory()
   const [product, setProduct] = useState(null);
   const { reviews, setReviews } = useReview(null);
   const { cartData, addItem } = useCart();
+  const { isLoggedIn } = useUser();
 
   const addToCart = (e) => {
     e.stopPropagation();
-    
-    addItem(cartData?.cartId, product.product_id, 1)
+    if (isLoggedIn) {
+      addItem(cartData?.cartId, product.product_id, 1);
+    } else {
+      history.push("/login");
+    }
   };
 
   useEffect(() => {
@@ -84,7 +90,9 @@ const ProductDetails = () => {
           <ReviewCard reviews={reviews.reviews} />
         </div>
         <div className="my-2 ml-2">
-          <ReviewModal product_id={product.product_id} reviews={reviews} />
+          {isLoggedIn && (
+            <ReviewModal product_id={product.product_id} reviews={reviews} />
+          )}
         </div>
       </div>
     </Layout>
