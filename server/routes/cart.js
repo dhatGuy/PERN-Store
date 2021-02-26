@@ -1,8 +1,5 @@
-const express = require("express");
-const router = express.Router();
-const pool = require("../db");
+const router = require("express").Router();
 const verifyToken = require("../middleware/verifyToken");
-const verifyAdmin = require("../middleware/verifyAdmin");
 const {
   getCart,
   addItem,
@@ -11,19 +8,20 @@ const {
   decreaseItemQuantity,
 } = require("../controllers/cart.controller");
 
+router.use(verifyToken);
 // get cart items
-router.route("/").get(verifyToken, getCart);
+router.route("/").get(getCart);
 
 // add item to cart
-router.route("/add").post(verifyToken, addItem);
+router.route("/add").post(addItem);
 
 // delete item from cart
-router.route("/delete").delete(verifyToken, deleteItem);
+router.route("/delete").delete(deleteItem);
 
 // increment item quantity
-router.route("/increment").put(verifyToken, increaseItemQuantity);
+router.route("/increment").put(increaseItemQuantity);
 
 // decrement item quantity
-router.route("/decrement").put(verifyToken, decreaseItemQuantity);
+router.route("/decrement").put(decreaseItemQuantity);
 
 module.exports = router;
