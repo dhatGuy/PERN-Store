@@ -19,16 +19,19 @@ const createUserDb = async ({ username, password, email, fullname }) => {
     );
     return user[0];
   } catch (error) {
-    console.log(error.stack)
+    console.log(error.stack);
     throw error;
   }
 };
 
-const getUserDb = async ({ id }) => {
+const getUserByIdDb = async (id) => {
   try {
     const {
       rows: user,
-    } = await pool.query("select * from users where user_id = $1", [id]);
+    } = await pool.query(
+      "select users.*, cart.id as cart_id from users join cart on cart.user_id = users.user_id where users.user_id = $1",
+      [id]
+    );
     return user[0];
   } catch (error) {
     throw error;
@@ -65,7 +68,7 @@ const updateUserDb = async ({ username, password, email, fullname, id }) => {
   }
 };
 
-const deleteUserDb = async ({ id }) => {
+const deleteUserDb = async (id) => {
   try {
     const {
       rows: user,
@@ -92,24 +95,24 @@ const createUserGoogleDb = async ({ sub, given_name, email, name }) => {
   }
 };
 
-const changeUserPasswordDb = async (hashedPassword, email) =>{
+const changeUserPasswordDb = async (hashedPassword, email) => {
   try {
     return await pool.query(`update users set password = $1 where email = $2`, [
       hashedPassword,
       email,
     ]);
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 module.exports = {
   getAllUsersDb,
-  getUserDb,
+  getUserByIdDb,
   getUserByEmailDb,
   updateUserDb,
   createUserDb,
   createUserGoogleDb,
   deleteUserDb,
-  changeUserPasswordDb
+  changeUserPasswordDb,
 };

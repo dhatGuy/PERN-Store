@@ -3,6 +3,10 @@ const {
   getUserByEmailDb,
   createUserGoogleDb,
   changeUserPasswordDb,
+  getUserByIdDb,
+  updateUserDb,
+  deleteUserDb,
+  getAllUsersDb,
 } = require("../db/user.db");
 
 class UserService {
@@ -16,6 +20,14 @@ class UserService {
   getUserByEmail = async (email) => {
     try {
       return await getUserByEmailDb(email);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+  getUserById = async (id) => {
+    try {
+      return await getUserByIdDb(id);
     } catch (error) {
       console.log(error);
       throw error;
@@ -35,6 +47,27 @@ class UserService {
       throw error;
     }
   };
+  updateUser = async (user) => {
+    try {
+      return await updateUserDb(user);
+    } catch (error) {
+      throw error;
+    }
+  };
+  deleteUser = async (id) => {
+    try {
+      return await deleteUserDb(id)
+    } catch (error) {
+      throw error
+    }
+  };
+  getAllUsers = async (id) =>{
+    try {
+      return await getAllUsersDb()
+    } catch (error) {
+      throw error
+    }
+  }
 }
 
 module.exports = new UserService();
