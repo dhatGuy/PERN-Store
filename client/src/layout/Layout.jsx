@@ -39,7 +39,6 @@ const Layout = ({ children, title }) => {
         <meta name="twitter:image" content="android-chrome-512x512.png" />
         <style type="text/css">{`
         html,body, #root {
-            height: 100%;
         }
     `}</style>
       </Helmet>
