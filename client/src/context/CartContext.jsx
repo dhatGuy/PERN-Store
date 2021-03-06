@@ -17,7 +17,7 @@ const CartProvider = ({ children }) => {
     });
   };
   useEffect(() => {
-    if (userData?.token)
+    if (isLoggedIn)
       cartService
         .getCart()
         .then((res) => {
