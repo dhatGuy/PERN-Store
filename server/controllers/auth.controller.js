@@ -1,69 +1,77 @@
-const validateUser = require('../utils/validateUser')
-const pool = require("../db");
-const {hashPassword, comparePassword} = require('../utils/hashPassword');
+const validateUser = require("../utils/validateUser");
+const { hashPassword, comparePassword } = require("../utils/hashPassword");
 const mail = require("../utils/mail");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const moment = require("moment");
-const curDate = moment().format();
-const { OAuth2Client } = require("google-auth-library");
-const {generateAccessToken, generateRefreshToken} = require("../utils/generateToken");
-const client = new OAuth2Client(process.env.CLIENT_ID);
+let curDate = moment().format();
+const {
+  generateAccessToken,
+  generateRefreshToken,
+} = require("../utils/generateToken");
+const CartService = require("../services/cart.service");
+const userService = require("../services/user.service");
+const { verifygoogleIdToken } = require("../utils");
+const { createGoogleAccount } = require("../services/user.service");
+const authService = require("../services/auth.service");
 
 const createAccount = async (req, res, next) => {
-  const { username, password, email, fullname } = req.body;
+  const { password, email, fullname } = req.body;
 
-  if (validateUser (req.body)) {
-    const chkEmail = await pool.query("select * from users where email = $1", [
-      email,
-    ]);
+  if (validateUser(req.body)) {
+    try {
+      const hashedPassword = await authService.hashPassword(password);
+      const { user_id: userId } = await userService.createUser({
+        ...req.body,
+        password: hashedPassword,
+      });
 
-    if (!chkEmail.rows[0]) {
-      const hashedPassword = hashPassword(password)
-      try {
-        const results = await pool.query(
-          "INSERT INTO users(username, password, email, fullname) VALUES($1, $2, $3, $4) returning *",
-          [username, hashedPassword, email, fullname]
-        );
-        mail.signupMail(email, fullname.split(" ")[0]);
-        res.status(200).json({
-          status: "success",
-          data: results.rows[0],
-        });
-      } catch (error) {
-        res.status(500).json(error);
-      }
-    } else {
-      res.status(500).json("Email is in use");
+      const { id: cartId } = await CartService.createCart(userId);
+
+      await mail.signupMail(email, fullname.split(" ")[0]);
+
+      res.status(201).json({
+        userId,
+        cartId,
+      });
+    } catch (error) {
+      next(error);
     }
   } else {
-    res.status(500).json("Password must be greater than 5 characters.");
+    next("Input validation error");
   }
-}
+};
 
 const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     if (validateUser(req.body)) {
-      const {rows: user} = await pool.query("select * from users where email = $1", [
-        email,
-      ]);
+      const user = await userService.getUserByEmail(email);
 
-      if (user[0]) {
-        const { password: dbPassword, user_id, email, username, fullname, roles } = user[0];
+      if (user) {
+        const {
+          fullname,
+          username,
+          email,
+          password: dbPassword,
+          user_id,
+          roles,
+          cart_id,
+        } = user;
 
         if (comparePassword(password, dbPassword)) {
-          const token = generateAccessToken({ id: user_id, roles });
-          // const refreshToken = generateRefreshToken({ id: user_id })
+          const token = generateAccessToken({ id: user_id, roles, cart_id });
+          // const refreshToken = generateRefreshToken({ id: user_id, roles, cart_id })
           res.header("auth-token", token);
           res.status(200).json({
             token,
-            user_id,
-            email,
-            username,
-            fullname,
-            roles,
-            status: "Login successful 🔓",
+            user: {
+              user_id,
+              fullname,
+              email,
+              username,
+              roles,
+            },
           });
         } else {
           next(new Error("Email or password incorrect."));
@@ -75,70 +83,59 @@ const loginUser = async (req, res, next) => {
       next(new Error("Invalid login"));
     }
   } catch (error) {
+    console.log(error);
     next(new Error("Something went wrong."));
   }
-}
+};
 
 const googleLogin = async (req, res) => {
   const { token } = req.body;
 
-  if(!token) return res.status(401)
+  if (!token) return res.status(401);
 
   try {
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: process.env.CLIENT_ID,
-    });
+    const ticket = await verifygoogleIdToken(token);
 
     const { name, email, sub, given_name } = ticket.getPayload();
-
     try {
-      await pool.query(
-        `INSERT INTO users(google_id,username, email, fullname) 
-        VALUES($1, $2, $3, $4) ON CONFLICT (email) 
-        DO UPDATE SET google_id = $1, fullname = $4 returning *`,
-        [sub, given_name, email, name]
+      await createGoogleAccount({ sub, given_name, email, name });
+      const { user_id, cart_id, roles } = await userService.getUserByEmail(
+        email
       );
-
-      const results = await pool.query("select * from users where email = $1", [
-        email,
-      ]);
-      const { user_id, username, fullname, roles } = results.rows[0];
-      const token = jwt.sign({ id: user_id, roles: roles }, process.env.SECRET);
+      const token = jwt.sign(
+        { id: user_id, roles: roles, cart_id },
+        process.env.SECRET
+      );
 
       res.header("auth-token", token);
       res.status(200).json({
         token,
-        user_id,
-        email,
-        username,
-        fullname,
-        roles,
-        status: "Login successful 🔓",
+        user: {
+          user_id,
+          fullname,
+          email,
+          username,
+          roles,
+        },
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
       res.status(500).send(error);
     }
   } catch (error) {
     console.log(error);
-    res.status(401).json({msg: "ID token required"});
+    res.status(401).json({ msg: "ID token required" });
   }
-}
+};
 
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
-  const {rows: dbEmail} = await pool.query(
-    "SELECT EXISTS (SELECT * from users where email = $1)",
-    [email]
-  );
 
-  if (dbEmail[0].exists) {
+  const isUserExist = await userService.getUserByEmail(email);
+
+  if (isUserExist) {
     try {
-      await pool.query(
-        `update public."resetTokens" set used = $1 where email = $2`,
-        [true, email]
-      );
+      await authService.setTokenStatus(email);
 
       //Create a random reset token
       var fpSalt = crypto.randomBytes(64).toString("base64");
@@ -146,22 +143,10 @@ const forgotPassword = async (req, res) => {
       //token expires after one hour
       var expireDate = moment().add(1, "h").format();
 
-      try {
-        await pool.query(
-          `insert into public."resetTokens" (email, expiration, token) values ($1, $2, $3)`,
-          [email, expireDate, fpSalt]
-        );
+      await authService.createResetToken({ email, expireDate, fpSalt });
 
-        mail
-          .forgotPasswordMail(fpSalt, email)
-          .then(() => {
-            return res.json({ status: "OK" });
-          })
-          .catch((err) => console.log(err));
-      } catch (error) {
-        console.log(error);
-        res.status(500).send(error);
-      }
+      await mail.forgotPasswordMail(fpSalt, email);
+      res.json({ status: "OK" });
     } catch (error) {
       console.log(error);
       res.status(500).send(error);
@@ -169,45 +154,40 @@ const forgotPassword = async (req, res) => {
   } else {
     res.status(500).send("Email not found!");
   }
-}
+};
 
 // verify password reset token
 const verifyResetToken = async (req, res) => {
   const { token, email } = req.body;
   try {
-    await pool.query(
-      `delete from public."resetTokens" where expiration <= $1`,
-      [curDate]
-    );
+    await authService.deleteResetToken(curDate);
 
     try {
-      const result = await pool.query(
-        `
-        select * from public."resetTokens" 
-        where token = $1 AND email = $2 AND expiration > $3 AND used = $4
-      `,
-        [token, email, curDate, false]
-      );
+      const isTokenValid = await authService.isTokenValid({
+        token,
+        email,
+        curDate,
+      });
 
-      if (result.rowCount < 1) {
+      if (!isTokenValid) {
         res.json({
           message: "Token has expired. Please try password reset again.",
           showForm: false,
         });
       } else {
         res.json({
-          result: result.rows[0],
           showForm: true,
         });
       }
     } catch (error) {
       console.log(error);
-      res.json("Unknown error", error);
+      res.status(500).json("Unknown error", error);
     }
   } catch (error) {
     console.log(error);
+    throw error;
   }
-}
+};
 
 const resetPassword = async (req, res) => {
   const { password, password2, token, email } = req.body;
@@ -225,15 +205,13 @@ const resetPassword = async (req, res) => {
     });
 
   try {
-    const result = await pool.query(
-      `
-        select * from public."resetTokens" 
-        where token = $1 AND email = $2 AND expiration > $3 AND used = $4
-      `,
-      [token, email, curDate, false]
-    );
+    const isTokenValid = await authService.isTokenValid({
+      token,
+      email,
+      curDate,
+    });
 
-    if (result.rowCount < 1)
+    if (!isTokenValid)
       return res.json({
         status: "error",
         message:
@@ -241,24 +219,17 @@ const resetPassword = async (req, res) => {
       });
 
     try {
-      await pool.query(
-        `update public."resetTokens" set used = $1 where email = $2`,
-        [true, email]
-      );
+      await authService.setTokenStatus(email);
 
-      const hashedPassword = hashPassword(password)
+      const hashedPassword = hashPassword(password);
 
       try {
-        await pool.query(`update users set password = $1 where email = $2`, [
-          hashedPassword,
-          email,
-        ]);
-        mail.resetPasswordMail(email).then(() =>
-          res.json({
-            status: "OK",
-            message: "Password reset. Please login with your new password.",
-          })
-        );
+        await userService.changeUserPassword(hashedPassword, email);
+        await mail.resetPasswordMail(email);
+        res.json({
+          status: "OK",
+          message: "Password reset. Please login with your new password.",
+        });
       } catch (error) {
         console.log(error);
         res.json(error);
@@ -271,7 +242,7 @@ const resetPassword = async (req, res) => {
     console.log(error);
     res.json(error);
   }
-}
+};
 
 module.exports = {
   createAccount,
@@ -279,5 +250,5 @@ module.exports = {
   googleLogin,
   forgotPassword,
   verifyResetToken,
-  resetPassword
-}
+  resetPassword,
+};

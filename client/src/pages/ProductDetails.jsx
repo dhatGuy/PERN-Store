@@ -17,13 +17,13 @@ const ProductDetails = () => {
   const history = useHistory()
   const [product, setProduct] = useState(null);
   const { reviews, setReviews } = useReview(null);
-  const { cartData, addItem } = useCart();
+  const { addItem } = useCart();
   const { isLoggedIn } = useUser();
 
   const addToCart = (e) => {
     e.stopPropagation();
     if (isLoggedIn) {
-      addItem(cartData?.cartId, product.product_id, 1);
+      addItem(product.product_id, 1);
     } else {
       history.push("/login");
     }
@@ -32,9 +32,9 @@ const ProductDetails = () => {
   useEffect(() => {
     productService
       .getProduct(id)
-      .then((res) => {
-        setProduct(res.data.product);
-        return res.data.product;
+      .then(({data}) => {
+        setProduct(data);
+        return data;
       })
       .then((data) => {
         reviewService

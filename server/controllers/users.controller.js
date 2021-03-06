@@ -1,6 +1,8 @@
-const pool = require("../db");
+const pool = require("../config");
+const { hashPassword } = require("../utils/hashPassword");
 
 const getAllUsers = async (req, res) => {
+
   try {
     const results = await pool.query("select * from users");
     res.status(200).json(results.rows);
@@ -11,11 +13,11 @@ const getAllUsers = async (req, res) => {
 
 const createUser = async (req, res) => {
   const { username, password, email, fullname } = req.body;
-
+  const hashedPassword = hashPassword(password)
   try {
     const results = await pool.query(
       "INSERT INTO users(username, password, email, fullname) VALUES($1, $2, $3, $4) returning *",
-      [username, password, email, fullname]
+      [username, hashedPassword, email, fullname]
     );
     res.status(200).json({
       status: "success",
@@ -37,6 +39,7 @@ const getUser = async (req, res) => {
     res.status(500).json(error);
   }
 };
+
 const updateUser = async (req, res) => {
   const { username, password, email, fullname } = req.body;
   const { id } = req.params;

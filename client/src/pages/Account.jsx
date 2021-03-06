@@ -4,7 +4,7 @@ import { useUser } from "context/UserContext";
 import Layout from "layout/Layout";
 
 const Account = () => {
-  const {userData} = useUser();
+  const { userData } = useUser();
 
   if (!userData)
     return (

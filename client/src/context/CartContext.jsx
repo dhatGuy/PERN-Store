@@ -26,15 +26,15 @@ const CartProvider = ({ children }) => {
   }, [userData, isLoggedIn]);
 
   const addItem = async ( productId, quantity) => {
-    const data = cartService.addToCart(cartData.cartId, productId, quantity);
+    const data = cartService.addToCart(productId, quantity);
     notify(data).then(({ data }) => {
       setCartData({ ...cartData, items: data.data });
     });
   };
 
   const deleteItem = (product_id) => {
-    const { items, cartId } = cartData;
-    cartService.removeFromCart(cartId, product_id).then(() => {
+    const { items } = cartData;
+    cartService.removeFromCart( product_id).then(() => {
       const data = items.filter((item) => item.product_id !== product_id);
       setCartData({ ...cartData, items: data });
     });
@@ -45,12 +45,12 @@ const CartProvider = ({ children }) => {
   }, 0);
 
   const increment = async (product_id) => {
-    const res = await cartService.increment(cartData.cartId, product_id);
+    const res = await cartService.increment(product_id);
     setCartData({ ...cartData, items: res.data });
     return res;
   };
   const decrement = async (product_id) => {
-    const res = await cartService.decrement(cartData.cartId, product_id);
+    const res = await cartService.decrement(product_id);
     setCartData({ ...cartData, items: res.data });
     return res;
   };

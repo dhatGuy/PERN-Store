@@ -1,4 +1,4 @@
-const pool = require("../db");
+const pool = require("../config");
 
 const getReview = async (req, res, next) => {
   const { product_id, user_id } = req.query;

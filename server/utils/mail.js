@@ -51,9 +51,8 @@ const forgotPasswordMail = async (token, email) => {
   };
 
   try {
-    await transport
-      .sendMail(message)
-      .then((data) => console.log(data.response));
+    const res = await transport.sendMail(message);
+    return res
   } catch (error) {
     console.log(error);
     return error;

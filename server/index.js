@@ -24,7 +24,7 @@ app.get("/api", (req, res, next) => console.log('route is working'));
 app.use((error, req, res, next) => {
   res
     .status(error.status || 500)
-    .json({ status: error.status, message: error.message, error: error.toString() });
+    .json({ status: error.status, message: error.message, error: error.message.toString() });
 });
 
 app.listen(PORT, () => console.log("Magic happening on port:", +PORT));

@@ -40,7 +40,7 @@ const Login = () => {
     try {
       setIsLoading(true);
       const data = await authService.login(email, password);
-      toast.success(data.status);
+      toast.success("Login successful 🔓");
 
       setTimeout(() => {
         setUserState(data);

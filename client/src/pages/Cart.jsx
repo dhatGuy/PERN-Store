@@ -27,7 +27,7 @@ const Cart = () => {
 
   const checkout = () => {
     setIsProcessing(true)
-    OrderService.createOrder(cartData.cartId, total, totalItems).then((res) => {
+    OrderService.createOrder( total, totalItems).then((res) => {
       setCartData({ ...cartData, items: [] });
       history.push({
         pathname: `/checkout`,

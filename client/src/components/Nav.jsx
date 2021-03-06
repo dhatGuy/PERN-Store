@@ -7,7 +7,7 @@ import { useUser } from "context/UserContext";
 
 const Nav = () => {
   const { cartQuantity } = useCart();
-  const { isLoggedIn, userData, logout, name } = useUser();
+  const { isLoggedIn, userData, logout } = useUser();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   
     return (
@@ -62,7 +62,7 @@ const Nav = () => {
               </Button>
               <Dropdown align="right" isOpen={isDropdownOpen}>
                 <DropdownItem className="curosr-not-allowed text-gray-400 border-b flex flex-col items-start justify-start">
-                  <p className="self-start">{name}</p>
+                  <p className="self-start">{userData?.fullname?.split(" ").join(" ")}</p>
                   <p className="self-start">@{userData?.username}</p>
                 </DropdownItem>
                 <DropdownItem tag="a">

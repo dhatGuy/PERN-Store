@@ -1,25 +1,23 @@
 const pool = require("../config");
 
-const getCart = async (req, res) => {
-  const userId = req.user.id;
-
-  // check if cart exists
-  const {
-    rows,
-  } = await pool.query(
-    "SELECT EXISTS (SELECT * FROM cart where user_id = $1)",
-    [userId]
-  );
-
+const createCartDb = async (userId) => {
+  console.log(userId)
   try {
-    if (!rows[0].exists) {
-      // create cart for user if cart not found
-      await pool.query(
-        "INSERT INTO cart(user_id) values($1) returning cart.id",
-        [userId]
-      );
-    }
+    const {
+      rows: cart,
+    } = await pool.query(
+      "INSERT INTO cart(user_id) values($1) returning cart.id",
+      [userId]
+    );
 
+    return cart[0];
+  } catch (error) {
+    return error;
+  }
+};
+
+const getCartDb = async (userId) => {
+  try {
     // get cart id
     const {
       rows: cartId,
@@ -36,17 +34,15 @@ const getCart = async (req, res) => {
       [userId]
     );
 
-    res.json({ items: cart.rows });
+    return { items: cart.rows };
   } catch (error) {
-    res.status(401).send(error);
-    throw error;
+    return error;
   }
-}
+};
 
 // add item to cart
-const addItem = async (req, res) => {
-  const { product_id, quantity } = req.body;
-  const cart_id = req.user.cart_id
+const addItemDb = async ({ cart_id, product_id, quantity }) => {
+
   try {
     const isProductExist = await pool.query(
       "SELECT * FROM cart_item WHERE cart_id = $1 AND product_id = $2",
@@ -82,25 +78,22 @@ const addItem = async (req, res) => {
 };
 
 // delete item from cart
-const deleteItem = async (req, res, next) => {
-  const { product_id } = req.body;
-  const cart_id = req.user.cart_id
+const deleteItemDb = async ({ cart_id, product_id }) => {
   try {
-    const {rows} = await pool.query(
+    const {
+      rows,
+    } = await pool.query(
       "delete from cart_item where cart_id = $1 AND product_id = $2 returning *",
       [cart_id, product_id]
     );
-    res.status(200).json(rows);
+    return rows[0];
   } catch (error) {
-    res.status(401).send(error);
+    return error
   }
-}
+};
 
 // increment item quantity by 1
-const increaseItemQuantity = async (req, res, next) => {
-  const { product_id } = req.body;
-  const cart_id = req.user.cart_id
-
+const increaseItemQuantityDb = async ({ cart_id, product_id }) => {
   try {
     await pool.query(
       "update cart_item set quantity = quantity + 1 where cart_item.cart_id = $1 and cart_item.product_id = $2",
@@ -110,16 +103,14 @@ const increaseItemQuantity = async (req, res, next) => {
       "Select products.*, cart_item.quantity, round((products.price * cart_item.quantity)::numeric, 2) as subtotal from cart_item join products on cart_item.product_id = products.product_id where cart_item.cart_id = $1",
       [cart_id]
     );
-    res.json(product.rows);
+    return product.rows[0]
   } catch (error) {
-    res.status(500).json(error);
+    return error
   }
-}
+};
 
 // decrement item quantity by 1
-const decreaseItemQuantity = async (req, res, next) => {
-  const { product_id } = req.body;
-  const cart_id = req.user.cart_id
+const decreaseItemQuantityDb = async ({ cart_id, product_id }) => {
 
   try {
     await pool.query(
@@ -130,16 +121,17 @@ const decreaseItemQuantity = async (req, res, next) => {
       "Select products.*, cart_item.quantity, round((products.price * cart_item.quantity)::numeric, 2) as subtotal from cart_item join products on cart_item.product_id = products.product_id where cart_item.cart_id = $1",
       [cart_id]
     );
-    res.json(product.rows);
+    product.rows[0]
   } catch (error) {
-    res.status(500).json(error);
+    return error
   }
-}
+};
 
 module.exports = {
-  getCart,
-  addItem,
-  increaseItemQuantity,
-  decreaseItemQuantity,
-  deleteItem
-}
+  createCartDb,
+  getCartDb,
+  addItemDb,
+  increaseItemQuantityDb,
+  decreaseItemQuantityDb,
+  deleteItemDb,
+};

@@ -1,42 +1,38 @@
 const pool = require("../config");
 
-const getAllProducts = async (req, res) => {
-  const { page = 1 } = req.query;
-  const limit = 12;
+const getAllProductsDb = async ({ page, limit, offset }) => {
   try {
-    const offset = (page - 1) * limit;
-    const results = await pool.query(
+    const { rows: products } = await pool.query(
       `select products.*, trunc(avg(reviews.rating)) as avg_rating, count(reviews.*) from products
         LEFT JOIN reviews
         ON products.product_id = reviews.product_id
         group by products.product_id limit $1 offset $2 `,
       [limit, offset]
     );
-    results.rows = [...results.rows].sort(() => Math.random() - 0.5);
-    res.status(200).json(results.rows);
+    // shuffle
+    products = [...products].sort(() => Math.random() - 0.5);
+    return products;
   } catch (error) {
-    res.status(500).json(error);
+    return error;
   }
 };
 
-const createProduct = async (req, res) => {
-  const { name, price, description } = req.body;
-
+const createProductDb = async ({ name, price, description }) => {
   try {
     const {
-      rows: newProduct,
+      rows: product,
     } = await pool.query(
       "INSERT INTO products(name, price, description) VALUES($1, $2, $3) returning *",
       [name, price, description]
     );
-    res.status(200).json(newProduct[0]);
+    console.log(product)
+    return product[0];
   } catch (error) {
-    res.status(500).json(error);
+    return error;
   }
 };
 
-const getProduct = async (req, res) => {
-  const { id } = req.params;
+const getProductDb = async (id) => {
   try {
     const { rows: product } = await pool.query(
       `select products.*, trunc(avg(reviews.rating),1) as avg_rating, count(reviews.*) from products
@@ -46,42 +42,44 @@ const getProduct = async (req, res) => {
         group by products.product_id`,
       [id]
     );
-    res.status(200).json(product[0]);
+    return product[0];
   } catch (error) {
-    res.status(500).json(error);
-  }
-};
-const updateProduct = async (req, res) => {
-  const { name, price, description } = req.body;
-  const { id } = req.params;
-  try {
-    const results = await pool.query(
-      "UPDATE products set name = $1, price = $2, description = $3 where product_id = $4 returning *",
-      [name, price, description, id]
-    );
-    res.status(200).json(results.rows[0]);
-  } catch (error) {
-    res.status(500).json(error);
+    return error;
   }
 };
 
-const deleteProduct = async (req, res) => {
-  const { id } = req.params;
+const updateProductDb = async ({ name, price, description, id }) => {
   try {
-    const results = await pool.query(
+    const {
+      rows: product,
+    } = await pool.query(
+      "UPDATE products set name = $1, price = $2, description = $3 where product_id = $4 returning *",
+      [name, price, description, id]
+    );
+    return product[0];
+  } catch (error) {
+    return error;
+  }
+};
+
+const deleteProductDb = async (id) => {
+  try {
+    const {
+      rows,
+    } = await pool.query(
       "DELETE FROM products where product_id = $1 returning *",
       [id]
     );
-    res.status(200).json(results.rows[0]);
+    return rows[0];
   } catch (error) {
-    res.status(500).json(error);
+    return error;
   }
 };
 
 module.exports = {
-  getProduct,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-  getAllProducts,
+  getProductDb,
+  createProductDb,
+  updateProductDb,
+  deleteProductDb,
+  getAllProductsDb,
 };

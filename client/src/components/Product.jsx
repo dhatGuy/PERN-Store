@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import ReactStars from "react-rating-stars-component";
 import { useUser } from "context/UserContext";
 
-const Product = ({ cartId, product }) => {
+const Product = ({ product }) => {
   const {isLoggedIn} = useUser()
   const history = useHistory();
   const { addItem } = useCart();
@@ -13,7 +13,7 @@ const Product = ({ cartId, product }) => {
   const addToCart = async (e) => {
     e.stopPropagation();
     if (isLoggedIn) {
-      addItem(cartId, product.product_id, 1);
+      addItem(product.product_id, 1);
     } else {
       history.push("/login");
     }

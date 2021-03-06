@@ -1,7 +1,6 @@
 import { Card, Pagination } from "@windmill/react-ui";
 import Product from "components/Product";
 import Spinner from "components/Spinner";
-import { useCart } from "context/CartContext";
 import { useProduct } from "context/ProductContext";
 import Layout from "layout/Layout";
 import React from "react";
@@ -10,7 +9,6 @@ import { useHistory } from "react-router-dom";
 const ProductList = () => {
   const { products, setPage } = useProduct();
   const history = useHistory();
-  const { cartData } = useCart();
 
   const handleChange = (page) => {
     setPage(page);
@@ -41,7 +39,7 @@ const ProductList = () => {
               key={prod.product_id}
               onClick={() => selectProduct(prod.product_id)}
             >
-              <Product cartId={cartData?.cartId} product={prod} />
+              <Product product={prod} />
             </div>
           ))}
         </Card>

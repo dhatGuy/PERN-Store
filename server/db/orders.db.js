@@ -1,9 +1,6 @@
-const pool = require("../config");
+const pool = require("../db");
 
-const createOrder = async (req, res, next) => {
-  const { amount, itemTotal } = req.body;
-  const userId = req.user.id
-  const cartId = req.user.cart_id;
+const createOrderDb = async ({ cartId, amount, itemTotal, userId }) => {
   try {
     // create an order
     const order = await pool.query(
@@ -37,11 +34,7 @@ const createOrder = async (req, res, next) => {
   }
 };
 
-const getAllOrders = async (req, res, next) => {
-  const { page = 1 } = req.query;
-  const userId = req.user.id;
-  const limit = 5;
-  const offset = (page - 1) * limit;
+const getAllOrdersDb = async ({userid, limit, offset}) => {
   try {
     const rows = await pool.query(
       "SELECT * from orders WHERE orders.user_id = $1",
@@ -52,18 +45,15 @@ const getAllOrders = async (req, res, next) => {
       from orders WHERE orders.user_id = $1 order by order_id desc limit $2 offset $3`,
       [userId, limit, offset]
     );
-    res.json({ items: orders.rows, total: rows.rowCount });
+    return { items: orders.rows, total: rows.rowCount }
   } catch (error) {
-    res.status(500).json(error);
+    return error
   }
 };
 
-const getOrder = async (req, res, next) => {
-  const { id } = req.params;
-  const userId = req.user.id;
-
+const getOrderDb = async ({ id, userId }) => {
   try {
-    const order = await pool.query(
+    const { rows: order } = await pool.query(
       `SELECT products.*, order_item.quantity 
       from orders 
       join order_item
@@ -73,14 +63,14 @@ const getOrder = async (req, res, next) => {
       where orders.order_id = $1 AND orders.user_id = $2`,
       [id, userId]
     );
-    res.json(order.rows);
+    return order;
   } catch (error) {
-    res.status(500).json(error);
+    return error;
   }
 };
 
 module.exports = {
-  createOrder,
-  getAllOrders,
-  getOrder,
+  createOrderDb,
+  getAllOrdersDb,
+  getOrderDb,
 };
