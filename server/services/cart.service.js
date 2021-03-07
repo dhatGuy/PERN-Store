@@ -5,6 +5,7 @@ const {
   deleteItemDb,
   increaseItemQuantityDb,
   decreaseItemQuantityDb,
+  emptyCartDb,
 } = require("../db/cart.db");
 
 class CartService {
@@ -53,6 +54,11 @@ class CartService {
     } catch (error) {
       throw error;
     }
+  };
+  emptyCart = async (cartId) => {
+    try {
+      return await emptyCartDb(cartId)
+    } catch (error) {}
   };
 }
 

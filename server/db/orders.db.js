@@ -1,42 +1,33 @@
-const pool = require("../db");
+const pool = require("../config/index");
 
 const createOrderDb = async ({ cartId, amount, itemTotal, userId }) => {
   try {
     // create an order
-    const order = await pool.query(
+    const {
+      rows: order,
+    } = await pool.query(
       "INSERT INTO orders(user_id, status, amount, total) VALUES($1, 'complete', $2, $3) returning *",
       [userId, amount, itemTotal]
     );
 
-    // get order id of the newly created order
-    const order_id = order.rows[0].order_id;
-
     // copy cart items from the current cart_item table into order_item table
-    try {
-      await pool.query(
-        `
+    await pool.query(
+      `
       INSERT INTO order_item(order_id,product_id, quantity) 
       SELECT $1, product_id, quantity from cart_item where cart_id = $2
       returning *
       `,
-        [order_id, cartId]
-      );
-
-      // delete all items from cart_items table
-      await pool.query("delete from cart_item where cart_id = $1", [cartId]);
-
-      res.json(order.rows[0]);
-    } catch (error) {
-      res.status(500).send(error);
-    }
+      [order[0].order_id, cartId]
+    );
+    return order[0];
   } catch (error) {
-    res.status(500).json(error);
+    throw error;
   }
 };
 
-const getAllOrdersDb = async ({userid, limit, offset}) => {
+const getAllOrdersDb = async ({ userId, limit, offset }) => {
   try {
-    const rows = await pool.query(
+    const {rowCount} = await pool.query(
       "SELECT * from orders WHERE orders.user_id = $1",
       [userId]
     );
@@ -45,9 +36,9 @@ const getAllOrdersDb = async ({userid, limit, offset}) => {
       from orders WHERE orders.user_id = $1 order by order_id desc limit $2 offset $3`,
       [userId, limit, offset]
     );
-    return { items: orders.rows, total: rows.rowCount }
+    return { items: orders.rows, total: rowCount };
   } catch (error) {
-    return error
+    throw error;
   }
 };
 
@@ -65,7 +56,7 @@ const getOrderDb = async ({ id, userId }) => {
     );
     return order;
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 

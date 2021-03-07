@@ -19,7 +19,6 @@ const addItem = async (req, res) => {
     const cart = await cartService.addItem({ ...req.body, cart_id });
     res.status(200).json({ data: cart });
   } catch (error) {
-    console.log(error);
     res.status(500).send(error);
   }
 };

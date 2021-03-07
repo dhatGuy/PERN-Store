@@ -111,7 +111,7 @@ const decreaseItemQuantityDb = async ({ cart_id, product_id }) => {
   }
 };
 
-emptyCartDb = async (cartId) =>{
+const emptyCartDb = async (cartId) =>{
   try {
     return await pool.query("delete from cart_item where cart_id = $1", [cartId]);
   } catch (error) {
