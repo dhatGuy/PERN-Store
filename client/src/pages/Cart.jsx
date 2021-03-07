@@ -22,30 +22,34 @@ const Cart = () => {
   const { cartData, setCartData } = useCart();
   const [total, setTotal] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
-  const [isProcessing, setIsProcessing] = useState(false)
+  const [isProcessing, setIsProcessing] = useState(false);
   const history = useHistory();
 
   const checkout = () => {
-    setIsProcessing(true)
-    OrderService.createOrder( total, totalItems).then((res) => {
+    setIsProcessing(true);
+    OrderService.createOrder(total, totalItems).then((res) => {
       setCartData({ ...cartData, items: [] });
       history.push({
         pathname: `/checkout`,
-        state: { detail: res.data },
+        state: { details: res.data },
       });
-      setIsProcessing(false)
+      setIsProcessing(false);
     });
   };
 
   useEffect(() => {
+    let isSubscribed = true;
     const data = cartData?.items.reduce((acc, cur) => {
       return acc + Number(cur.subtotal);
     }, 0);
     const items = cartData?.items.reduce((acc, cur) => {
       return acc + Number(cur.quantity);
     }, 0);
-    setTotalItems(items);
-    setTotal(Number(data));
+    if (isSubscribed) {
+      setTotalItems(items);
+      setTotal(+data);
+    }
+    return () => (isSubscribed = false);
   }, [cartData]);
 
   if (!cartData) {
@@ -103,7 +107,9 @@ const Cart = () => {
         </Table>
         <TableFooter className="flex flex-col justify-end items-end">
           <div className="mb-2">Total: {formatCurrency(total)}</div>
-          <Button onClick={() => checkout()}>{isProcessing ? <Spinner size={20}/> : "Checkout"}</Button>
+          <Button onClick={() => checkout()}>
+            {isProcessing ? <Spinner size={20} /> : "Checkout"}
+          </Button>
         </TableFooter>
       </TableContainer>
     </Layout>
