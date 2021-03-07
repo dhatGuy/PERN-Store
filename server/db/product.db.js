@@ -1,16 +1,15 @@
 const pool = require("../config");
 
-const getAllProductsDb = async ({ page, limit, offset }) => {
+const getAllProductsDb = async ({ limit, offset }) => {
   try {
-    const { rows: products } = await pool.query(
+    const { rows } = await pool.query(
       `select products.*, trunc(avg(reviews.rating)) as avg_rating, count(reviews.*) from products
         LEFT JOIN reviews
         ON products.product_id = reviews.product_id
         group by products.product_id limit $1 offset $2 `,
       [limit, offset]
     );
-    // shuffle
-    products = [...products].sort(() => Math.random() - 0.5);
+    const products = [...rows].sort(() => Math.random() - 0.5);
     return products;
   } catch (error) {
     return error;
@@ -25,14 +24,13 @@ const createProductDb = async ({ name, price, description }) => {
       "INSERT INTO products(name, price, description) VALUES($1, $2, $3) returning *",
       [name, price, description]
     );
-    console.log(product)
     return product[0];
   } catch (error) {
     return error;
   }
 };
 
-const getProductDb = async (id) => {
+const getProductDb = async ({ id }) => {
   try {
     const { rows: product } = await pool.query(
       `select products.*, trunc(avg(reviews.rating),1) as avg_rating, count(reviews.*) from products
@@ -62,7 +60,7 @@ const updateProductDb = async ({ name, price, description, id }) => {
   }
 };
 
-const deleteProductDb = async (id) => {
+const deleteProductDb = async ({id}) => {
   try {
     const {
       rows,
