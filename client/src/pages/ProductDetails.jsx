@@ -5,6 +5,7 @@ import Spinner from "components/Spinner";
 import { useCart } from "context/CartContext";
 import { useReview } from "context/ReviewContext";
 import { useUser } from "context/UserContext";
+import { formatCurrency } from "helpers";
 import Layout from "layout/Layout";
 import React, { useEffect, useState } from "react";
 import ReactStars from "react-rating-stars-component";
@@ -14,7 +15,7 @@ import reviewService from "services/review.service";
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const history = useHistory()
+  const history = useHistory();
   const [product, setProduct] = useState(null);
   const { reviews, setReviews } = useReview(null);
   const { addItem } = useCart();
@@ -32,7 +33,7 @@ const ProductDetails = () => {
   useEffect(() => {
     productService
       .getProduct(id)
-      .then(({data}) => {
+      .then(({ data }) => {
         setProduct(data);
         return data;
       })
@@ -58,12 +59,16 @@ const ProductDetails = () => {
       <Card className="flex lg:flex-row flex-col border mt-20 mb-12">
         <img
           className="sm:w-full md:w-1/2 lg:w-1/3 object-cover"
+          decoding="async"
+          loading="lazy"
           src={product.image_url}
           alt={product.name}
         />
         <CardBody className="flex flex-col items-start">
           <p className="text-4xl text-gray-600">{product.name}</p>
-          <p className="mt-2 font-bold text-2xl">₦ {product.price}</p>
+          <p className="mt-2 font-bold text-2xl">
+            {formatCurrency(product.price)}
+          </p>
           <span className="flex items-center">
             <ReactStars
               count={5}

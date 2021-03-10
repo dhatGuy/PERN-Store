@@ -34,6 +34,8 @@ const OrderDetails = () => {
             >
               <img
                 className="sm:w-full md:w-1/2 lg:w-1/3 object-cover"
+                loading="lazy"
+                decoding="async"
                 src={item.image_url}
                 alt={item.name}
               />
