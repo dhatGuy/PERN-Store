@@ -4,27 +4,24 @@ import authService from "services/auth.service";
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
-  const [userData, setUserData] = useState();
+  const [userData, setUserData] = useState(null);
   const [authData, setAuthData] = useState({
     token: "",
     expiresAt: "",
   });
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    setUserData(JSON.parse(localStorage.getItem("user")));
+    if (localStorage.getItem("token") && localStorage.getItem("user")) {
+      setIsLoggedIn(true);
+      setUserData(JSON.parse(localStorage.getItem("user")));
+      setAuthData(JSON.parse(localStorage.getItem("token")));
+    }
   }, []);
 
-  useEffect(() => {
-    if (authData?.token) {
-      setIsLoggedIn(true);
-      localStorage.setItem("user", JSON.stringify(userData));
-      console.log(userData)
-    }
-  }, [authData, userData]);
-
   const setUserInfo = (data) => {
-    const {user, token} = data
+    const { user, token } = data;
+    setIsLoggedIn(true);
     setUserData(user);
     setAuthData({
       token,
@@ -38,6 +35,10 @@ const UserProvider = ({ children }) => {
   const logout = () => {
     setUserData();
     authService.logout();
+    setAuthData({
+      token: "",
+      expiresAt: "",
+    });
     setIsLoggedIn(false);
   };
 
@@ -48,6 +49,7 @@ const UserProvider = ({ children }) => {
         setUserState: (data) => setUserInfo(data),
         logout,
         isLoggedIn,
+        authData
       }}
     >
       {children}

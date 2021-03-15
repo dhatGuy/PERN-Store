@@ -6,7 +6,7 @@ import { Home, ShoppingCart, User } from "react-feather";
 import { useUser } from "context/UserContext";
 
 const Nav = () => {
-  const { cartQuantity } = useCart();
+  const { cartTotal } = useCart();
   const { isLoggedIn, userData, logout } = useUser();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   
@@ -47,7 +47,7 @@ const Nav = () => {
                   <span className="lg:block hidden">Cart</span>
                   <ShoppingCart className="lg:hidden" />
                   <Badge className="ml-2" type="danger">
-                    {cartQuantity || 0}
+                    {cartTotal}
                   </Badge>{" "}
                 </Button>
               </Link>

@@ -21,16 +21,21 @@ const Product = ({ product }) => {
   };
   return (
     <>
-      <img
-        className="w-full h-56"
-        src={product.image_url}
-        alt={product.name}
-        loading="lazy"
-        decoding="async"
-      />
-      <CardBody className="flex flex-col justify-between items-stretch">
-        <p className="font-bold text-xl">{product.name}</p>
-        <p className="font-medium">{formatCurrency(product.price)}</p>
+      <span href="" className="block relative h-48 rounded overflow-hidden">
+        <img
+          className="w-full h-full"
+          src={product.image_url}
+          alt={product.name}
+          loading="lazy"
+          decoding="async"
+          title={product.name}
+        />
+      </span>
+      <CardBody className="flex flex-col items-stretch mt-4">
+        <h2 className="title-font text-lg font-medium overflow-ellipsis whitespace-nowrap overflow-hidden">{product.name}</h2>
+        <p className="">
+          {formatCurrency(product.price)}
+        </p>
         <span className="flex items-center">
           <ReactStars
             count={5}

@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import cartService from "services/cart.service";
 import { useUser } from "./UserContext";
 
@@ -7,42 +6,36 @@ const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
   const [cartData, setCartData] = useState();
-  const { userData, isLoggedIn } = useUser();
+  const [cartTotal, setCartTotal] = useState(0);
+  const { isLoggedIn } = useUser();
 
-  const notify = (data) => {
-    return toast.promise(data, {
-      loading: "Adding to cart",
-      success: "Item added to cart",
-      error: "An error occured",
-    });
-  };
   useEffect(() => {
-    if (isLoggedIn)
-      cartService
-        .getCart()
-        .then((res) => {
-          setCartData(res?.data);
-        });
-  }, [userData, isLoggedIn]);
+    if (isLoggedIn) {
+      cartService.getCart().then((res) => {
+        setCartData(res?.data);
+      });
+    }
+  }, [isLoggedIn]);
 
-  const addItem = async ( productId, quantity) => {
-    const data = cartService.addToCart(productId, quantity);
-    notify(data).then(({ data }) => {
-      setCartData({ ...cartData, items: data.data });
-    });
+  useEffect(() => {
+    const quantity = cartData?.items?.reduce((acc, cur) => {
+      return acc + Number(cur.quantity);
+    }, 0);
+    setCartTotal(quantity);
+  }, [cartData]);
+
+  const addItem = async (productId, quantity) => {
+    const { data } = await cartService.addToCart(productId, quantity);
+    setCartData({ items: [...data.data] });
   };
 
   const deleteItem = (product_id) => {
     const { items } = cartData;
-    cartService.removeFromCart( product_id).then(() => {
+    cartService.removeFromCart(product_id).then(() => {
       const data = items.filter((item) => item.product_id !== product_id);
       setCartData({ ...cartData, items: data });
     });
   };
-
-  const cartQuantity = cartData?.items?.reduce((acc, cur) => {
-    return acc + Number(cur.quantity);
-  }, 0);
 
   const increment = async (product_id) => {
     const res = await cartService.increment(product_id);
@@ -64,7 +57,7 @@ const CartProvider = ({ children }) => {
         deleteItem,
         increment,
         decrement,
-        cartQuantity,
+        cartTotal,
       }}
     >
       {children}

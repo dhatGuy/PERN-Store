@@ -27,7 +27,10 @@ const Layout = ({ children, title }) => {
         <meta property="og:url" content="https://pern-store.netlify.app/" />
         <meta property="og:site_name" content="PERN Store" />
         <meta property="og:image" content="android-chrome-512x512.png" />
-        <meta property="og:image:secure_url" content="android-chrome-512x512.png" />
+        <meta
+          property="og:image:secure_url"
+          content="android-chrome-512x512.png"
+        />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@_odunsi_" />
         <meta name="twitter:creator" content="@_odunsi_" />
@@ -38,13 +41,20 @@ const Layout = ({ children, title }) => {
         <meta name="twitter:title" content="PERN Store" />
         <meta name="twitter:image" content="android-chrome-512x512.png" />
         <style type="text/css">{`
-        html,body, #root {
+        html,body{
         }
     `}</style>
       </Helmet>
-      <Nav />
-      <div className="text-gray-700 h-full mx-auto px-2 lg:px-56">
-        <main className="h-full">{children}</main>
+      <div className="min-h-screen flex flex-col">
+        <Nav />
+        <div className="text-gray-700 mx-auto px-2 lg:px-56 flex-grow h-full">
+          <main className="h-full">{children}</main>
+        </div>
+        <footer className="mt-auto flex justify-center">
+          <p>
+            Created with ♥ by<a href="www.github.com/dhatguy"> dhatGuy</a>
+          </p>
+        </footer>
       </div>
     </>
   );

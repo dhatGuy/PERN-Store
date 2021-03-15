@@ -37,8 +37,8 @@ const Orders = () => {
   if (!orders) {
     return (
       <Layout>
-        <div className="h-full flex items-center justify-center">
-          <Spinner size={150} loading={!orders} />
+        <div className="flex items-center justify-center">
+          <Spinner size={150} loading={true} />
         </div>
       </Layout>
     );

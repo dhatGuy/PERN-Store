@@ -4,8 +4,8 @@ class CartService {
   getCart() {
     return API.get("/cart");
   }
-  addToCart(product_id, quantity) {
-    return API.post("/cart/add", { product_id, quantity });
+  async addToCart(product_id, quantity) {
+    return await API.post("/cart/add", { product_id, quantity });
   }
 
   async removeFromCart(product_id) {

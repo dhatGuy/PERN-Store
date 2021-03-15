@@ -23,7 +23,7 @@ const ReviewCard = ({ reviews }) => {
               value={review.rating}
               activeColor="#ffd700"
             />
-            <p className="text-white leading-tight my-4">{review.content}</p>
+            <p className="text-white w-full leading-tight my-4">{review.content}</p>
             <p className="text-white text-opacity-60">{`${format(
               parseISO(review.date),
               "dd-MM-yy"

@@ -27,7 +27,6 @@ const Login = () => {
         setUserState(data);
         setRedirectToReferrer(true);
         setIsLoading(false);
-        window.location.reload()
       }, 1500);
     } catch (error) {
       setIsLoading(false);
@@ -46,7 +45,6 @@ const Login = () => {
         setUserState(data);
         setRedirectToReferrer(true);
         setIsLoading(false);
-        window.location.reload()
       }, 1500);
     } catch (error) {
       setIsLoading(false);
@@ -65,7 +63,7 @@ const Login = () => {
     <Layout title="Login">
       <div className="flex items-center justify-center m-auto mt-20">
         <form
-          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col md:w-1/2 "
+          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col"
           onSubmit={onSubmit}
         >
           <h1 className="text-center text-4xl mb-2">Continue Shopping</h1>

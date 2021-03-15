@@ -1,4 +1,4 @@
-import { Button, Card, CardBody } from "@windmill/react-ui";
+import { Button } from "@windmill/react-ui";
 import ReviewCard from "components/ReviewCard";
 import ReviewModal from "components/ReviewModal";
 import Spinner from "components/Spinner";
@@ -31,24 +31,21 @@ const ProductDetails = () => {
   };
 
   useEffect(() => {
-    productService
-      .getProduct(id)
-      .then(({ data }) => {
-        setProduct(data);
-        return data;
-      })
-      .then((data) => {
-        reviewService
-          .getReviews(data.product_id)
-          .then((data) => setReviews(data.data));
-      });
+    async function fetchData() {
+      const { data } = await productService.getProduct(id);
+      setProduct(data);
+      reviewService
+        .getReviews(data.product_id)
+        .then((res) => setReviews(res.data));
+    }
+    fetchData();
   }, [id, setReviews]);
 
   if (!product || !reviews) {
     return (
       <Layout>
-        <div className="h-full flex items-center justify-center">
-          <Spinner size={150} loading={!product} />
+        <div className="min-h-full flex items-center justify-center">
+          <Spinner size={150} loading={true} />
         </div>
       </Layout>
     );
@@ -56,50 +53,68 @@ const ProductDetails = () => {
 
   return (
     <Layout title={product.name}>
-      <Card className="flex lg:flex-row flex-col border mt-20 mb-12">
-        <img
-          className="sm:w-full md:w-1/2 lg:w-1/3 object-cover"
-          decoding="async"
-          loading="lazy"
-          src={product.image_url}
-          alt={product.name}
-        />
-        <CardBody className="flex flex-col items-start">
-          <p className="text-4xl text-gray-600">{product.name}</p>
-          <p className="mt-2 font-bold text-2xl">
-            {formatCurrency(product.price)}
-          </p>
-          <span className="flex items-center">
-            <ReactStars
-              count={5}
-              size={24}
-              edit={false}
-              value={+product.avg_rating}
-              activeColor="#ffd700"
+      <section className="body-font overflow-hidden">
+        <div className="container px-5 py-24 mx-auto">
+          <div className="lg:w-4/5 mx-auto flex flex-wrap">
+            <img
+              decoding="async"
+              loading="lazy"
+              src={product.image_url}
+              alt={product.name}
+              className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
             />
-            {""}(
-            {+product.count > 0
-              ? `${+product.count} ratings`
-              : "No ratings available"}
-            )
-          </span>
-          <p className="text-gray-600">{product.description}</p>
-          <Button className="mt-4" onClick={(e) => addToCart(e)}>
-            Add to cart
-          </Button>
-        </CardBody>
-      </Card>
-      <div className="mt-10">
-        <h1 className="font-bold text-2xl">Product Reviews</h1>
-        <div className="flex flex-wrap items-center content-end">
-          <ReviewCard reviews={reviews.reviews} />
+            <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
+              <h1 className="text-3xl title-font font-medium mb-1">
+                {product.name}
+              </h1>
+              <div className="flex mb-4">
+                <span className="flex items-center">
+                  <ReactStars
+                    count={5}
+                    size={24}
+                    edit={false}
+                    value={+product.avg_rating}
+                    activeColor="#ffd700"
+                  />
+                  <span className="ml-3">
+                    {+product.count > 0
+                      ? `${+product.count} Ratings`
+                      : "No ratings available"}
+                  </span>
+                </span>
+              </div>
+              <p className="leading-relaxed pb-6 border-b-2 border-gray-800">
+                {product.description}
+              </p>
+              <div className="flex mt-4 ">
+                <span className="title-font font-medium text-2xl">
+                  {formatCurrency(product.price)}
+                </span>
+                <Button
+                  className="ml-auto border-0 focus:outline-none rounded"
+                  onClick={(e) => addToCart(e)}
+                >
+                  Add to cart
+                </Button>
+              </div>
+            </div>
+          </div>
+          <div className="mt-10">
+            <h1 className="font-bold text-2xl">Product Reviews</h1>
+            <div className="flex flex-wrap items-center content-end">
+              <ReviewCard reviews={reviews.reviews} />
+            </div>
+            <div className="m-2 mx-auto">
+              {isLoggedIn && (
+                <ReviewModal
+                  product_id={product.product_id}
+                  reviews={reviews}
+                />
+              )}
+            </div>
+          </div>
         </div>
-        <div className="my-2 ml-2">
-          {isLoggedIn && (
-            <ReviewModal product_id={product.product_id} reviews={reviews} />
-          )}
-        </div>
-      </div>
+      </section>
     </Layout>
   );
 };
