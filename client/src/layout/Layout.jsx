@@ -47,10 +47,10 @@ const Layout = ({ children, title }) => {
       </Helmet>
       <div className="min-h-screen flex flex-col">
         <Nav />
-        <div className="text-gray-700 mx-auto px-2 lg:px-56 flex-grow h-full">
+        <div className="text-gray-700 mx-auto px-2 lg:px-56 flex-grow h-full w-full">
           <main className="h-full">{children}</main>
         </div>
-        <footer className="mt-auto flex justify-center">
+        <footer className="mt-auto flex justify-center py-2">
           <p>
             Created with ♥ by<a href="www.github.com/dhatguy"> dhatGuy</a>
           </p>

@@ -60,7 +60,7 @@ const Nav = () => {
                 <span className="lg:block hidden">Account</span>
                 <User className="lg:hidden" />
               </Button>
-              <Dropdown align="right" isOpen={isDropdownOpen}>
+              <Dropdown align="right" isOpen={isDropdownOpen} className="z-10">
                 <DropdownItem className="curosr-not-allowed text-gray-400 border-b flex flex-col items-start justify-start">
                   <p className="self-start">{userData?.fullname?.split(" ").join(" ")}</p>
                   <p className="self-start">@{userData?.username}</p>
