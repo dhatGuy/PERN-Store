@@ -1,6 +1,6 @@
 import { Button } from "@windmill/react-ui";
-import ReviewCard from "components/ReviewCard";
-import ReviewModal from "components/ReviewModal";
+// import ReviewCard from "components/ReviewCard";
+// import ReviewModal from "components/ReviewModal";
 import Spinner from "components/Spinner";
 import { useCart } from "context/CartContext";
 import { useReview } from "context/ReviewContext";
@@ -99,7 +99,7 @@ const ProductDetails = () => {
               </div>
             </div>
           </div>
-          <div className="mt-10">
+          {/* <div className="mt-10">
             <h1 className="font-bold text-2xl">Product Reviews</h1>
             <div className="flex flex-wrap items-center content-end">
               <ReviewCard reviews={reviews.reviews} />
@@ -112,7 +112,7 @@ const ProductDetails = () => {
                 />
               )}
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
     </Layout>
