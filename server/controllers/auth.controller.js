@@ -16,10 +16,17 @@ const { createGoogleAccount } = require("../services/user.service");
 const authService = require("../services/auth.service");
 
 const createAccount = async (req, res, next) => {
-  const { password, email, fullname } = req.body;
+  const { password, email, fullname, username } = req.body;
 
   if (validateUser(req.body)) {
     try {
+      const user = await userService.getUserByEmail(email);
+
+      if (user?.email === email) return res.status(500).json("Email exists already");
+
+      if (user?.username === username)
+        return res.status(500).json("Username taken already");
+
       const hashedPassword = await authService.hashPassword(password);
       const { user_id: userId } = await userService.createUser({
         ...req.body,

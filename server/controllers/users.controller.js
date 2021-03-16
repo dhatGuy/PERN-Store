@@ -20,7 +20,7 @@ const createUser = async (req, res) => {
       email,
       fullname,
     });
-    res.status(200).json({
+    res.status(201).json({
       status: "success",
       user,
     });
@@ -39,37 +39,54 @@ const getUserById = async (req, res) => {
       user.cart_id = undefined;
       return res.status(200).json(user);
     } catch (error) {
-      return res.status(500).json(error);
+      return res.status(500).json("User not found");
     }
   }
   return res.status(401).json({ message: "Unauthorized" });
 };
+const getUserProfile = async (req, res) => {
+  const { id } = req.user;
+  try {
+    const user = await userService.getUserById(id);
+    user.password = undefined;
+    user.google_id = undefined;
+    user.cart_id = undefined;
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
 
 const updateUser = async (req, res) => {
-  const { username, email, fullname } = req.body;
+  const { username, email, fullname, password } = req.body;
   const { id } = req.params;
-  const user = await userService.getUserByEmail(email)
   if (+id == req.user.id || req.user.roles.includes("admin")) {
     try {
-      if(user){
-
-        const results = await userService.updateUser({username, email, fullname, id})
+      const user = await userService.getUserByEmail(email);
+      if (user) {
+        const results = await userService.updateUser({
+          username,
+          email,
+          fullname,
+          password,
+          id,
+        });
         res.status(200).json(results);
-      } else{
+      } else {
         res.status(500).send("Email exists already.");
-
       }
     } catch (error) {
       res.status(500).json(error);
     }
   }
+  return res.status(401).json({ message: "Unauthorized" });
 };
 
 const deleteUser = async (req, res) => {
   const { id } = req.params;
   if (+id == req.user.id || req.user.roles.includes("admin")) {
     try {
-      const results = await userService.deleteUser(id)
+      const results = await userService.deleteUser(id);
       res.status(200).json(results);
     } catch (error) {
       res.status(500).json(error);
@@ -84,4 +101,5 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUser,
+  getUserProfile
 };

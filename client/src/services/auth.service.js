@@ -45,7 +45,7 @@ class AuthService {
   }
 
   register(username, email, password) {
-    return API.post("/signup", {
+    return API.post("auth/signup", {
       username,
       email,
       password,
@@ -53,7 +53,7 @@ class AuthService {
   }
 
   getCurrentUser() {
-    return JSON.parse(localStorage.getItem("user"));
+    return API.get("/users/profile");
   }
 }
 

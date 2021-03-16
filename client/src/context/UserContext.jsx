@@ -11,10 +11,14 @@ const UserProvider = ({ children }) => {
   });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  useEffect(() =>{
+    authService.getCurrentUser().then(res=> setUserData(res.data))
+  },[isLoggedIn])
+
   useEffect(() => {
-    if (localStorage.getItem("token") && localStorage.getItem("user")) {
+    if (localStorage.getItem("token") ) {
       setIsLoggedIn(true);
-      setUserData(JSON.parse(localStorage.getItem("user")));
+      authService.getCurrentUser().then(res=> setUserData(res.data))
       setAuthData(JSON.parse(localStorage.getItem("token")));
     }
   }, []);
@@ -27,7 +31,6 @@ const UserProvider = ({ children }) => {
       token,
       expiresAt: "",
     });
-    localStorage.setItem("user", JSON.stringify(user));
     localStorage.setItem("token", JSON.stringify(token));
     // localStorage.setItem("expiresAt", JSON.stringify(token));
   };

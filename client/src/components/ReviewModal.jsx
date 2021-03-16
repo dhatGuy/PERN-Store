@@ -11,14 +11,14 @@ import {
   Backdrop,
 } from "@windmill/react-ui";
 import reviewService from "services/review.service";
-import authService from "services/auth.service";
 import toast from "react-hot-toast";
 import { useHistory } from "react-router-dom";
 import ReactStars from "react-rating-stars-component";
+import { useUser } from "context/UserContext";
 
-const user_id = authService.getCurrentUser()?.user_id;
 const ReviewModal = ({ product_id, reviews }) => {
-  const review = reviews.reviews.find((elm) => elm.user_id === user_id);
+  const {userData} = useUser()
+  const review = reviews.reviews.find((elm) => elm.user_id === userData?.user_id);
   const { reviewExist } = reviews;
   const [rating, setRating] = useState(1);
   const [content, setContent] = useState("");

@@ -1,11 +1,11 @@
 import { Button, HelperText, Input, Label } from "@windmill/react-ui";
 import API from "api/axios.config";
 import Spinner from "components/Spinner";
+import { useUser } from "context/UserContext";
 import Layout from "layout/Layout";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
-import authService from "services/auth.service";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -17,9 +17,8 @@ const Register = () => {
   const [error, setError] = useState("");
   const { state } = useLocation();
   const history = useHistory();
-
-  const user = authService.getCurrentUser();
-
+  const {authData} = useUser()
+  
   const onSubmit = (e) => {
     e.preventDefault();
     setError("");
@@ -39,16 +38,16 @@ const Register = () => {
             setIsLoading(!isLoading);
           }, 1000);
         })
-        .catch((error) => {
+        .catch(({response}) => {
           setIsLoading(false);
-          setError(error.response.data);
+          setError(response.data);
         });
     } else {
       setError("Password doesn't match ");
     }
   };
 
-  if (user?.token) {
+  if (authData.token) {
     return <Redirect to={state?.from || "/"} />;
   }
   return (

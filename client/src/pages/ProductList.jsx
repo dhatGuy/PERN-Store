@@ -23,7 +23,7 @@ const ProductList = () => {
     <Layout loading={isLoading}>
       <div className="container py-20 mx-auto">
         <Card className="flex flex-wrap h-full mx-2">
-          {products.map((prod) => (
+          {products?.map((prod) => (
             <div
               className="w-full flex flex-col justify-between sm:w-1/2 md:w-1/3 lg:w-1/4 my-2 px-2 box-border cursor-pointer"
               key={prod.product_id}
