@@ -1,6 +1,6 @@
 import { Button, HelperText, Input, Label } from "@windmill/react-ui";
 import ForgotPasswordModal from "components/ForgotPasswordModal";
-import Spinner from "components/Spinner";
+import PulseLoader from "react-spinners/PulseLoader";
 import { useUser } from "context/UserContext";
 import Layout from "layout/Layout";
 import React, { useState } from "react";
@@ -104,8 +104,8 @@ const Login = () => {
           <div className="mt-4">
             <ForgotPasswordModal />
           </div>
-          <Button type="submit">
-            {isLoading ? <Spinner size={20} loading={isLoading} /> : "Login"}
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? <PulseLoader color={"#0a138b"} size={10} loading={isLoading} /> : "Login"}
           </Button>
           <GoogleLogin
             className="my-4 flex justify-center"

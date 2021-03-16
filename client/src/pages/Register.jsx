@@ -1,6 +1,6 @@
 import { Button, HelperText, Input, Label } from "@windmill/react-ui";
 import API from "api/axios.config";
-import Spinner from "components/Spinner";
+import PulseLoader from "react-spinners/PulseLoader";
 import { useUser } from "context/UserContext";
 import Layout from "layout/Layout";
 import React, { useState } from "react";
@@ -134,7 +134,7 @@ const Register = () => {
           </div>
           <Button type="submit">
             {isLoading ? (
-              <Spinner size={20} loading={isLoading} />
+              <PulseLoader color={"#0a138b"} size={10} loading={isLoading} />
             ) : (
               "Create Account"
             )}
