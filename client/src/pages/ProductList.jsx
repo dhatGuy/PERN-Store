@@ -1,13 +1,12 @@
 import { Card, Pagination } from "@windmill/react-ui";
 import Product from "components/Product";
-import Spinner from "components/Spinner";
 import { useProduct } from "context/ProductContext";
 import Layout from "layout/Layout";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
 const ProductList = () => {
-  const { products, setPage } = useProduct();
+  const { products, setPage, isLoading } = useProduct();
   const history = useHistory();
 
   const handleChange = (page) => {
@@ -20,17 +19,8 @@ const ProductList = () => {
     });
   };
 
-  if (!products) {
-    return (
-      <Layout>
-        <div className="h-full flex items-center justify-center">
-          <Spinner size={150} loading={true} />
-        </div>
-      </Layout>
-    );
-  }
   return (
-    <Layout>
+    <Layout loading={isLoading}>
       <div className="container py-20 mx-auto">
         <Card className="flex flex-wrap h-full mx-2">
           {products.map((prod) => (

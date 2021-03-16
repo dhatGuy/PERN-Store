@@ -19,7 +19,7 @@ import { ShoppingCart } from "react-feather";
 import { formatCurrency } from "helpers";
 
 const Cart = () => {
-  const { cartData, setCartData } = useCart();
+  const { cartData, setCartData, isLoading } = useCart();
   const [total, setTotal] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -52,19 +52,9 @@ const Cart = () => {
     return () => (isSubscribed = false);
   }, [cartData]);
 
-  if (!cartData) {
-    return (
-      <Layout>
-        <div className="h-full flex items-center justify-center">
-          <Spinner size={150} loading={!cartData} />
-        </div>
-      </Layout>
-    );
-  }
-
   if (cartData?.items?.length === 0) {
     return (
-      <Layout>
+      <Layout title="Cart" loading={isLoading}>
         <h1 className="my-10 text-center text-4xl font-semibold">
           Shopping Cart
         </h1>
@@ -80,7 +70,7 @@ const Cart = () => {
   }
 
   return (
-    <Layout>
+    <Layout loading={isLoading}>
       <h1 className="my-10 text-center text-4xl font-semibold">
         Shopping Cart
       </h1>

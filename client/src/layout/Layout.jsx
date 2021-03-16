@@ -1,8 +1,9 @@
 import Nav from "components/Nav";
+import Spinner from "components/Spinner";
 import React from "react";
 import { Helmet } from "react-helmet-async";
 
-const Layout = ({ children, title }) => {
+const Layout = ({ children, title, loading }) => {
   return (
     <>
       <Helmet>
@@ -42,14 +43,22 @@ const Layout = ({ children, title }) => {
         <meta name="twitter:image" content="android-chrome-512x512.png" />
         <style type="text/css">{`
         html,body{
+          height: 100%;
         }
     `}</style>
       </Helmet>
       <div className="min-h-screen flex flex-col">
         <Nav />
-        <div className="text-gray-700 mt-16 mx-auto px-2 lg:px-56 flex-grow h-full w-full">
-          <main className="h-full">{children}</main>
-        </div>
+        {loading ? (
+          <>
+            <Spinner size={150} loading />
+          </>
+        ) : (
+          <div className="text-gray-700 mt-16 mx-auto px-2 lg:px-56 flex-grow h-full w-full">
+            <main className="h-full">{children}</main>
+          </div>
+        )}
+
         <footer className="mt-auto flex justify-center py-2">
           <p>
             Created with ♥ by<a href="www.github.com/dhatguy"> dhatGuy</a>

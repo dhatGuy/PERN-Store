@@ -9,7 +9,6 @@ import {
   TableRow,
 } from "@windmill/react-ui";
 import OrderItem from "components/OrderItem";
-import Spinner from "components/Spinner";
 import { useOrders } from "context/OrderContext";
 import Layout from "layout/Layout";
 import React, { useEffect, useState } from "react";
@@ -34,19 +33,10 @@ const Orders = () => {
     orderService.getAllOrders(currentPage).then((res) => setOrders(res.data));
   }, [currentPage, setOrders]);
 
-  if (!orders) {
-    return (
-      <Layout>
-        <div className="flex items-center justify-center">
-          <Spinner size={150} loading={true} />
-        </div>
-      </Layout>
-    );
-  }
 
-  if (orders.length === 0) {
+  if (orders?.length === 0) {
     return (
-      <Layout>
+      <Layout loading={orders === null}>
         <h1 className="my-10 text-center text-4xl font-semibold">Orders</h1>
         <p>You are yet to place an order</p>
       </Layout>
@@ -54,7 +44,7 @@ const Orders = () => {
   }
 
   return (
-    <Layout>
+    <Layout title="Orders" loading={orders === null}>
       <h1 className="my-10 text-center text-4xl font-semibold">Orders</h1>
       <TableContainer>
         <Table>
@@ -81,7 +71,7 @@ const Orders = () => {
         </Table>
         <TableFooter>
           <Pagination
-            totalResults={orders.total}
+            totalResults={orders?.total}
             resultsPerPage={5}
             onChange={handlePage}
             label="Table navigation"

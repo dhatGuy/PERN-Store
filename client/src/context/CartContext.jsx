@@ -8,11 +8,14 @@ const CartProvider = ({ children }) => {
   const [cartData, setCartData] = useState();
   const [cartTotal, setCartTotal] = useState(0);
   const { isLoggedIn } = useUser();
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     if (isLoggedIn) {
+      setIsLoading(true)
       cartService.getCart().then((res) => {
         setCartData(res?.data);
+        setIsLoading(false)
       });
     }
   }, [isLoggedIn]);
@@ -51,6 +54,7 @@ const CartProvider = ({ children }) => {
   return (
     <CartContext.Provider
       value={{
+        isLoading,
         cartData,
         setCartData,
         addItem,
