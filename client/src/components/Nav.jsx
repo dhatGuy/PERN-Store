@@ -11,7 +11,7 @@ const Nav = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   
     return (
-    <nav className="flex items-center justify-between px-2 lg:px-36 py-2 bg-gray-50 shadow-lg">
+    <nav className="flex items-center justify-between px-2 lg:px-36 py-2 shadow-lg fixed w-full bg-white top-0 z-10">
       <span className="text-gray-700 text-2xl font-bold dark:text-gray-400">
         <h1>PERN Store</h1>
       </span>

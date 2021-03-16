@@ -9,7 +9,7 @@ const Account = () => {
   if (!userData)
     return (
       <Layout title="Account">
-        <div className="h-full flex items-center justify-center">
+        <div className="absolute">
           <Spinner size={150} loading />
         </div>
       </Layout>
