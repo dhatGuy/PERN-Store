@@ -20,7 +20,7 @@ const Login = () => {
 
   const handleGoogleLogin = async (googleData) => {
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const data = await authService.googleLogin(googleData.tokenId);
       toast.success(data.status);
       setTimeout(() => {
