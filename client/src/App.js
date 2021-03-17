@@ -22,9 +22,7 @@ function App() {
       <Suspense
         fallback={
           <Layout>
-            <div className="h-full flex items-center justify-center">
-              <Spinner size={150} />
-            </div>
+              <Spinner size={100} />
           </Layout>
         }
       >

@@ -6,7 +6,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 
 const ProductList = () => {
-  const { products, setPage, isLoading } = useProduct();
+  const { products, setPage } = useProduct();
   const history = useHistory();
 
   const handleChange = (page) => {
@@ -20,7 +20,7 @@ const ProductList = () => {
   };
 
   return (
-    <Layout loading={isLoading}>
+    <Layout >
       <div className="container py-20 mx-auto">
         <Card className="flex flex-wrap h-full mx-2">
           {products?.map((prod) => (
