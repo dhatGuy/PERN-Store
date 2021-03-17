@@ -11,14 +11,15 @@ const UserProvider = ({ children }) => {
   });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  useEffect(() =>{
-    authService.getCurrentUser().then(res=> setUserData(res.data))
-  },[isLoggedIn])
+  useEffect(() => {
+    if (isLoggedIn) {
+      authService.getCurrentUser().then((res) => setUserData(res.data));
+    }
+  }, [isLoggedIn]);
 
   useEffect(() => {
-    if (localStorage.getItem("token") ) {
+    if (localStorage.getItem("token")) {
       setIsLoggedIn(true);
-      authService.getCurrentUser().then(res=> setUserData(res.data))
       setAuthData(JSON.parse(localStorage.getItem("token")));
     }
   }, []);
@@ -52,7 +53,7 @@ const UserProvider = ({ children }) => {
         setUserState: (data) => setUserInfo(data),
         logout,
         isLoggedIn,
-        authData
+        authData,
       }}
     >
       {children}

@@ -14,7 +14,7 @@ import {
   TableFooter,
   Button,
 } from "@windmill/react-ui";
-import Spinner from "components/Spinner";
+import PulseLoader from "react-spinners/PulseLoader";
 import { ShoppingCart } from "react-feather";
 import { formatCurrency } from "helpers";
 
@@ -97,8 +97,8 @@ const Cart = () => {
         </Table>
         <TableFooter className="flex flex-col justify-end items-end">
           <div className="mb-2">Total: {formatCurrency(total)}</div>
-          <Button onClick={() => checkout()}>
-            {isProcessing ? <Spinner size={20} /> : "Checkout"}
+          <Button onClick={() => checkout()} disabled={isProcessing}>
+            {isProcessing ? <PulseLoader size={10} color={"#0a138b"} /> : "Checkout"}
           </Button>
         </TableFooter>
       </TableContainer>
