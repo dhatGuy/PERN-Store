@@ -3,26 +3,26 @@ import API from "api/axios.config";
 import PulseLoader from "react-spinners/PulseLoader";
 import { useUser } from "context/UserContext";
 import Layout from "layout/Layout";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import toast from "react-hot-toast";
+import { useForm } from "react-hook-form";
 import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
 
 const Register = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setpassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const { state } = useLocation();
   const history = useHistory();
-  const {authData} = useUser()
-  
-  const onSubmit = (e) => {
-    e.preventDefault();
+  const { authData } = useUser();
+  const { register, errors, handleSubmit, watch } = useForm();
+  const password = useRef({});
+  password.current = watch("password", "");
+
+  const onSubmit = (data) => {
+    console.log(data);
+    const { password, password2, username, name, email } = data;
     setError("");
-    if (password === confirmPassword) {
+    if (password === password2) {
       setIsLoading(!isLoading);
       API.post("/auth/signup", {
         username,
@@ -32,13 +32,13 @@ const Register = () => {
       })
         .then(() => {
           setError("");
-          toast.success("Account created successfully.")
+          toast.success("Account created successfully.");
           setTimeout(() => {
             history.push("/login");
             setIsLoading(!isLoading);
           }, 1000);
         })
-        .catch(({response}) => {
+        .catch(({ response }) => {
           setIsLoading(false);
           setError(response.data);
         });
@@ -52,13 +52,13 @@ const Register = () => {
   }
   return (
     <Layout title="Create account">
-      <div className="flex items-center justify-center m-auto mt-20">
+      <div className="flex items-center justify-center mx-auto mt-20 ">
         <form
-          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col"
-          onSubmit={onSubmit}
+          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col w-full md:w-1/2 mx-2"
+          onSubmit={handleSubmit(onSubmit)}
         >
           <h1 className="text-center text-4xl">Create Account</h1>
-          <div className="mb-4">
+          <div className="mt-4">
             <Label className="block text-grey-darker text-sm font-bold mb-2">
               <span>Username</span>
             </Label>
@@ -66,14 +66,26 @@ const Register = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
               type="text"
               name="username"
-              required
-              id="username"
-              value={username}
-              placeholder="Enter a valid username"
-              onChange={(e) => setUsername(e.target.value)}
+              ref={register({
+                minLength: {
+                  value: 4,
+                  message: "Username must be greater than 3 characters",
+                },
+                required: "Username is required",
+              })}
             />
           </div>
-          <div className="mb-4">
+          {errors.username && errors.username.type === "required" && (
+            <HelperText className="pt-2" valid={false}>
+              {errors.username.message}
+            </HelperText>
+          )}
+          {errors.username && errors.username.type === "minLength" && (
+            <HelperText className="pt-2" valid={false}>
+              {errors.username.message}
+            </HelperText>
+          )}
+          <div className="mt-4">
             <Label className="block text-grey-darker text-sm font-bold mb-2">
               <span>Fullname</span>
             </Label>
@@ -81,14 +93,26 @@ const Register = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
               type="text"
               name="name"
-              required
-              id="name"
-              value={name}
-              placeholder="Enter your fullname"
-              onChange={(e) => setName(e.target.value)}
+              ref={register({
+                required: "Name cannot be empty",
+                minLength: {
+                  value: 6,
+                  message: "Name must be greater than 5 characters",
+                },
+              })}
             />
           </div>
-          <div className="mb-4">
+          {errors.name && errors.name.type === "required" && (
+            <HelperText className="pt-2" valid={false}>
+              {errors.name.message}
+            </HelperText>
+          )}
+          {errors.name && errors.name.type === "minLength" && (
+            <HelperText className="pt-2" valid={false}>
+              {errors.name.message}
+            </HelperText>
+          )}
+          <div className="mt-4">
             <Label className="block text-grey-darker text-sm font-bold mb-2">
               <span>Email</span>
             </Label>
@@ -96,14 +120,27 @@ const Register = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
               type="email"
               name="email"
-              required
-              id="email"
-              value={email}
-              placeholder="Enter a valid email"
-              onChange={(e) => setEmail(e.target.value)}
+              ref={register({
+                required: "Email required",
+                pattern: {
+                  // eslint-disable-next-line no-useless-escape
+                  value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                  message: "Email not valid",
+                },
+              })}
             />
           </div>
-          <div className="mb-4">
+          {errors.email && errors.email.type === "required" && (
+            <HelperText className="pt-2" valid={false}>
+              {errors.email.message}
+            </HelperText>
+          )}
+          {errors.email && errors.email.type === "pattern" && (
+            <HelperText className="pt-2" valid={false}>
+              {errors.email.message}
+            </HelperText>
+          )}
+          <div className="mt-4">
             <Label className="block text-grey-darker text-sm font-bold mb-2">
               <span>Password</span>
             </Label>
@@ -111,13 +148,26 @@ const Register = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
               type="password"
               name="password"
-              required
-              id="password"
-              value={password}
-              onChange={(e) => setpassword(e.target.value)}
+              ref={register({
+                required: "Password required",
+                minLength: {
+                  value: 6,
+                  message: "Password must be greater than 5 characters",
+                },
+              })}
             />
           </div>
-          <div className="mb-4">
+          {errors.password && errors.password.type === "required" && (
+            <HelperText className="pt-2" valid={false}>
+              {errors.password.message}
+            </HelperText>
+          )}
+          {errors.password && errors.password.type === "pattern" && (
+            <HelperText className="pt-2" valid={false}>
+              {errors.password.message}
+            </HelperText>
+          )}
+          <div className="mt-4">
             <Label className="block text-grey-darker text-sm font-bold mb-2">
               <span>Confirm Password</span>
             </Label>
@@ -125,20 +175,29 @@ const Register = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
               type="password"
               name="password2"
-              required
-              id="password2"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              ref={register({
+                validate: (value) =>
+                  value === password.current || "Passwords do not match",
+              })}
             />
-            {error && <HelperText valid={false}>{error}</HelperText>}
+            {errors.password2 && (
+              <HelperText className="pt-2" valid={false}>
+                {errors.password2.message}
+              </HelperText>
+            )}
           </div>
-          <Button type="submit">
+          <Button type="submit" className="mt-4">
             {isLoading ? (
               <PulseLoader color={"#0a138b"} size={10} loading={isLoading} />
             ) : (
               "Create Account"
             )}
           </Button>
+          {error && (
+            <HelperText className="pt-2" valid={false}>
+              {error}
+            </HelperText>
+          )}
           <p className="text-sm mt-4">
             Have an account?{" "}
             <Link to="/login" className="font-bold">

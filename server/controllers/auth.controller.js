@@ -73,11 +73,7 @@ const loginUser = async (req, res, next) => {
           res.status(200).json({
             token,
             user: {
-              user_id,
-              fullname,
-              email,
-              username,
-              roles,
+              user_id
             },
           });
         } else {
@@ -102,7 +98,6 @@ const googleLogin = async (req, res) => {
 
   try {
     const ticket = await verifygoogleIdToken(token);
-
     const { name, email, sub, given_name } = ticket.getPayload();
     try {
       await createGoogleAccount({ sub, given_name, email, name });
@@ -118,11 +113,7 @@ const googleLogin = async (req, res) => {
       res.status(200).json({
         token,
         user: {
-          user_id,
-          fullname,
-          email,
-          username,
-          roles,
+          user_id
         },
       });
     } catch (error) {
@@ -250,6 +241,10 @@ const resetPassword = async (req, res) => {
     res.json(error);
   }
 };
+
+const refreshToken = async(req, res)=>{
+  
+}
 
 module.exports = {
   createAccount,

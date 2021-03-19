@@ -1,15 +1,14 @@
 import { Button, HelperText, Input, Label } from "@windmill/react-ui";
-import Spinner from "components/Spinner";
+import PulseLoader from "react-spinners/PulseLoader";
 import useQuery from "hooks/useQuery";
 import Layout from "layout/Layout";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useHistory } from "react-router-dom";
 import authService from "services/auth.service";
+import { useForm } from "react-hook-form";
 
 const ResetPassword = () => {
-  const [password, setPassword] = useState("");
-  const [password2, setPassword2] = useState("");
   const [msg, setMsg] = useState("");
   const [resetmsg, setResetMsg] = useState("");
   const [isResetting, setIsResetting] = useState(false);
@@ -17,6 +16,9 @@ const ResetPassword = () => {
   const query = useQuery();
   const token = query.get("token");
   const email = query.get("email");
+  const { register, handleSubmit, errors, watch } = useForm();
+  const password = useRef({});
+  password.current = watch("password", "");
 
   useEffect(() => {
     authService
@@ -25,11 +27,10 @@ const ResetPassword = () => {
       .catch((e) => console.log(e.response));
   }, [token, email]);
 
-  const handlePasswordReset = (e) => {
-    e.preventDefault();
+  const handlePasswordReset = (data) => {
     setIsResetting(true);
     authService
-      .resetPassword(token, email, password, password2)
+      .resetPassword(token, email, data.password, data.password2)
       .then(({ data }) => {
         if (data.status === "error") {
           setIsResetting(false);
@@ -54,7 +55,10 @@ const ResetPassword = () => {
             <h1 className="text-4xl font-bold text-center">Reset Password</h1>
           </header>
           <div className="mx-auto max-w-lg shadow-2xl p-8 md:p-10">
-            <form className="flex flex-col" onSubmit={handlePasswordReset}>
+            <form
+              className="flex flex-col"
+              onSubmit={handleSubmit(handlePasswordReset)}
+            >
               <Label className="mb-4">
                 <span className="block text-gray-700 text-sm font-bold mb-2">
                   Password
@@ -63,10 +67,25 @@ const ResetPassword = () => {
                   className="rounded w-full text-gray-700 focus:outline-none border px-2 py-2 focus:border-purple-600 transition duration-500"
                   type="password"
                   inputMode="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  name="password"
+                  ref={register({
+                    required: "Password cannot be empty",
+                    minLength: {
+                      value: 6,
+                      message: "Password must be greater than 5 characters",
+                    },
+                  })}
                 />
-                <HelperText valid={false}>{resetmsg.message || ""}</HelperText>
+                {errors.password && errors.password.type === "required" && (
+                  <HelperText className="pt-2" valid={false}>
+                    {resetmsg.message}
+                  </HelperText>
+                )}
+                {errors.password && errors.password.type === "minLength" && (
+                  <HelperText className="pt-2" valid={false}>
+                    {resetmsg.message}
+                  </HelperText>
+                )}
               </Label>
               <Label className="mb-4">
                 <span className="block text-gray-700 text-sm font-bold mb-2">
@@ -76,12 +95,29 @@ const ResetPassword = () => {
                   className="rounded w-full text-gray-700 focus:outline-none border px-2 py-2 focus:border-purple-600 transition duration-500"
                   type="password"
                   inputMode="password"
-                  value={password2}
-                  onChange={(e) => setPassword2(e.target.value)}
+                  name="password2"
+                  ref={register({
+                    validate: (value) =>
+                      value === password.current || "Passwords do not match",
+                  })}
                 />
               </Label>
-              <Button type="submit">
-                {isResetting ? <Spinner size={20} /> : "Reset Password"}
+              {errors.password && errors.password.type === "required" && (
+                <HelperText className="pt-2" valid={false}>
+                  {resetmsg.message}
+                </HelperText>
+              )}
+              {resetmsg && (
+                <HelperText className="pt-2" valid={false}>
+                  {resetmsg.message || ""}
+                </HelperText>
+              )}
+              <Button type="submit" disabled={isResetting}>
+                {isResetting ? (
+                  <PulseLoader size={10} color={"#0a138b"} />
+                ) : (
+                  "Reset Password"
+                )}
               </Button>
             </form>
           </div>
