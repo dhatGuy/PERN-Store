@@ -18,6 +18,7 @@
     "react-feather": "^2.0.9",
     "react-google-login": "^5.2.2",
     "react-helmet-async": "^1.0.7",
+    "react-hook-form": "^6.15.5",
     "react-hot-toast": "^1.0.1",
     "react-rating-stars-component": "^2.2.0",
     "react-router-dom": "^5.2.0",
