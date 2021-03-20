@@ -28,9 +28,7 @@ const Cart = () => {
         <div className="h-full flex flex-col justify-center items-center">
           <ShoppingCart size={150} />
           <p>Cart is empty</p>
-          <Link to="/">
-            <Button tag="a">Continue shopping</Button>
-          </Link>
+            <Button tag={Link} to="/">Continue shopping</Button>
         </div>
       </Layout>
     );
@@ -64,7 +62,12 @@ const Cart = () => {
         </Table>
         <TableFooter className="flex flex-col justify-end items-end">
           <div className="mb-2">Total: {formatCurrency(cartSubtotal)}</div>
-          <Button tag={Link} to="/checkout">
+          <Button tag={Link} to={{
+            pathname: "/checkout",
+            state: {
+              fromCartPage: true
+            }
+          }}>
             Checkout
           </Button>
         </TableFooter>
