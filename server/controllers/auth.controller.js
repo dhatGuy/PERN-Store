@@ -57,16 +57,13 @@ const loginUser = async (req, res, next) => {
 
       if (user) {
         const {
-          fullname,
-          username,
-          email,
           password: dbPassword,
           user_id,
           roles,
           cart_id,
         } = user;
 
-        if (comparePassword(password, dbPassword)) {
+        if (await comparePassword(password, dbPassword)) {
           const token = generateAccessToken({ id: user_id, roles, cart_id });
           // const refreshToken = generateRefreshToken({ id: user_id, roles, cart_id })
           res.header("auth-token", token);
