@@ -106,7 +106,6 @@ const Login = () => {
           </div>
           {errors.password && errors.password.type === "required" && (
             <HelperText className="mt-1 italic" valid={false}>
-              {console.log(errors)}
               Password required
             </HelperText>
           )}

@@ -3,7 +3,7 @@ const orderService = require("../services/order.service");
 const cartService = require("../services/cart.service");
 
 const createOrder = async (req, res, next) => {
-  const { amount, itemTotal } = req.body;
+  const { amount, itemTotal, stripePaymentId } = req.body;
   const userId = req.user.id;
   const cartId = req.user.cart_id;
   try {
@@ -12,9 +12,10 @@ const createOrder = async (req, res, next) => {
       amount,
       itemTotal,
       userId,
+      stripePaymentId,
     });
 
-    // delete all items from cart_items table
+    // delete all items from cart_items table for the user order has been processed
     await cartService.emptyCart(cartId);
 
     res.json(newOrder);

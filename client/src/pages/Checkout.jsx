@@ -1,28 +1,41 @@
-import { Button } from "@windmill/react-ui";
 import Layout from "layout/Layout";
-import React from "react";
-import { format, parseISO } from "date-fns";
-import { Link, useHistory, useLocation } from "react-router-dom";
-import { formatCurrency } from "helpers";
+import React, { useState } from "react";
+import AddressForm from "components/AddressForm";
+import PaymentForm from "components/PaymentForm";
+import Confirmation from "components/Confirmation";
 
 const Checkout = () => {
-  const { state } = useLocation();
-  const { goBack } = useHistory();
-  if (!state) {
-    return goBack();
-  }
+  const [activeStep, setActiveStep] = useState(0);
+  const [addressData, setAddressData] = useState();
+
+  const nextStep = () =>
+    setActiveStep((prevStep) => setActiveStep(prevStep + 1));
+  const previousStep = () =>
+    setActiveStep((prevStep) => setActiveStep(prevStep - 1));
+
+  const resetState = () => {
+    setActiveStep(0);
+    setAddressData();
+  };
+
+  const next = (data) => {
+    setAddressData(data);
+    nextStep();
+  };
   return (
     <Layout>
       <div className="flex flex-col justify-center items-center mt-20">
-        <h1>It's ordered!</h1>
-        <p>Your order has been recieved.</p>
-        <p>Order No.: #{state.details.order_id}</p>
-        <p>Order Date: {format(parseISO(state.details.date), "d MMM, yyyy")}</p>
-        <p>No. of items: {state.details.total}</p>
-        <p>Amount: {formatCurrency(state.details?.amount)}</p>
-        <Button layout="outline">
-          <Link to="/products">Continue shopping</Link>
-        </Button>
+        {activeStep === 0 ? (
+          <AddressForm next={next} />
+        ) : activeStep === 1 ? (
+          <PaymentForm
+            nextStep={nextStep}
+            previousStep={previousStep}
+            addressData={addressData}
+          />
+        ) : (
+          <Confirmation resetState={resetState} />
+        )}
       </div>
     </Layout>
   );

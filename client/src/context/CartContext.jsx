@@ -6,6 +6,7 @@ const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
   const [cartData, setCartData] = useState();
+  const [cartSubtotal, setCartSubtotal] = useState(0)
   const [cartTotal, setCartTotal] = useState(0);
   const { isLoggedIn } = useUser();
   const [isLoading, setIsLoading] = useState(false)
@@ -24,6 +25,10 @@ const CartProvider = ({ children }) => {
     const quantity = cartData?.items?.reduce((acc, cur) => {
       return acc + Number(cur.quantity);
     }, 0);
+    const totalAmt = cartData?.items.reduce((acc, cur) => {
+      return acc + Number(cur.subtotal);
+    }, 0);
+    setCartSubtotal((totalAmt))
     setCartTotal(quantity);
   }, [cartData]);
 
@@ -62,6 +67,7 @@ const CartProvider = ({ children }) => {
         increment,
         decrement,
         cartTotal,
+        cartSubtotal
       }}
     >
       {children}

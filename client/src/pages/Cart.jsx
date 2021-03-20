@@ -1,9 +1,8 @@
 import CartItem from "components/CartItem";
 import { useCart } from "context/CartContext";
 import Layout from "layout/Layout";
-import React, { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import OrderService from "services/order.service";
+import React from "react";
+import { Link } from "react-router-dom";
 import {
   TableContainer,
   Table,
@@ -14,43 +13,11 @@ import {
   TableFooter,
   Button,
 } from "@windmill/react-ui";
-import PulseLoader from "react-spinners/PulseLoader";
 import { ShoppingCart } from "react-feather";
 import { formatCurrency } from "helpers";
 
 const Cart = () => {
-  const { cartData, setCartData, isLoading } = useCart();
-  const [total, setTotal] = useState(0);
-  const [totalItems, setTotalItems] = useState(0);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const history = useHistory();
-
-  const checkout = () => {
-    setIsProcessing(true);
-    OrderService.createOrder(total, totalItems).then((res) => {
-      setCartData({ ...cartData, items: [] });
-      history.push({
-        pathname: `/checkout`,
-        state: { details: res.data },
-      });
-      setIsProcessing(false);
-    });
-  };
-
-  useEffect(() => {
-    let isSubscribed = true;
-    const data = cartData?.items.reduce((acc, cur) => {
-      return acc + Number(cur.subtotal);
-    }, 0);
-    const items = cartData?.items.reduce((acc, cur) => {
-      return acc + Number(cur.quantity);
-    }, 0);
-    if (isSubscribed) {
-      setTotalItems(items);
-      setTotal(+data);
-    }
-    return () => (isSubscribed = false);
-  }, [cartData]);
+  const { cartData, isLoading, cartSubtotal } = useCart();
 
   if (cartData?.items?.length === 0) {
     return (
@@ -96,9 +63,9 @@ const Cart = () => {
           </TableBody>
         </Table>
         <TableFooter className="flex flex-col justify-end items-end">
-          <div className="mb-2">Total: {formatCurrency(total)}</div>
-          <Button onClick={() => checkout()} disabled={isProcessing}>
-            {isProcessing ? <PulseLoader size={10} color={"#0a138b"} /> : "Checkout"}
+          <div className="mb-2">Total: {formatCurrency(cartSubtotal)}</div>
+          <Button tag={Link} to="/checkout">
+            Checkout
           </Button>
         </TableFooter>
       </TableContainer>

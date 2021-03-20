@@ -1,8 +1,8 @@
 import API from "api/axios.config";
 
 class OrderService {
-  createOrder(amount, itemTotal) {
-    return API.post("/orders/create", { amount, itemTotal });
+  createOrder(amount, itemTotal, stripePaymentId) {
+    return API.post("/orders/create", { amount, itemTotal, stripePaymentId });
   }
   getAllOrders(page) {
     return API.get(`/orders/?page=${page}`);

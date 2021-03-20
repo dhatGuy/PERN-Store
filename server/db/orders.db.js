@@ -1,13 +1,13 @@
 const pool = require("../config/index");
 
-const createOrderDb = async ({ cartId, amount, itemTotal, userId }) => {
+const createOrderDb = async ({ cartId, amount, itemTotal, userId, stripePaymentId }) => {
   try {
     // create an order
     const {
       rows: order,
     } = await pool.query(
-      "INSERT INTO orders(user_id, status, amount, total) VALUES($1, 'complete', $2, $3) returning *",
-      [userId, amount, itemTotal]
+      "INSERT INTO orders(user_id, status, amount, total, stripe_payment_id) VALUES($1, 'complete', $2, $3, $4) returning *",
+      [userId, amount, itemTotal, stripePaymentId]
     );
 
     // copy cart items from the current cart_item table into order_item table

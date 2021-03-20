@@ -13,13 +13,12 @@ const Register = () => {
   const [error, setError] = useState("");
   const { state } = useLocation();
   const history = useHistory();
-  const { authData } = useUser();
+  const { isLoggedIn } = useUser();
   const { register, errors, handleSubmit, watch } = useForm();
   const password = useRef({});
   password.current = watch("password", "");
 
   const onSubmit = (data) => {
-    console.log(data);
     const { password, password2, username, name, email } = data;
     setError("");
     if (password === password2) {
@@ -47,7 +46,7 @@ const Register = () => {
     }
   };
 
-  if (authData.token) {
+  if (isLoggedIn) {
     return <Redirect to={state?.from || "/"} />;
   }
   return (
