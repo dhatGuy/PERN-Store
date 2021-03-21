@@ -1,11 +1,8 @@
 import Spinner from "components/Spinner";
 import Layout from "layout/Layout";
-import Account from "pages/Account";
 import Cart from "pages/Cart";
-import Checkout from "pages/Checkout";
 import Login from "pages/Login";
 import Register from "pages/Register";
-import ResetPassword from "pages/ResetPassword";
 import { lazy, Suspense } from "react";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -15,6 +12,9 @@ const ProductDetails = lazy(() => import("pages/ProductDetails"));
 const OrderDetails = lazy(() => import("pages/OrderDetails"));
 const Orders = lazy(() => import("pages/Orders"));
 const Product = lazy(() => import("pages/ProductList"));
+const Checkout = lazy(() => import("pages/Checkout"));
+const ResetPassword = lazy(() => import("pages/ResetPassword"));
+const Account = lazy(()=> import("pages/Account"))
 
 function App() {
   return (
@@ -22,12 +22,12 @@ function App() {
       <Suspense
         fallback={
           <Layout>
-              <Spinner size={100} />
+            <Spinner size={100} />
           </Layout>
         }
       >
         <>
-        <Toaster position="top-right"/>
+          <Toaster position="top-right" />
           <Switch>
             <ProtectedRoute exact path="/profile">
               <Account />

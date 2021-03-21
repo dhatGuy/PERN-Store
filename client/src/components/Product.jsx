@@ -23,7 +23,7 @@ const Product = ({ product }) => {
     <>
       <span href="" className="block relative h-48 rounded overflow-hidden">
         <img
-          className="w-full h-full"
+          className="w-full h-full object-contain object-center"
           src={product.image_url}
           alt={product.name}
           loading="lazy"
