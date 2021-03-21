@@ -6,7 +6,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import OrderSummary from "./OrderSummary";
-import { Button } from "@windmill/react-ui";
+import { Button, HelperText } from "@windmill/react-ui";
 import { useCart } from "context/CartContext";
 import { formatCurrency } from "helpers";
 import PulseLoader from "react-spinners/PulseLoader";
@@ -15,11 +15,13 @@ import OrderService from "services/order.service";
 
 const PaymentForm = ({ previousStep, addressData, nextStep }) => {
   const { cartSubtotal, cartTotal, cartData, setCartData } = useCart();
+  const [error, setError] = useState()
   const [isProcessing, setIsProcessing] = useState(false);
   const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUB_KEY);
 
   const handleSubmit = async (e, elements, stripe) => {
     e.preventDefault();
+    setError()
     const { fullname, email, address, city, state } = addressData;
     if (!stripe || !elements) {
       return;
@@ -46,6 +48,9 @@ const PaymentForm = ({ previousStep, addressData, nextStep }) => {
           },
         },
       });
+      if(result.error){
+        setError(result.error)
+      }
 
       await stripe.confirmCardPayment(data.client_secret, {
         payment_method: result.paymentMethod.id,
@@ -53,9 +58,9 @@ const PaymentForm = ({ previousStep, addressData, nextStep }) => {
 
       OrderService.createOrder(cartSubtotal, cartTotal, data.id).then(res=>{
         setCartData({...cartData, items: []})
+        setIsProcessing(false);
+        nextStep()
       })
-      setIsProcessing(false);
-      nextStep()
     } catch (error) {
       console.log(error);
       setIsProcessing(false);
@@ -65,15 +70,16 @@ const PaymentForm = ({ previousStep, addressData, nextStep }) => {
 
   return (
     <div className="w-full md:w-1/2">
-      <h1>Payment details</h1>
+      <h1 className="text-3xl font-semibold text-center mb-2">Payment details</h1>
       <OrderSummary />
-      <h1>Payment Method</h1>
+      <h1 className="font-medium text-2xl">Payment Method</h1>
       <Elements stripe={stripePromise}>
         <ElementsConsumer>
           {({ stripe, elements }) => (
             <form onSubmit={(e) => handleSubmit(e, elements, stripe)}>
               <CardElement className="border py-2" />
-              <div className="flex justify-between">
+              {error && <HelperText valid={false}>{error.message}</HelperText>}
+              <div className="flex justify-between py-4">
                 <Button onClick={previousStep} layout="outline" size="small">
                   Back
                 </Button>

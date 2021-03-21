@@ -15,6 +15,7 @@ const PaymentForm = ({next}) => {
 
   return (
     <div className="w-full">
+      <h1 className="text-3xl text-center mb-4 font-semibold">Address Details</h1>
       <form
         className="border p-4 border-black-4 w-full md:w-1/2 mx-auto"
         onSubmit={handleSubmit(data=> next(data))}
