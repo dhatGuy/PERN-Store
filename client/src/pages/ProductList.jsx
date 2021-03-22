@@ -4,19 +4,24 @@ import Spinner from "components/Spinner";
 import { useProduct } from "context/ProductContext";
 import Layout from "layout/Layout";
 import React from "react";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const ProductList = () => {
   const { products, setPage } = useProduct();
+  const history = useHistory();
 
   const handleChange = (page) => {
     setPage(page);
   };
 
+  const toProduct = (product_id) => history.push(`products/${product_id}`);
+
   if (!products) {
     return (
       <>
-        <Spinner size={100} loading />
+        <Layout>
+          <Spinner size={100} loading />
+        </Layout>
       </>
     );
   }
@@ -26,13 +31,13 @@ const ProductList = () => {
       <div className="container py-20 mx-auto">
         <Card className="flex flex-wrap h-full mx-2">
           {products?.map((prod) => (
-            <Link
+            <div
               className="w-full flex flex-col justify-between sm:w-1/2 md:w-1/3 lg:w-1/4 my-2 px-2 box-border"
               key={prod.product_id}
-              to={`products/${prod.product_id}`}
+              onClick={() => toProduct(prod.product_id)}
             >
               <Product product={prod} />
-            </Link>
+            </div>
           ))}
         </Card>
         <a href="# ">

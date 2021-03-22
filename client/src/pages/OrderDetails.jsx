@@ -33,7 +33,7 @@ const OrderDetails = () => {
               className="flex my-4 p-2 md:flex-row flex-col"
             >
               <img
-                className="sm:w-full md:w-1/2 lg:w-1/3 object-cover"
+                className="sm:w-full md:w-1/2 lg:w-1/3 object-contain md:object-cover"
                 loading="lazy"
                 decoding="async"
                 src={item.image_url}

@@ -54,7 +54,7 @@ const ProductDetails = () => {
               loading="lazy"
               src={product?.image_url}
               alt={product?.name}
-              className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
+              className="lg:w-1/2 w-full lg:h-auto h-64 object-contain md:object-cover object-center rounded"
             />
             <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
               <h1 className="text-3xl title-font font-medium mb-1">
