@@ -37,6 +37,19 @@ const getUserByIdDb = async (id) => {
     throw error;
   }
 };
+const getUserByUsernameDb = async (username) => {
+  try {
+    const {
+      rows: user,
+    } = await pool.query(
+      "select users.*, cart.id as cart_id from users join cart on cart.user_id = users.user_id where users.username = $1",
+      [username]
+    );
+    return user[0];
+  } catch (error) {
+    throw error;
+  }
+};
 
 const getUserByEmailDb = async (email) => {
   try {
@@ -54,13 +67,13 @@ const getUserByEmailDb = async (email) => {
   }
 };
 
-const updateUserDb = async ({ username, password, email, fullname, id }) => {
+const updateUserDb = async ({ username, email, fullname, id }) => {
   try {
     const {
       rows: user,
     } = await pool.query(
-      "UPDATE users set username = $1, password = $2, email = $3, fullname = $4 where user_id = $5 returning *",
-      [username, password, email, fullname, id]
+      "UPDATE users set username = $1, email = $2, fullname = $3 where user_id = $4 returning username, email, fullname, user_id",
+      [username, email, fullname, id]
     );
     return user[0];
   } catch (error) {
@@ -114,5 +127,6 @@ module.exports = {
   createUserDb,
   createUserGoogleDb,
   deleteUserDb,
+  getUserByUsernameDb,
   changeUserPasswordDb,
 };

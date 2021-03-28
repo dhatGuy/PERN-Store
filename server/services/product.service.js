@@ -33,6 +33,14 @@ class ProductService {
     }
   };
 
+  getProductByName = async (name) => {
+    try {
+      return await getProductByNameDb(name);
+    } catch (error) {
+      throw error;
+    }
+  };
+
   updateProduct = async (data) => {
     try {
       return await updateProductDb(data);

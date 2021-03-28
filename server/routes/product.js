@@ -1,10 +1,11 @@
-const router = require("express").Router()
+const router = require("express").Router();
 const {
   getAllProducts,
   createProduct,
   getProduct,
   updateProduct,
   deleteProduct,
+  getProductByName,
 } = require("../controllers/products.controller");
 const verifyAdmin = require("../middleware/verifyAdmin");
 const verifyToken = require("../middleware/verifyToken");
@@ -17,6 +18,7 @@ router
 router
   .route("/:id")
   .get(getProduct)
+  .get(getProductByName)
   .put(verifyToken, verifyAdmin, updateProduct)
   .delete(verifyToken, verifyAdmin, deleteProduct);
 

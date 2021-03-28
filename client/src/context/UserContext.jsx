@@ -1,3 +1,4 @@
+import API from "api/axios.config";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import authService from "services/auth.service";
 
@@ -23,6 +24,15 @@ const UserProvider = ({ children }) => {
       setAuthData(JSON.parse(localStorage.getItem("token")));
     }
   }, []);
+
+  const updateUserData = async (fullname, email, username) => {
+    const res = await API.put(`/users/${userData.user_id}`, {
+      fullname,
+      email,
+      username,
+    });
+    setUserData(res.data);
+  };
 
   const setUserInfo = (data) => {
     const { user, token } = data;
@@ -54,6 +64,7 @@ const UserProvider = ({ children }) => {
         logout,
         isLoggedIn,
         authData,
+        updateUserData,
       }}
     >
       {children}

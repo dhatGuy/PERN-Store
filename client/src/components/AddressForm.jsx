@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
-const PaymentForm = ({next}) => {
+const PaymentForm = ({ next }) => {
   const { userData } = useUser();
   const { register, handleSubmit, errors, setValue } = useForm();
 
@@ -15,10 +15,12 @@ const PaymentForm = ({next}) => {
 
   return (
     <div className="w-full">
-      <h1 className="text-3xl text-center mb-4 font-semibold">Address Details</h1>
+      <h1 className="text-3xl text-center mb-4 font-semibold">
+        Address Details
+      </h1>
       <form
         className="border p-4 border-black-4 w-full md:w-1/2 mx-auto"
-        onSubmit={handleSubmit(data=> next(data))}
+        onSubmit={handleSubmit((data) => next(data))}
       >
         <Label className="block text-grey-darker text-sm font-bold mb-4">
           <span>Fullname</span>
@@ -40,7 +42,9 @@ const PaymentForm = ({next}) => {
             name="email"
             ref={register({ required: "Required" })}
           />
-          {errors.email && <HelperText valid={false}>{errors.email.message}</HelperText>}
+          {errors.email && (
+            <HelperText valid={false}>{errors.email.message}</HelperText>
+          )}
         </Label>
         <Label className="block text-grey-darker text-sm font-bold mb-4">
           <span>Address</span>
@@ -50,7 +54,9 @@ const PaymentForm = ({next}) => {
             name="address"
             ref={register({ required: "Required" })}
           />
-          {errors.address && <HelperText valid={false}>{errors.address.message}</HelperText>}
+          {errors.address && (
+            <HelperText valid={false}>{errors.address.message}</HelperText>
+          )}
         </Label>
         <Label className="block text-grey-darker text-sm font-bold mb-4">
           <span>Country</span>
@@ -60,7 +66,9 @@ const PaymentForm = ({next}) => {
             name="country"
             ref={register({ required: "Required" })}
           />
-          {errors.country && <HelperText valid={false}>{errors.country.message}</HelperText>}
+          {errors.country && (
+            <HelperText valid={false}>{errors.country.message}</HelperText>
+          )}
         </Label>
         <Label className="block text-grey-darker text-sm font-bold mb-4">
           <span>State/Region</span>
@@ -70,7 +78,9 @@ const PaymentForm = ({next}) => {
             name="state"
             ref={register({ required: "Required" })}
           />
-          {errors.state && <HelperText>{errors.state.message}</HelperText>}
+          {errors.state && (
+            <HelperText valid={false}>{errors.state.message}</HelperText>
+          )}
         </Label>
         <Label className="block text-grey-darker text-sm font-bold mb-4">
           <span>City</span>
@@ -80,16 +90,17 @@ const PaymentForm = ({next}) => {
             name="city"
             ref={register({ required: "Required" })}
           />
-          {errors.city && <HelperText valid={false}>{errors.city.message}</HelperText>}
+          {errors.city && (
+            <HelperText valid={false}>{errors.city.message}</HelperText>
+          )}
         </Label>
         <div className="flex justify-between">
-
-        <Button tag={Link} to="/cart" layout="outline" size="small">
-          Back to cart
-        </Button>
-        <Button type="submit" size="small">
-          Proceed
-        </Button>
+          <Button tag={Link} to="/cart" layout="outline" size="small">
+            Back to cart
+          </Button>
+          <Button type="submit" size="small">
+            Proceed
+          </Button>
         </div>
       </form>
     </div>

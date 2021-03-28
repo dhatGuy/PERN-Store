@@ -7,6 +7,9 @@ class ProductService {
   getProduct(id) {
     return API.get( `/products/${id}`);
   }
+  getProductByName(name) {
+    return API.get( `/products/${name}`);
+  }
 }
 
 export default new ProductService();

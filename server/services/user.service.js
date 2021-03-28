@@ -7,6 +7,7 @@ const {
   updateUserDb,
   deleteUserDb,
   getAllUsersDb,
+  getUserByUsernameDb,
 } = require("../db/user.db");
 
 class UserService {
@@ -29,7 +30,6 @@ class UserService {
     try {
       return await getUserByIdDb(id);
     } catch (error) {
-      console.log(error);
       throw error;
     }
   };
@@ -48,26 +48,47 @@ class UserService {
     }
   };
   updateUser = async (user) => {
+    const { email, username, id } = user;
     try {
+      const getUser = await getUserByIdDb(id);
+      const findUserByEmail = await getUserByEmailDb(email);
+      const findUserByUsername = await getUserByUsernameDb(username);
+      const emailChanged = email && getUser.email !== email;
+      const usernameChanged = username && getUser.username !== username;
+      const errors = {};
+
+      if (emailChanged && typeof findUserByEmail === "object") {
+        errors["email"] = `Email is already taken`;
+      }
+      if (usernameChanged && typeof findUserByUsername === "object") {
+        errors["username"] = `Username is already taken`;
+      }
+
+      if (Object.keys(errors).length > 0) {
+        throw errors;
+      }
+
       return await updateUserDb(user);
     } catch (error) {
       throw error;
     }
   };
+
   deleteUser = async (id) => {
     try {
-      return await deleteUserDb(id)
+      return await deleteUserDb(id);
     } catch (error) {
-      throw error
+      throw error;
     }
   };
-  getAllUsers = async (id) =>{
+
+  getAllUsers = async (id) => {
     try {
-      return await getAllUsersDb()
+      return await getAllUsersDb();
     } catch (error) {
-      throw error
+      throw error;
     }
-  }
+  };
 }
 
 module.exports = new UserService();

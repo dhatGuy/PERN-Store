@@ -68,5 +68,6 @@
     "babel-register": "^6.26.0",
     "postcss-cli": "^8.3.1",
     "react-router-sitemap": "^1.2.0"
-  }
+  },
+  "proxy": "http://localhost:9000"
 }

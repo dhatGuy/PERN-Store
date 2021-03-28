@@ -58,28 +58,21 @@ const getUserProfile = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const { username, email, fullname, password } = req.body;
-  const { id } = req.params;
-  if (+id == req.user.id || req.user.roles.includes("admin")) {
+  const { username, email, fullname } = req.body;
+  if (+req.params.id == req.user.id || req.user.roles.includes("admin")) {
     try {
-      const user = await userService.getUserByEmail(email);
-      if (user) {
-        const results = await userService.updateUser({
-          username,
-          email,
-          fullname,
-          password,
-          id,
-        });
-        res.status(200).json(results);
-      } else {
-        res.status(500).send("Email exists already.");
-      }
+      const results = await userService.updateUser({
+        username,
+        email,
+        fullname,
+        id: req.user.id,
+      });
+      return res.status(201).json(results);
     } catch (error) {
-      res.status(500).json(error);
+      return res.status(500).json(error);
     }
   }
-  return res.status(401).json({ message: "Unauthorized" });
+  res.status(401).json({ message: "Unauthorized" });
 };
 
 const deleteUser = async (req, res) => {
@@ -101,5 +94,5 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUser,
-  getUserProfile
+  getUserProfile,
 };

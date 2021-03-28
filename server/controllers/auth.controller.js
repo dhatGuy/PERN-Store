@@ -22,7 +22,8 @@ const createAccount = async (req, res, next) => {
     try {
       const user = await userService.getUserByEmail(email);
 
-      if (user?.email === email) return res.status(500).json("Email exists already");
+      if (user?.email === email)
+        return res.status(500).json("Email exists already");
 
       if (user?.username === username)
         return res.status(500).json("Username taken already");
@@ -56,21 +57,23 @@ const loginUser = async (req, res, next) => {
       const user = await userService.getUserByEmail(email);
 
       if (user) {
-        const {
-          password: dbPassword,
-          user_id,
-          roles,
-          cart_id,
-        } = user;
+        const { password: dbPassword, user_id, roles, cart_id } = user;
 
         if (await comparePassword(password, dbPassword)) {
           const token = generateAccessToken({ id: user_id, roles, cart_id });
-          // const refreshToken = generateRefreshToken({ id: user_id, roles, cart_id })
+          const refreshToken = generateRefreshToken({
+            id: user_id,
+            roles,
+            cart_id,
+          });
           res.header("auth-token", token);
+          res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+          });
           res.status(200).json({
             token,
             user: {
-              user_id
+              user_id,
             },
           });
         } else {
@@ -110,7 +113,7 @@ const googleLogin = async (req, res) => {
       res.status(200).json({
         token,
         user: {
-          user_id
+          user_id,
         },
       });
     } catch (error) {
@@ -239,9 +242,7 @@ const resetPassword = async (req, res) => {
   }
 };
 
-const refreshToken = async(req, res)=>{
-  
-}
+const refreshToken = async (req, res) => {};
 
 module.exports = {
   createAccount,
