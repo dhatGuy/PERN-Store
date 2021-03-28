@@ -3,10 +3,29 @@ import AccountForm from "components/AccountForm";
 import { useUser } from "context/UserContext";
 import Layout from "layout/Layout";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import authService from "services/auth.service";
+import PulseLoader from "react-spinners/PulseLoader";
 
 const Account = () => {
   const { userData } = useUser();
   const [showSettings, setShowSettings] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+
+  const resetPassword = () => {
+    setIsSending(true);
+    authService
+      .forgotPassword(userData.email)
+      .then((data) => {
+        if (data.data.status === "OK") {
+          setIsSending(false);
+          toast.success("Email has been sent successfully.");
+        }
+      })
+      .catch((error) => {
+        setIsSending(false);
+      });
+  };
 
   return (
     <Layout title="Profile" loading={userData === null}>
@@ -47,6 +66,20 @@ const Account = () => {
                   </dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                     {userData?.email}
+                  </dd>
+                </div>
+                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">
+                    Password
+                  </dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    <Button disabled={isSending} onClick={resetPassword}>
+                      {isSending ? (
+                        <PulseLoader color={"#0a138b"} size={10} />
+                      ) : (
+                        "Reset Password"
+                      )}
+                    </Button>
                   </dd>
                 </div>
                 <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">

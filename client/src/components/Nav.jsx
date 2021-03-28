@@ -2,7 +2,7 @@ import { Badge, Button, Dropdown, DropdownItem } from "@windmill/react-ui";
 import { useCart } from "context/CartContext";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Home, ShoppingCart, User } from "react-feather";
+import { ShoppingCart, User } from "react-feather";
 import { useUser } from "context/UserContext";
 
 const Nav = () => {
@@ -12,9 +12,9 @@ const Nav = () => {
   
     return (
     <nav className="flex items-center justify-between px-2 lg:px-36 py-2 shadow-lg fixed w-full bg-white top-0 z-10">
-      <span className="text-gray-700 text-2xl font-bold dark:text-gray-400">
+      <Link to="/" className="text-gray-700 text-2xl font-bold dark:text-gray-400">
         <h1>PERN Store</h1>
-      </span>
+      </Link>
       <ul className="flex space-x-4">
         {!isLoggedIn && (
           <>
@@ -33,14 +33,6 @@ const Nav = () => {
 
         {isLoggedIn && (
           <>
-            <li>
-              <Link to="/">
-                <Button layout="link">
-                  <span className="lg:block hidden">Home</span>
-                  <Home className="lg:hidden" />
-                </Button>
-              </Link>
-            </li>
             <li>
               <Link to="/cart">
                 <Button layout="link">

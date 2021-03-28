@@ -2,10 +2,12 @@ import { Button, HelperText, Input, Label } from "@windmill/react-ui";
 import { useUser } from "context/UserContext";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import PulseLoader from "react-spinners/PulseLoader";
 
 const AccountForm = ({ setShowSettings, userData }) => {
   const { register, handleSubmit, setValue } = useForm();
   const [validationError, setValidationError] = useState();
+  const [isSaving, setIsSaving] = useState(false);
   const { updateUserData } = useUser();
 
   useEffect(() => {
@@ -20,10 +22,13 @@ const AccountForm = ({ setShowSettings, userData }) => {
 
   const onSubmit = async ({ fullname, email, username }) => {
     setValidationError();
+    setIsSaving(true)
     try {
       await updateUserData(fullname, email, username);
       setShowSettings(false);
+      setIsSaving(false)
     } catch (error) {
+      setIsSaving(false)
       setValidationError(error.response.data);
     }
   };
@@ -107,7 +112,13 @@ const AccountForm = ({ setShowSettings, userData }) => {
             />
           </div>
           <div className="px-4 py-5 ">
-            <Button type="submit">Save</Button>
+            <Button disabled={isSaving} type="submit">
+              {isSaving ? (
+                <PulseLoader color={"#0a138b"} size={10} loading={isSaving} />
+              ) : (
+                "Save"
+              )}
+            </Button>
           </div>
         </form>
       </div>
