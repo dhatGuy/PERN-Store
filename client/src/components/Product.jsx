@@ -50,7 +50,7 @@ const Product = ({ product }) => {
 
         <Button
           iconLeft={ShoppingCart}
-          className="mt-4 transition duration-200 ease-out bg-opacity-0 group-hover:bg-opacity-100"
+          className="mt-4 transition duration-200 ease-out lg:bg-opacity-0 group-hover:bg-opacity-100"
           onClick={(e) => addToCart(e)}
         >
           {" "}
