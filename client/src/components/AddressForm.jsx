@@ -11,6 +11,10 @@ const PaymentForm = ({ next }) => {
   useEffect(() => {
     setValue("fullname", userData?.fullname);
     setValue("email", userData?.email);
+    setValue("address", userData?.address);
+    setValue("country", userData?.country);
+    setValue("city", userData?.city);
+    setValue("state", userData?.state);
   }, [setValue, userData]);
 
   return (

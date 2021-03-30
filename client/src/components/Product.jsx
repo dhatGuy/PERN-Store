@@ -2,6 +2,7 @@ import { Button, CardBody } from "@windmill/react-ui";
 import { useCart } from "context/CartContext";
 import { useUser } from "context/UserContext";
 import React from "react";
+import { ShoppingCart } from "react-feather";
 import ReactStars from "react-rating-stars-component";
 import { useHistory } from "react-router-dom";
 import { formatCurrency } from "../helpers";
@@ -32,10 +33,10 @@ const Product = ({ product }) => {
         />
       </span>
       <CardBody className="flex flex-col items-stretch mt-4">
-        <h2 className="title-font text-lg font-medium overflow-ellipsis whitespace-nowrap overflow-hidden">{product.name}</h2>
-        <p className="">
-          {formatCurrency(product.price)}
-        </p>
+        <h2 className="title-font text-lg font-medium overflow-ellipsis whitespace-nowrap overflow-hidden">
+          {product.name}
+        </h2>
+        <p className="">{formatCurrency(product.price)}</p>
         <span className="flex items-center">
           <ReactStars
             count={5}
@@ -46,8 +47,8 @@ const Product = ({ product }) => {
           />
           {""}({+product.count})
         </span>
-        <Button className="mt-4" onClick={(e) => addToCart(e)}>
-          Add to cart
+        <Button iconLeft={ShoppingCart}
+          className="mt-4" onClick={(e) => addToCart(e)}> Add to cart
         </Button>
       </CardBody>
     </>
