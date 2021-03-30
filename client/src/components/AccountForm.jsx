@@ -24,7 +24,7 @@ const AccountForm = ({ setShowSettings, userData }) => {
     setValidationError();
     setIsSaving(true);
     try {
-      await updateUserData(data)
+      await updateUserData(data);
       setShowSettings(false);
       setIsSaving(false);
     } catch (error) {
@@ -119,7 +119,13 @@ const AccountForm = ({ setShowSettings, userData }) => {
                 "Save"
               )}
             </Button>
-            <Button disabled={isSaving} onClick={()=> setShowSettings(false)} layout="outline">Cancel</Button>
+            <Button
+              disabled={isSaving}
+              onClick={() => setShowSettings(false)}
+              layout="outline"
+            >
+              Cancel
+            </Button>
           </div>
         </form>
       </div>
