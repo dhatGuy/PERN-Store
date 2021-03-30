@@ -12,9 +12,8 @@ const {
 
 class UserService {
   createUser = async (user) => {
-    const modifiedUser = { ...user, email: user.email.toLowerCase() };
     try {
-      return await createUserDb(modifiedUser);
+      return await createUserDb(user);
     } catch (error) {
       throw error;
     }
@@ -49,15 +48,15 @@ class UserService {
   };
   updateUser = async (user) => {
     const { email, username, id } = user;
+    const errors = {};
     try {
       const getUser = await getUserByIdDb(id);
       const findUserByEmail = await getUserByEmailDb(email);
       const findUserByUsername = await getUserByUsernameDb(username);
       const emailChanged =
-        email && getUser.email !== email;
+        email && getUser.email.toLowerCase() !== email.toLowerCase();
       const usernameChanged =
-        username && getUser.username !== username;
-      const errors = {};
+        username && getUser.username.toLowerCase() !== username.toLowerCase();
 
       if (emailChanged && typeof findUserByEmail === "object") {
         errors["email"] = `Email is already taken`;

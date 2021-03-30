@@ -41,7 +41,7 @@ const getUserByUsernameDb = async (username) => {
     const {
       rows: user,
     } = await pool.query(
-      "select users.*, cart.id as cart_id from users join cart on cart.user_id = users.user_id where users.username = $1",
+      "select users.*, cart.id as cart_id from users join cart on cart.user_id = users.user_id where lower(users.username) = lower($1)",
       [username]
     );
     return user[0];
@@ -55,7 +55,7 @@ const getUserByEmailDb = async (email) => {
     const {
       rows: user,
     } = await pool.query(
-      "select users.*, cart.id as cart_id from users join cart on cart.user_id = users.user_id where email = $1",
+      "select users.*, cart.id as cart_id from users join cart on cart.user_id = users.user_id where lower(email) = lower($1)",
       [email]
     );
 
