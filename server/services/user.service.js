@@ -12,15 +12,16 @@ const {
 
 class UserService {
   createUser = async (user) => {
+    const modifiedUser = { ...user, email: user.email.toLowerCase() };
     try {
-      return await createUserDb(user);
+      return await createUserDb(modifiedUser);
     } catch (error) {
       throw error;
     }
   };
   getUserByEmail = async (email) => {
     try {
-      return await getUserByEmailDb(email);
+      return await getUserByEmailDb(email.toLowerCase());
     } catch (error) {
       console.log(error);
       throw error;
@@ -53,8 +54,10 @@ class UserService {
       const getUser = await getUserByIdDb(id);
       const findUserByEmail = await getUserByEmailDb(email);
       const findUserByUsername = await getUserByUsernameDb(username);
-      const emailChanged = email && getUser.email !== email;
-      const usernameChanged = username && getUser.username !== username;
+      const emailChanged =
+        email && getUser.email !== email;
+      const usernameChanged =
+        username && getUser.username !== username;
       const errors = {};
 
       if (emailChanged && typeof findUserByEmail === "object") {

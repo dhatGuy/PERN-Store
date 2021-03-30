@@ -12,6 +12,7 @@ const ProductList = () => {
 
   const handleChange = (page) => {
     setPage(page);
+    window.scrollTo(0, 0);
   };
 
   const toProduct = (product_id) => history.push(`products/${product_id}`);
@@ -40,14 +41,12 @@ const ProductList = () => {
             </div>
           ))}
         </Card>
-        <a href="# ">
-          <Pagination
-            totalResults={20}
-            resultsPerPage={12}
-            onChange={handleChange}
-            label="Page navigation"
-          />
-        </a>
+        <Pagination
+          totalResults={20}
+          resultsPerPage={12}
+          onChange={handleChange}
+          label="Page navigation"
+        />
       </div>
     </Layout>
   );
