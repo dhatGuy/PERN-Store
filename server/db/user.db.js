@@ -19,7 +19,6 @@ const createUserDb = async ({ username, password, email, fullname }) => {
     );
     return user[0];
   } catch (error) {
-    console.log(error.stack);
     throw error;
   }
 };
@@ -62,7 +61,6 @@ const getUserByEmailDb = async (email) => {
 
     return user[0];
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -80,7 +78,7 @@ const updateUserDb = async ({
   try {
     const { rows: user } = await pool.query(
       `UPDATE users set username = $1, email = $2, fullname = $3, address = $4, city = $5, state = $6, country = $7 
-      where user_id = $8 returning username, email, fullname, user_id`,
+      where user_id = $8 returning username, email, fullname, user_id, address, city, country, state`,
       [username, email, fullname, address, city, state, country, id]
     );
     return user[0];

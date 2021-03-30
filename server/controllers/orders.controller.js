@@ -20,7 +20,6 @@ const createOrder = async (req, res, next) => {
 
     res.json(newOrder);
   } catch (error) {
-    console.log(error);
     res.status(500).json(error);
   }
 };

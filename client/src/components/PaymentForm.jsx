@@ -62,7 +62,6 @@ const PaymentForm = ({ previousStep, addressData, nextStep }) => {
         nextStep()
       })
     } catch (error) {
-      console.log(error);
       setIsProcessing(false);
       // throw error
     }

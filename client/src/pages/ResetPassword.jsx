@@ -24,7 +24,7 @@ const ResetPassword = () => {
     authService
       .checkToken(token, email)
       .then(({ data }) => setMsg(data))
-      .catch((e) => console.log(e.response));
+      .catch((e) => console.error(e.response));
   }, [token, email]);
 
   const handlePasswordReset = (data) => {
@@ -44,7 +44,6 @@ const ResetPassword = () => {
       })
       .catch((err) => {
         setIsResetting(false);
-        console.log(err);
       });
   };
   return (

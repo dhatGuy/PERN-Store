@@ -36,7 +36,6 @@ const ReviewModal = ({ product_id, reviews }) => {
       })
       .catch((error) => {
         toast.error("Error: ", error.response);
-        console.log(error.response);
       });
   };
 
@@ -51,7 +50,6 @@ const ReviewModal = ({ product_id, reviews }) => {
       })
       .catch((error) => {
         toast.error("Error: ", error.response);
-        console.log(error.response);
       });
   };
 

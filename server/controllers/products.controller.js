@@ -88,39 +88,39 @@ const getProductReviews = async (req, res, next) => {
   } catch (error) {
     res.status(500).json(error);
   }
-}
+};
 
-  const createProductReview = async (req, res) => {
-    const {product_id, content, rating } = req.body;
-    const user_id = req.user.id;
+const createProductReview = async (req, res) => {
+  const { product_id, content, rating } = req.body;
+  const user_id = req.user.id;
 
-    try {
-      const result = await pool.query(
-        `INSERT INTO reviews(user_id, product_id, content, rating) 
+  try {
+    const result = await pool.query(
+      `INSERT INTO reviews(user_id, product_id, content, rating) 
        VALUES($1, $2, $3, $4) returning *
       `,
-        [user_id, product_id, content, rating]
-      );
-      res.json(result.rows);
-    } catch (error) {
-      res.status(500).json(error.detail);
-    }
+      [user_id, product_id, content, rating]
+    );
+    res.json(result.rows);
+  } catch (error) {
+    res.status(500).json(error.detail);
   }
+};
 
-  const updateProductReview = async (req, res) => {
-    const { content, rating, id } = req.body;
+const updateProductReview = async (req, res) => {
+  const { content, rating, id } = req.body;
 
-    try {
-      const result = await pool.query(
-        `UPDATE reviews set content = $1, rating = $2 where id = $3 returning *
+  try {
+    const result = await pool.query(
+      `UPDATE reviews set content = $1, rating = $2 where id = $3 returning *
       `,
-        [content, rating, id]
-      );
-      res.json(result.rows);
-    } catch (error) {
-      res.status(500).json(error);
-    }
+      [content, rating, id]
+    );
+    res.json(result.rows);
+  } catch (error) {
+    res.status(500).json(error);
   }
+};
 
 module.exports = {
   getProduct,
@@ -131,5 +131,5 @@ module.exports = {
   getProductByName,
   getProductReviews,
   updateProductReview,
-  createProductReview
+  createProductReview,
 };

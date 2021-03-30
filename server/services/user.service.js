@@ -23,7 +23,6 @@ class UserService {
     try {
       return await getUserByEmailDb(email.toLowerCase());
     } catch (error) {
-      console.log(error);
       throw error;
     }
   };

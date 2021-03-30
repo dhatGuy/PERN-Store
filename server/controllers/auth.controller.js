@@ -86,7 +86,6 @@ const loginUser = async (req, res, next) => {
       next(new Error("Invalid login"));
     }
   } catch (error) {
-    console.log(error);
     next(new Error("Something went wrong."));
   }
 };
@@ -117,11 +116,9 @@ const googleLogin = async (req, res) => {
         },
       });
     } catch (error) {
-      console.log(error);
       res.status(500).send(error);
     }
   } catch (error) {
-    console.log(error);
     res.status(401).json({ msg: "ID token required" });
   }
 };
@@ -146,7 +143,6 @@ const forgotPassword = async (req, res) => {
       await mail.forgotPasswordMail(fpSalt, email);
       res.json({ status: "OK" });
     } catch (error) {
-      console.log(error);
       res.status(500).send(error);
     }
   } else {
@@ -178,11 +174,9 @@ const verifyResetToken = async (req, res) => {
         });
       }
     } catch (error) {
-      console.log(error);
       res.status(500).json("Unknown error", error);
     }
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -229,15 +223,12 @@ const resetPassword = async (req, res) => {
           message: "Password reset. Please login with your new password.",
         });
       } catch (error) {
-        console.log(error);
         res.json(error);
       }
     } catch (error) {
-      console.log(error);
       res.json(error);
     }
   } catch (error) {
-    console.log(error);
     res.json(error);
   }
 };

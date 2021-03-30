@@ -59,7 +59,6 @@ const getUserProfile = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const { username, email, fullname, address, city, state, country } = req.body;
-  console.log(req.body)
   if (+req.params.id == req.user.id || req.user.roles.includes("admin")) {
     try {
       const results = await userService.updateUser({
@@ -74,7 +73,6 @@ const updateUser = async (req, res) => {
       });
       return res.status(201).json(results);
     } catch (error) {
-      console.log(error)
       return res.status(500).json(error);
     }
   }
