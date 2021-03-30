@@ -67,13 +67,21 @@ const getUserByEmailDb = async (email) => {
   }
 };
 
-const updateUserDb = async ({ username, email, fullname, id }) => {
+const updateUserDb = async ({
+  username,
+  email,
+  fullname,
+  id,
+  address,
+  city,
+  state,
+  country,
+}) => {
   try {
-    const {
-      rows: user,
-    } = await pool.query(
-      "UPDATE users set username = $1, email = $2, fullname = $3 where user_id = $4 returning username, email, fullname, user_id",
-      [username, email, fullname, id]
+    const { rows: user } = await pool.query(
+      `UPDATE users set username = $1, email = $2, fullname = $3, address = $4, city = $5, state = $6, country = $7 
+      where user_id = $8 returning username, email, fullname, user_id`,
+      [username, email, fullname, address, city, state, country, id]
     );
     return user[0];
   } catch (error) {

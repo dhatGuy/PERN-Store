@@ -25,11 +25,23 @@ const UserProvider = ({ children }) => {
     }
   }, []);
 
-  const updateUserData = async (fullname, email, username) => {
+  const updateUserData = async ({
+    fullname,
+    email,
+    username,
+    address,
+    city,
+    state,
+    country,
+  }) => {
     const res = await API.put(`/users/${userData.user_id}`, {
       fullname,
       email,
       username,
+      address,
+      city,
+      state,
+      country,
     });
     setUserData(res.data);
   };

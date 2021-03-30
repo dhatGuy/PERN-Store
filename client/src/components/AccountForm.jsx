@@ -20,15 +20,15 @@ const AccountForm = ({ setShowSettings, userData }) => {
     setValue("state", userData?.state);
   }, [setValue, userData]);
 
-  const onSubmit = async ({ fullname, email, username }) => {
+  const onSubmit = async (data) => {
     setValidationError();
-    setIsSaving(true)
+    setIsSaving(true);
     try {
-      await updateUserData(fullname, email, username);
+      await updateUserData(data)
       setShowSettings(false);
-      setIsSaving(false)
+      setIsSaving(false);
     } catch (error) {
-      setIsSaving(false)
+      setIsSaving(false);
       setValidationError(error.response.data);
     }
   };
@@ -111,7 +111,7 @@ const AccountForm = ({ setShowSettings, userData }) => {
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
             />
           </div>
-          <div className="px-4 py-5 ">
+          <div className="px-4 py-5 space-x-4">
             <Button disabled={isSaving} type="submit">
               {isSaving ? (
                 <PulseLoader color={"#0a138b"} size={10} loading={isSaving} />
@@ -119,6 +119,7 @@ const AccountForm = ({ setShowSettings, userData }) => {
                 "Save"
               )}
             </Button>
+            <Button disabled={isSaving} onClick={()=> setShowSettings(false)} layout="outline">Cancel</Button>
           </div>
         </form>
       </div>

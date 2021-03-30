@@ -2,7 +2,6 @@ const router = require("express").Router();
 const cart = require("./cart");
 const order = require("./order");
 const product = require("./product");
-const reviews = require("./reviews");
 const users = require("./users");
 const auth = require("./auth");
 const payment = require("./payment");
@@ -14,7 +13,6 @@ router.use("/users", users);
 router.use("/products", product);
 router.use("/orders", order);
 router.use("/cart", cart);
-router.use("/reviews", reviews);
 router.use("/payment", payment);
 router.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
