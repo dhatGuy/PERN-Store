@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { LogOut, ShoppingCart, User } from "react-feather";
 import { useUser } from "context/UserContext";
+import { Transition } from "@windmill/react-ui";
 
 const Nav = () => {
   const { cartTotal } = useCart();
@@ -55,37 +56,49 @@ const Nav = () => {
                   <span className="lg:block hidden">Account</span>
                   <User className="lg:hidden" />
                 </Button>
-                <Dropdown
-                  align="right"
-                  isOpen={isDropdownOpen}
-                  className="z-10"
+                <Transition
+                  show={isDropdownOpen}
+                  enter="transition ease-out duration-150 transform"
+                  enterFrom="opacity-0 scale-95"
+                  enterTo="opacity-100 scale-100"
+                  leave="transition ease-in duration-75 transform"
+                  leaveFrom="opacity-100 scale-100"
+                  leaveTo="opacity-0 scale-95"
                 >
-                  <DropdownItem className="curosr-not-allowed text-gray-400 border-b flex flex-col items-start justify-start">
-                    <p className="self-start">
-                      {userData?.fullname?.split(" ").join(" ")}
-                    </p>
-                    <p className="self-start">@{userData?.username}</p>
-                  </DropdownItem>
-                  <DropdownItem tag="a">
-                    <Link className="w-full" to="/profile">
-                      Profile
-                    </Link>
-                  </DropdownItem>
-                  <DropdownItem tag="a">
-                    <Link className="w-full" to="/orders">
-                      Orders
-                    </Link>
-                  </DropdownItem>
-                  <DropdownItem tag="a" className="border-t">
-                    <Link
-                      className="w-full"
-                      onClick={() => logout()}
-                      to="/login"
-                    >
-                      <Button iconRight={LogOut} block>Logout</Button>
-                    </Link>
-                  </DropdownItem>
-                </Dropdown>
+                  <Dropdown
+                    align="right"
+                    isOpen={isDropdownOpen}
+                    className="z-10"
+                  >
+                    <DropdownItem className="cursor-not-allowed text-gray-400 border-b flex flex-col items-start justify-start">
+                      <p className="self-start">
+                        {userData?.fullname?.split(" ").join(" ")}
+                      </p>
+                      <p className="self-start">@{userData?.username}</p>
+                    </DropdownItem>
+                    <DropdownItem tag="a">
+                      <Link className="w-full" to="/profile">
+                        Profile
+                      </Link>
+                    </DropdownItem>
+                    <DropdownItem tag="a">
+                      <Link className="w-full" to="/orders">
+                        Orders
+                      </Link>
+                    </DropdownItem>
+                    <DropdownItem tag="a" className="border-t">
+                      <Link
+                        className="w-full"
+                        onClick={() => logout()}
+                        to="/login"
+                      >
+                        <Button iconRight={LogOut} block>
+                          Logout
+                        </Button>
+                      </Link>
+                    </DropdownItem>
+                  </Dropdown>
+                </Transition>
               </li>
             </>
           )}

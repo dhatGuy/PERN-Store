@@ -21,8 +21,8 @@ const Product = ({ product }) => {
     }
   };
   return (
-    <>
-      <span href="" className="block relative h-48 rounded overflow-hidden">
+    <div className="group">
+      <span className="block relative h-48 rounded overflow-hidden">
         <img
           className="w-full h-full object-contain object-center"
           src={product.image_url}
@@ -47,11 +47,17 @@ const Product = ({ product }) => {
           />
           {""}({+product.count})
         </span>
-        <Button iconLeft={ShoppingCart}
-          className="mt-4" onClick={(e) => addToCart(e)}> Add to cart
+
+        <Button
+          iconLeft={ShoppingCart}
+          className="mt-4 transition duration-200 ease-out bg-opacity-0 group-hover:bg-opacity-100"
+          onClick={(e) => addToCart(e)}
+        >
+          {" "}
+          Add to cart
         </Button>
       </CardBody>
-    </>
+    </div>
   );
 };
 
