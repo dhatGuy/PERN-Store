@@ -213,7 +213,7 @@ const resetPassword = async (req, res) => {
     try {
       await authService.setTokenStatus(email);
 
-      const hashedPassword = hashPassword(password);
+      const hashedPassword = await hashPassword(password);
 
       try {
         await userService.changeUserPassword(hashedPassword, email);
