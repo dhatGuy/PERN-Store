@@ -29,9 +29,10 @@ const signupMail = async (to, name) => {
 
   try {
     await transport.sendMail(message).then((data) => {
-      throw error;
+      console.log(data);
     });
   } catch (error) {
+    console.log(error)
     return error;
   }
 };
@@ -52,8 +53,10 @@ const forgotPasswordMail = async (token, email) => {
 
   try {
     const res = await transport.sendMail(message);
+    console.log(res)
     return res;
   } catch (error) {
+    console.log(error)
     return error;
   }
 };
