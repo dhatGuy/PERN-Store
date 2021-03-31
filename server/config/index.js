@@ -8,7 +8,7 @@ const connectionString =
 const pool = new Pool({
   connectionString: isProduction ? process.env.DATABASE_URL : connectionString,
   ssl: {
-    rejectUnauthorized: true
+    rejectUnauthorized: false
     }
 });
 
