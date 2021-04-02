@@ -53,9 +53,9 @@ function App() {
             <ProtectedRoute exact path="/orders/:id/">
               <OrderDetails />
             </ProtectedRoute>
-            <ProtectedRoute path="/cart">
+            <Route path="/cart">
               <Cart />
-            </ProtectedRoute>
+            </Route>
             <Route path="/reset-password">
               <ResetPassword />
             </Route>

@@ -1,24 +1,16 @@
 import { Button, CardBody } from "@windmill/react-ui";
 import { useCart } from "context/CartContext";
-import { useUser } from "context/UserContext";
 import React from "react";
 import { ShoppingCart } from "react-feather";
 import ReactStars from "react-rating-stars-component";
-import { useHistory } from "react-router-dom";
 import { formatCurrency } from "../helpers";
 
 const Product = ({ product }) => {
-  const { isLoggedIn } = useUser();
-  const history = useHistory();
   const { addItem } = useCart();
 
   const addToCart = async (e) => {
     e.stopPropagation();
-    if (isLoggedIn) {
-      addItem(product.product_id, 1);
-    } else {
-      history.push("/login");
-    }
+    addItem(product, 1);
   };
   return (
     <div className="group">

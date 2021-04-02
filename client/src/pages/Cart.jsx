@@ -35,7 +35,7 @@ const Cart = () => {
   }
 
   return (
-    <Layout loading={isLoading}>
+    <Layout loading={isLoading || cartData === undefined}>
       <h1 className="my-10 text-center text-4xl font-semibold">
         Shopping Cart
       </h1>

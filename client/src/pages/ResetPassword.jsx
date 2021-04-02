@@ -1,6 +1,6 @@
 import { Button, HelperText, Input, Label } from "@windmill/react-ui";
 import PulseLoader from "react-spinners/PulseLoader";
-import useQuery from "hooks/useQuery";
+import useQuery from "helpers/useQuery";
 import Layout from "layout/Layout";
 import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";

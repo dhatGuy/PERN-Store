@@ -3,31 +3,23 @@ import { Button } from "@windmill/react-ui";
 // import ReviewModal from "components/ReviewModal";
 import { useCart } from "context/CartContext";
 // import { useReview } from "context/ReviewContext";
-import { useUser } from "context/UserContext";
 import { formatCurrency } from "helpers";
 import Layout from "layout/Layout";
 import React, { useEffect, useState } from "react";
 import ReactStars from "react-rating-stars-component";
-import { useHistory, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import productService from "services/product.service";
 // import reviewService from "services/review.service";
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const history = useHistory();
   const [product, setProduct] = useState(null);
   // const { reviews, setReviews } = useReview(null);
   const { addItem } = useCart();
-  const { isLoggedIn } = useUser();
   const [isLoading, setIsLoading] = useState(false);
 
   const addToCart = (e) => {
-    e.stopPropagation();
-    if (isLoggedIn) {
-      addItem(product.product_id, 1);
-    } else {
-      history.push("/login");
-    }
+    addItem(product.product_id, 1);
   };
 
   useEffect(() => {

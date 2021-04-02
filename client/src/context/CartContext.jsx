@@ -1,3 +1,4 @@
+import localCart from "helpers/localStorage";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import cartService from "services/cart.service";
 import { useUser } from "./UserContext";
@@ -6,18 +7,25 @@ const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
   const [cartData, setCartData] = useState();
-  const [cartSubtotal, setCartSubtotal] = useState(0)
+  const [cartSubtotal, setCartSubtotal] = useState(0);
   const [cartTotal, setCartTotal] = useState(0);
   const { isLoggedIn } = useUser();
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     if (isLoggedIn) {
-      setIsLoading(true)
       cartService.getCart().then((res) => {
         setCartData(res?.data);
-        setIsLoading(false)
+        setIsLoading(false);
       });
+    } else {
+      const items = localCart.getItems();
+      if (items === null) {
+        return;
+      }
+      setCartData({ items: [...items] });
+      setIsLoading(false);
     }
   }, [isLoggedIn]);
 
@@ -28,32 +36,56 @@ const CartProvider = ({ children }) => {
     const totalAmt = cartData?.items.reduce((acc, cur) => {
       return acc + Number(cur.subtotal);
     }, 0);
-    setCartSubtotal((totalAmt))
+    setCartSubtotal(totalAmt);
     setCartTotal(quantity);
   }, [cartData]);
 
-  const addItem = async (productId, quantity) => {
-    const { data } = await cartService.addToCart(productId, quantity);
-    setCartData({ items: [...data.data] });
+  const addItem = async (product, quantity) => {
+    if (isLoggedIn) {
+      const { data } = await cartService.addToCart(
+        product.product_id,
+        quantity
+      );
+      setCartData({ items: [...data.data] });
+    } else {
+      localCart.addItem(product, 1);
+      setCartData({ ...cartData, items: localCart.getItems() });
+    }
   };
 
   const deleteItem = (product_id) => {
-    const { items } = cartData;
-    cartService.removeFromCart(product_id).then(() => {
-      const data = items.filter((item) => item.product_id !== product_id);
-      setCartData({ ...cartData, items: data });
-    });
+    if (isLoggedIn) {
+      const { items } = cartData;
+      cartService.removeFromCart(product_id).then(() => {
+        const data = items.filter((item) => item.product_id !== product_id);
+        setCartData({ ...cartData, items: data });
+      });
+    } else {
+      localCart.removeItem(product_id);
+      setCartData({ ...cartData, items: localCart.getItems() });
+    }
   };
 
   const increment = async (product_id) => {
-    const res = await cartService.increment(product_id);
-    setCartData({ ...cartData, items: res.data });
-    return res;
+    if (isLoggedIn) {
+      const res = await cartService.increment(product_id);
+      setCartData({ ...cartData, items: res.data });
+      return res;
+    } else {
+      localCart.incrementQuantity(product_id);
+      setCartData({ ...cartData, items: localCart.getItems() });
+    }
   };
+
   const decrement = async (product_id) => {
-    const res = await cartService.decrement(product_id);
-    setCartData({ ...cartData, items: res.data });
-    return res;
+    if (isLoggedIn) {
+      const res = await cartService.decrement(product_id);
+      setCartData({ ...cartData, items: res.data });
+      return res;
+    } else {
+      localCart.decrementQuantity(product_id);
+      setCartData({ ...cartData, items: localCart.getItems() });
+    }
   };
 
   return (
@@ -67,7 +99,7 @@ const CartProvider = ({ children }) => {
         increment,
         decrement,
         cartTotal,
-        cartSubtotal
+        cartSubtotal,
       }}
     >
       {children}
