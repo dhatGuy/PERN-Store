@@ -8,7 +8,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import OrderSummary from "./OrderSummary";
 import { Button, HelperText } from "@windmill/react-ui";
 import { useCart } from "context/CartContext";
-import { formatCurrency } from "helpers";
+import { formatCurrency } from "helpers/formatCurrency";
 import PulseLoader from "react-spinners/PulseLoader";
 import API from "api/axios.config";
 import OrderService from "services/order.service";

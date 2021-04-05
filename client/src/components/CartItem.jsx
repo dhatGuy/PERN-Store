@@ -1,6 +1,6 @@
 import { Button, TableCell } from "@windmill/react-ui";
 import { useCart } from "context/CartContext";
-import { formatCurrency } from "helpers";
+import { formatCurrency } from "helpers/formatCurrency";
 import React from "react";
 
 const CartItem = ({ item }) => {

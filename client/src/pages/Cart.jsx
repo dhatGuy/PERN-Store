@@ -14,7 +14,7 @@ import {
   Button,
 } from "@windmill/react-ui";
 import { ShoppingCart } from "react-feather";
-import { formatCurrency } from "helpers";
+import { formatCurrency } from "helpers/formatCurrency";
 
 const Cart = () => {
   const { cartData, isLoading, cartSubtotal } = useCart();

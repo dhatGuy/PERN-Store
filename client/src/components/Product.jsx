@@ -3,7 +3,7 @@ import { useCart } from "context/CartContext";
 import React from "react";
 import { ShoppingCart } from "react-feather";
 import ReactStars from "react-rating-stars-component";
-import { formatCurrency } from "../helpers";
+import { formatCurrency } from "../helpers/formatCurrency";
 
 const Product = ({ product }) => {
   const { addItem } = useCart();

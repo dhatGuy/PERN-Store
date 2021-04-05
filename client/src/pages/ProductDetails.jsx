@@ -3,7 +3,7 @@ import { Button } from "@windmill/react-ui";
 // import ReviewModal from "components/ReviewModal";
 import { useCart } from "context/CartContext";
 // import { useReview } from "context/ReviewContext";
-import { formatCurrency } from "helpers";
+import { formatCurrency } from "helpers/formatCurrency";
 import Layout from "layout/Layout";
 import React, { useEffect, useState } from "react";
 import ReactStars from "react-rating-stars-component";

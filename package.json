@@ -3,8 +3,6 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
-    "@stripe/react-stripe-js": "^1.4.0",
-    "@stripe/stripe-js": "^1.13.2",
     "concurrently": "^6.0.0"
   },
   "devDependencies": {},
