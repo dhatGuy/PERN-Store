@@ -55,6 +55,7 @@ class LocalCart {
       this.saveItems([...this.getItems(), product]);
     }
   };
+  clearCart = () => localStorage.removeItem("__cart")
 }
 
 export default new LocalCart();

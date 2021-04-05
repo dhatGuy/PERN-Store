@@ -10,7 +10,7 @@ const Product = ({ product }) => {
 
   const addToCart = async (e) => {
     e.stopPropagation();
-    addItem(product, 1);
+    await addItem(product, 1);
   };
   return (
     <div className="group">

@@ -15,6 +15,10 @@ const CartProvider = ({ children }) => {
   useEffect(() => {
     setIsLoading(true);
     if (isLoggedIn) {
+      localCart.getItems().forEach(async ({product_id, quantity}) => {
+        await cartService.addToCart(product_id, quantity);
+      })
+      localCart.clearCart()
       cartService.getCart().then((res) => {
         setCartData(res?.data);
         setIsLoading(false);
