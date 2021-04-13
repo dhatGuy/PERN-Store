@@ -15,10 +15,10 @@ const CartProvider = ({ children }) => {
   useEffect(() => {
     setIsLoading(true);
     if (isLoggedIn) {
-      localCart.getItems().forEach(async ({product_id, quantity}) => {
+      localCart.getItems().forEach(async ({ product_id, quantity }) => {
         await cartService.addToCart(product_id, quantity);
-      })
-      localCart.clearCart()
+      });
+      localCart.clearCart();
       cartService.getCart().then((res) => {
         setCartData(res?.data);
         setIsLoading(false);
@@ -46,11 +46,15 @@ const CartProvider = ({ children }) => {
 
   const addItem = async (product, quantity) => {
     if (isLoggedIn) {
-      const { data } = await cartService.addToCart(
-        product.product_id,
-        quantity
-      );
-      setCartData({ items: [...data.data] });
+      try {
+        const { data } = await cartService.addToCart(
+          product.product_id,
+          quantity
+        );
+        setCartData({ items: [...data.data] });
+      } catch (error) {
+        return error
+      }
     } else {
       localCart.addItem(product, 1);
       setCartData({ ...cartData, items: localCart.getItems() });

@@ -18,8 +18,8 @@ const ProductDetails = () => {
   const { addItem } = useCart();
   const [isLoading, setIsLoading] = useState(false);
 
-  const addToCart = (e) => {
-    addItem(product.product_id, 1);
+  const addToCart = async (e) => {
+    await addItem(product, 1);
   };
 
   useEffect(() => {
