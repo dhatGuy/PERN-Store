@@ -1,19 +1,28 @@
 import Layout from "layout/Layout";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddressForm from "components/AddressForm";
 import PaymentForm from "components/PaymentForm";
 import Confirmation from "components/Confirmation";
 import { useHistory, useLocation } from "react-router";
+import { useCart } from "context/CartContext";
 
 const Checkout = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [addressData, setAddressData] = useState();
-  const {state} = useLocation()
-  const {goBack} = useHistory()
-  
-    if(!state?.fromCartPage) {
-      return goBack()
+  const { state } = useLocation();
+  const history = useHistory();
+  const { cartData } = useCart();
+
+  useEffect(() => {
+    if (!state?.fromCartPage) {
+      return history.push('/cart');
     }
+
+    if (cartData.items.length === 0) {
+      return history.push("/cart");
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const nextStep = () =>
     setActiveStep((prevStep) => setActiveStep(prevStep + 1));
