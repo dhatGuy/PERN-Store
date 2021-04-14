@@ -25,7 +25,7 @@ const Nav = () => {
               <li>
                 <Link to="/login">
                   <Button layout="link">
-                    <span className="lg:block hidden">login</span>
+                    <span>login</span>
                   </Button>
                 </Link>
               </li>
