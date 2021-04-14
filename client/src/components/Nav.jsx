@@ -23,6 +23,13 @@ const Nav = () => {
           {!isLoggedIn && (
             <>
               <li>
+                <Link to="/login">
+                  <Button layout="link">
+                    <span className="lg:block hidden">login</span>
+                  </Button>
+                </Link>
+              </li>
+              <li>
                 <Link to="/cart">
                   <Button layout="link">
                     <span className="lg:block hidden">Cart</span>
