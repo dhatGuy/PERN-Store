@@ -10,6 +10,8 @@
     "start": "node server",
     "server": "nodemon server",
     "client": "npm start --prefix client",
+    "deploy": "git subtree push --prefix server heroku master",
+    "logs": "heroku logs --tail",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [],
