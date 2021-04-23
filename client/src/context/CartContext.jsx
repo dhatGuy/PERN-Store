@@ -15,14 +15,20 @@ const CartProvider = ({ children }) => {
   useEffect(() => {
     setIsLoading(true);
     if (isLoggedIn) {
-      localCart.getItems().forEach(async ({ product_id, quantity }) => {
-        await cartService.addToCart(product_id, quantity);
-      });
-      localCart.clearCart();
-      cartService.getCart().then((res) => {
-        setCartData(res?.data);
-        setIsLoading(false);
-      });
+      const saveLocalCart = async () => {
+        const cartObj = localCart
+          .getItems()
+          .map(({ product_id, quantity }) =>
+            cartService.addToCart(product_id, quantity)
+          );
+        await Promise.all(cartObj);
+        localCart.clearCart();
+        cartService.getCart().then((res) => {
+          setCartData(res?.data);
+          setIsLoading(false);
+        });
+      };
+      saveLocalCart();
     } else {
       const items = localCart.getItems();
       if (items === null) {
@@ -53,7 +59,7 @@ const CartProvider = ({ children }) => {
         );
         setCartData({ items: [...data.data] });
       } catch (error) {
-        return error
+        return error;
       }
     } else {
       localCart.addItem(product, 1);
