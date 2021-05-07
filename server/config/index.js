@@ -14,7 +14,7 @@ const pool = new Pool({
     ? process.env.DATABASE_URL // Heroku will supply us with a string called DATABASE_URL for the connectionString,
     : connectionString,
   ssl: {
-    rejectUnauthorized: isProduction,
+    rejectUnauthorized: false,
   },
 });
 
