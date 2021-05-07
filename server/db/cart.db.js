@@ -49,9 +49,9 @@ const addItemDb = async ({ cart_id, product_id, quantity }) => {
       [cart_id]
     );
 
-    return results.rows
+    return results.rows;
   } catch (error) {
-    throw error
+    throw error;
   }
 };
 
@@ -86,8 +86,8 @@ const increaseItemQuantityDb = async ({ cart_id, product_id }) => {
        where cart_item.cart_id = $1
       `,
       [cart_id]
-    )
-    return results.rows
+    );
+    return results.rows;
   } catch (error) {
     throw error;
   }
@@ -104,20 +104,20 @@ const decreaseItemQuantityDb = async ({ cart_id, product_id }) => {
     const results = await pool.query(
       "Select products.*, cart_item.quantity, round((products.price * cart_item.quantity)::numeric, 2) as subtotal from cart_item join products on cart_item.product_id = products.product_id where cart_item.cart_id = $1",
       [cart_id]
-    )
-    return results.rows
+    );
+    return results.rows;
   } catch (error) {
     throw error;
   }
 };
 
-const emptyCartDb = async (cartId) =>{
+const emptyCartDb = async (cartId) => {
   try {
     return await pool.query("delete from cart_item where cart_id = $1", [cartId]);
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 module.exports = {
   createCartDb,

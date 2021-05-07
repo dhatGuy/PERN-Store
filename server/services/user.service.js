@@ -20,14 +20,27 @@ class UserService {
   };
   getUserByEmail = async (email) => {
     try {
-      return await getUserByEmailDb(email.toLowerCase());
+      const user = await getUserByEmailDb(email);
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  };
+  getUserByUsername = async (username) => {
+    try {
+      const user = await getUserByUsernameDb(username);
+      return user;
     } catch (error) {
       throw error;
     }
   };
   getUserById = async (id) => {
     try {
-      return await getUserByIdDb(id);
+      const user = await getUserByIdDb(id);
+      user.password = undefined;
+      user.google_id = undefined;
+      user.cart_id = undefined;
+      return user;
     } catch (error) {
       throw error;
     }

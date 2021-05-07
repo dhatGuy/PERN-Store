@@ -6,8 +6,8 @@ const verifygoogleIdToken = async token => {
     idToken: token,
     audience: process.env.CLIENT_ID,
   });
-}
+};
 
 module.exports ={
   verifygoogleIdToken
-}
+};

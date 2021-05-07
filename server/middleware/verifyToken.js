@@ -1,18 +1,18 @@
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
 
 const verifyToken = (req, res, next) => {
-  const token = req.header('auth-token')
+  const token = req.header("auth-token");
   if(!token){
-    return res.sendStatus(401)
+    return res.sendStatus(401);
   }
 
   try {
-    const verified = jwt.verify(token, process.env.SECRET)
-    req.user = verified
-    next()
+    const verified = jwt.verify(token, process.env.SECRET);
+    req.user = verified;
+    next();
   } catch (error) {
-    res.status(400).send("Invalid Token")
+    res.status(400).send("Invalid Token");
   }
-}
+};
 
 module.exports = verifyToken;

@@ -32,7 +32,7 @@ const signupMail = async (to, name) => {
       console.log(data);
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return error;
   }
 };
@@ -44,8 +44,8 @@ const forgotPasswordMail = async (token, email) => {
     subject: "Forgot Password",
     html: `<p>To reset your password, please click the link below.
       <a href="${url}/reset-password?token=${encodeURIComponent(
-      token
-    )}&email=${email}"><br/>
+  token
+)}&email=${email}"><br/>
       Reset Password
       </a></p>
       <p><b>Note that this link will expire in the next one(1) hour.</b></p>`,
@@ -53,10 +53,10 @@ const forgotPasswordMail = async (token, email) => {
 
   try {
     const res = await transport.sendMail(message);
-    console.log(res)
+    console.log(res);
     return res;
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return error;
   }
 };
@@ -66,7 +66,7 @@ const resetPasswordMail = async (email) => {
     from: process.env.GMAIL_EMAIL,
     to: email,
     subject: "Password Reset Successful",
-    html: `<p>Your password has been changed successfully.</p>`,
+    html: "<p>Your password has been changed successfully.</p>",
   };
 
   try {

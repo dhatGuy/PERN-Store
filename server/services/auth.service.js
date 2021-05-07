@@ -14,33 +14,33 @@ class AuthService {
 
   async setTokenStatus(email){
     try {
-      return await setTokenStatusDb(email)
+      return await setTokenStatusDb(email);
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 
   async createResetToken(data){
     try {
-      return await createResetTokenDb(data)
+      return await createResetTokenDb(data);
     } catch (error) {
-      throw error
+      throw error;
     }
   }
   async deleteResetToken(date){
     try {
-      return await deleteResetTokenDb(date)
+      return await deleteResetTokenDb(date);
     } catch (error) {
-      throw error
+      throw error;
     }
   }
   async isTokenValid(data){
     try {
-      return await isValidTokenDb(data)
+      return await isValidTokenDb(data);
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 }
 
-module.exports = new AuthService()
+module.exports = new AuthService();

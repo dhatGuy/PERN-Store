@@ -27,7 +27,7 @@ const createOrderDb = async ({ cartId, amount, itemTotal, userId, stripePaymentI
 
 const getAllOrdersDb = async ({ userId, limit, offset }) => {
   try {
-    const {rowCount} = await pool.query(
+    const { rowCount } = await pool.query(
       "SELECT * from orders WHERE orders.user_id = $1",
       [userId]
     );

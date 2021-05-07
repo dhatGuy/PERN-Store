@@ -1,12 +1,12 @@
 import { Button, HelperText, Input, Label } from "@windmill/react-ui";
 import API from "api/axios.config";
-import PulseLoader from "react-spinners/PulseLoader";
 import { useUser } from "context/UserContext";
 import Layout from "layout/Layout";
 import React, { useRef, useState } from "react";
-import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
+import PulseLoader from "react-spinners/PulseLoader";
 
 const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +39,7 @@ const Register = () => {
         })
         .catch(({ response }) => {
           setIsLoading(false);
-          setError(response.data);
+          setError(response.data.error);
         });
     } else {
       setError("Password doesn't match ");

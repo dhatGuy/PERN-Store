@@ -4,7 +4,7 @@ module.exports = (req, res, next) => {
     req.user = {
       ...req.user,
       roles
-    }
+    };
     return next();
   } else {
     return res.status(401).json({ message: "require admin role" });

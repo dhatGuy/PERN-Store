@@ -28,7 +28,7 @@ const getUserByIdDb = async (id) => {
     const {
       rows: user,
     } = await pool.query(
-      "select users.*, cart.id as cart_id from users join cart on cart.user_id = users.user_id where users.user_id = $1",
+      "select users.*, cart.id as cart_id from users left join cart on cart.user_id = users.user_id where users.user_id = $1",
       [id]
     );
     return user[0];
@@ -41,7 +41,7 @@ const getUserByUsernameDb = async (username) => {
     const {
       rows: user,
     } = await pool.query(
-      "select users.*, cart.id as cart_id from users join cart on cart.user_id = users.user_id where lower(users.username) = lower($1)",
+      "select users.*, cart.id as cart_id from users left join cart on cart.user_id = users.user_id where lower(users.username) = lower($1)",
       [username]
     );
     return user[0];
@@ -55,10 +55,9 @@ const getUserByEmailDb = async (email) => {
     const {
       rows: user,
     } = await pool.query(
-      "select users.*, cart.id as cart_id from users join cart on cart.user_id = users.user_id where lower(email) = lower($1)",
+      "select users.*, cart.id as cart_id from users left join cart on cart.user_id = users.user_id where lower(email) = lower($1)",
       [email]
     );
-
     return user[0];
   } catch (error) {
     throw error;
@@ -116,7 +115,7 @@ const createUserGoogleDb = async ({ sub, given_name, email, name }) => {
 
 const changeUserPasswordDb = async (hashedPassword, email) => {
   try {
-    return await pool.query(`update users set password = $1 where email = $2`, [
+    return await pool.query("update users set password = $1 where email = $2", [
       hashedPassword,
       email,
     ]);

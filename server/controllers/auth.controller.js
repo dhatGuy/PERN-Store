@@ -1,3 +1,4 @@
+require("dotenv").config();
 const validateUser = require("../utils/validateUser");
 const { hashPassword, comparePassword } = require("../utils/hashPassword");
 const mail = require("../utils/mail");
@@ -19,34 +20,32 @@ const createAccount = async (req, res, next) => {
   const { password, email, fullname, username } = req.body;
 
   if (validateUser(req.body)) {
-    try {
-      const user = await userService.getUserByEmail(email);
-
-      if (user?.email === email)
-        return res.status(500).json("Email exists already");
-
-      if (user?.username === username)
-        return res.status(500).json("Username taken already");
-
-      const hashedPassword = await authService.hashPassword(password);
-      const { user_id: userId } = await userService.createUser({
-        ...req.body,
-        password: hashedPassword,
-      });
-
-      const { id: cartId } = await CartService.createCart(userId);
-
-      await mail.signupMail(email, fullname.split(" ")[0]);
-
-      res.status(201).json({
-        userId,
-        cartId,
-      });
-    } catch (error) {
-      next(error);
+    const userByEmail = await userService.getUserByEmail(email);
+    const userByUsername = await userService.getUserByUsername(username);
+    if (userByEmail) {
+      return res.status(401).json({ error: "email taken already" });
     }
+
+    if (userByUsername) {
+      return res.status(401).json({ error: "username taken already" });
+    }
+
+    const hashedPassword = await authService.hashPassword(password);
+    const { user_id: userId } = await userService.createUser({
+      ...req.body,
+      password: hashedPassword,
+    });
+
+    const { id: cartId } = await CartService.createCart(userId);
+
+    await mail.signupMail(email, fullname.split(" ")[0]);
+
+    res.status(201).json({
+      userId,
+      cartId,
+    });
   } else {
-    next("Input validation error");
+    next({ error: "Input validation error" });
   }
 };
 
@@ -58,7 +57,6 @@ const loginUser = async (req, res, next) => {
 
       if (user) {
         const { password: dbPassword, user_id, roles, cart_id } = user;
-
         if (await comparePassword(password, dbPassword)) {
           const token = generateAccessToken({ id: user_id, roles, cart_id });
           const refreshToken = generateRefreshToken({
@@ -86,6 +84,7 @@ const loginUser = async (req, res, next) => {
       next(new Error("Invalid login"));
     }
   } catch (error) {
+    console.log(error);
     next(new Error("Something went wrong."));
   }
 };
@@ -185,7 +184,7 @@ const resetPassword = async (req, res) => {
   const { password, password2, token, email } = req.body;
 
   const isValidPassword =
-    typeof password == "string" && password.trim().length >= 6;
+    typeof password === "string" && password.trim().length >= 6;
 
   if (password !== password2)
     return res.json({ message: "Password do not match.", status: "error" });

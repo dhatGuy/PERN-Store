@@ -1,20 +1,15 @@
 import { Button } from "@windmill/react-ui";
-// import ReviewCard from "components/ReviewCard";
-// import ReviewModal from "components/ReviewModal";
 import { useCart } from "context/CartContext";
-// import { useReview } from "context/ReviewContext";
 import { formatCurrency } from "helpers/formatCurrency";
 import Layout from "layout/Layout";
 import React, { useEffect, useState } from "react";
 import ReactStars from "react-rating-stars-component";
 import { useParams } from "react-router-dom";
 import productService from "services/product.service";
-// import reviewService from "services/review.service";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
-  // const { reviews, setReviews } = useReview(null);
   const { addItem } = useCart();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -27,10 +22,6 @@ const ProductDetails = () => {
       setIsLoading(true);
       const { data: product } = await productService.getProduct(id);
       setProduct(product);
-      // const { data: reviews } = await reviewService.getReviews(
-      //   product.product_id
-      // );
-      // setReviews(reviews);
       setIsLoading(false)
     }
     fetchData();
@@ -84,20 +75,6 @@ const ProductDetails = () => {
               </div>
             </div>
           </div>
-          {/* <div className="mt-10">
-            <h1 className="font-bold text-2xl">Product Reviews</h1>
-            <div className="flex flex-wrap items-center content-end">
-              <ReviewCard reviews={reviews.reviews} />
-            </div>
-            <div className="m-2 mx-auto">
-              {isLoggedIn && (
-                <ReviewModal
-                  product_id={product.product_id}
-                  reviews={reviews}
-                />
-              )}
-            </div>
-          </div> */}
         </div>
       </section>
     </Layout>

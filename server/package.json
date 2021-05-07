@@ -5,11 +5,20 @@
   "main": "index.js",
   "scripts": {
     "start": "node index",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
+    "test:watch": "cross-env NODE_ENV=test jest --verbose --runInBand --watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "engines": {
     "node": "14.x",
     "npm": "6.14.7"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
   },
   "keywords": [],
   "author": "",
@@ -22,6 +31,7 @@
     "crypto": "^1.0.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
     "google-auth-library": "^6.1.6",
     "helmet": "^4.4.1",
     "jsonwebtoken": "^8.5.1",
@@ -31,5 +41,10 @@
     "pg": "^8.5.1",
     "stripe": "^8.138.0",
     "swagger-ui-express": "^4.1.6"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "eslint": "^7.25.0",
+    "supertest": "^6.1.3"
   }
 }

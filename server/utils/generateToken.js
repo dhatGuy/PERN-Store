@@ -11,4 +11,4 @@ function generateRefreshToken(data) {
 module.exports = {
   generateAccessToken,
   generateRefreshToken
-}
+};

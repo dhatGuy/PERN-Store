@@ -32,7 +32,7 @@ const isValidTokenDb = async ({ token, email, curDate }) => {
 const createResetTokenDb = async ({ email, expireDate, fpSalt }) => {
   try {
     await pool.query(
-      `insert into public."resetTokens" (email, expiration, token) values ($1, $2, $3)`,
+      "insert into public.\"resetTokens\" (email, expiration, token) values ($1, $2, $3)",
       [email, expireDate, fpSalt]
     );
 
@@ -45,7 +45,7 @@ const createResetTokenDb = async ({ email, expireDate, fpSalt }) => {
 const setTokenStatusDb = async (email) => {
   try {
     await pool.query(
-      `update public."resetTokens" set used = $1 where email = $2`,
+      "update public.\"resetTokens\" set used = $1 where email = $2",
       [true, email]
     );
 
@@ -58,7 +58,7 @@ const setTokenStatusDb = async (email) => {
 const deleteResetTokenDb = async (curDate) => {
   try {
     await pool.query(
-      `delete from public."resetTokens" where expiration <= $1`,
+      "delete from public.\"resetTokens\" where expiration <= $1",
       [curDate]
     );
     return true;

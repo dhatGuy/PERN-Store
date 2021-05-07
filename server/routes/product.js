@@ -25,7 +25,7 @@ router
   .put(verifyToken, verifyAdmin, updateProduct)
   .delete(verifyToken, verifyAdmin, deleteProduct);
 
-  router.route("/:id/reviews")
+router.route("/:id/reviews")
   .get( getProductReviews)
   .post(verifyToken, createProductReview)
   .put(verifyToken, updateProductReview);
