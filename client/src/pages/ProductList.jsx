@@ -12,7 +12,7 @@ const ProductList = () => {
 
   const handleChange = (page) => {
     setPage(page);
-    window.scrollTo(0, 0);
+    window.scrollTo({ behavior: "smooth", top: 0 });
   };
 
   const toProduct = (product_id) => history.push(`products/${product_id}`);
