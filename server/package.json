@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index",
+    "start": "cross-env NODE_ENV=production node index",
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
     "test:watch": "cross-env NODE_ENV=test jest --verbose --runInBand --watch",
     "lint": "eslint .",
