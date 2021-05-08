@@ -29,7 +29,7 @@ const Login = () => {
       }, 1500);
     } catch (error) {
       setIsLoading(false);
-      setError(error.response?.data);
+      setError(error.response?.data.error);
     }
   };
 
@@ -48,7 +48,7 @@ const Login = () => {
       }, 1500);
     } catch (error) {
       setIsLoading(false);
-      setError(error.response?.data);
+      setError(error.response?.data.error);
     }
   };
 
@@ -111,7 +111,7 @@ const Login = () => {
           )}
           {error && (
             <HelperText className="mt-1 italic" valid={false}>
-              {error.message}
+              {error}
             </HelperText>
           )}
           <div className="mt-4">
