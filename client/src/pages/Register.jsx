@@ -39,7 +39,7 @@ const Register = () => {
         })
         .catch(({ response }) => {
           setIsLoading(false);
-          setError(response.data.error);
+          setError(response.data.message);
         });
     } else {
       setError("Password doesn't match ");

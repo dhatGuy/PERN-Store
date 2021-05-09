@@ -7,7 +7,7 @@ const routes = require("./routes");
 const helmet = require("helmet");
 const compression = require("compression");
 const unknownEndpoint = require("./middleware/unKnownEndpoint");
-const errorHandler = require("./middleware/errorHandler");
+const { handleError } = require("./utils/error");
 
 const app = express();
 
@@ -22,6 +22,6 @@ app.use("/api", routes);
 
 app.get("/api", () => console.log("route is working"));
 app.use(unknownEndpoint);
-app.use(errorHandler);
+app.use(handleError);
 
 module.exports = app;

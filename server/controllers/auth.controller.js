@@ -1,238 +1,71 @@
-require("dotenv").config();
-const validateUser = require("../utils/validateUser");
-const { hashPassword, comparePassword } = require("../utils/hashPassword");
-const mail = require("../utils/mail");
-const jwt = require("jsonwebtoken");
-const crypto = require("crypto");
-const moment = require("moment");
-let curDate = moment().format();
-const {
-  generateAccessToken,
-  generateRefreshToken,
-} = require("../utils/generateToken");
-const CartService = require("../services/cart.service");
-const userService = require("../services/user.service");
-const { verifygoogleIdToken } = require("../utils");
-const { createGoogleAccount } = require("../services/user.service");
 const authService = require("../services/auth.service");
 
-const createAccount = async (req, res, next) => {
-  const { password, email, fullname, username } = req.body;
+const createAccount = async (req, res) => {
+  const user = await authService.signUp(req.body);
 
-  if (validateUser(req.body)) {
-    const userByEmail = await userService.getUserByEmail(email);
-    const userByUsername = await userService.getUserByUsername(username);
-    if (userByEmail) {
-      return res.status(401).json({ error: "email taken already" });
-    }
-
-    if (userByUsername) {
-      return res.status(401).json({ error: "username taken already" });
-    }
-
-    const hashedPassword = await authService.hashPassword(password);
-    const { user_id: userId } = await userService.createUser({
-      ...req.body,
-      password: hashedPassword,
-    });
-
-    const { id: cartId } = await CartService.createCart(userId);
-
-    await mail.signupMail(email, fullname.split(" ")[0]);
-
-    res.status(201).json({
-      userId,
-      cartId,
-    });
-  } else {
-    next({ error: "Input validation error" });
-  }
+  res.status(201).json(user);
 };
 
-const loginUser = async (req, res, next) => {
+const loginUser = async (req, res) => {
   const { email, password } = req.body;
-  try {
-    if (validateUser(req.body)) {
-      const user = await userService.getUserByEmail(email);
+  const user = await authService.login(email, password);
 
-      if (user) {
-        const { password: dbPassword, user_id, roles, cart_id } = user;
-        if (await comparePassword(password, dbPassword)) {
-          const token = generateAccessToken({ id: user_id, roles, cart_id });
-          const refreshToken = generateRefreshToken({
-            id: user_id,
-            roles,
-            cart_id,
-          });
-          res.header("auth-token", token);
-          res.cookie("refreshToken", refreshToken, {
-            httpOnly: true,
-          });
-          res.status(200).json({
-            token,
-            user: {
-              user_id,
-            },
-          });
-        } else {
-          next(new Error("Email or password incorrect."));
-        }
-      } else {
-        next(new Error("Email or password incorrect."));
-      }
-    } else {
-      next(new Error("Invalid login"));
-    }
-  } catch (error) {
-    console.log(error);
-    next(new Error("Something went wrong."));
-  }
+  res.header("auth-token", user.token);
+  res.cookie("refreshToken", user.refreshToken, {
+    httpOnly: true,
+  });
+  res.status(200).json({
+    token: user.token,
+    user,
+  });
 };
 
 const googleLogin = async (req, res) => {
   const { token } = req.body;
 
-  if (!token) return res.status(401);
-
-  try {
-    const ticket = await verifygoogleIdToken(token);
-    const { name, email, sub, given_name } = ticket.getPayload();
-    try {
-      await createGoogleAccount({ sub, given_name, email, name });
-      const { user_id, cart_id, roles } = await userService.getUserByEmail(
-        email
-      );
-      const token = jwt.sign(
-        { id: user_id, roles: roles, cart_id },
-        process.env.SECRET
-      );
-
-      res.header("auth-token", token);
-      res.status(200).json({
-        token,
-        user: {
-          user_id,
-        },
-      });
-    } catch (error) {
-      res.status(500).send(error);
-    }
-  } catch (error) {
-    res.status(401).json({ msg: "ID token required" });
-  }
+  const user = await authService.googleLogin(token);
+  res.header("auth-token", user.token);
+  res.cookie("refreshToken", user.refreshToken, {
+    httpOnly: true,
+  });
+  res.json(user);
 };
 
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
 
-  const isUserExist = await userService.getUserByEmail(email);
+  await authService.forgotPassword(email);
 
-  if (isUserExist) {
-    try {
-      await authService.setTokenStatus(email);
-
-      //Create a random reset token
-      var fpSalt = crypto.randomBytes(64).toString("base64");
-
-      //token expires after one hour
-      var expireDate = moment().add(1, "h").format();
-
-      await authService.createResetToken({ email, expireDate, fpSalt });
-
-      await mail.forgotPasswordMail(fpSalt, email);
-      res.json({ status: "OK" });
-    } catch (error) {
-      res.status(500).send(error);
-    }
-  } else {
-    res.status(500).send("Email not found!");
-  }
+  res.json({ status: "OK" });
 };
 
 // verify password reset token
 const verifyResetToken = async (req, res) => {
   const { token, email } = req.body;
-  try {
-    await authService.deleteResetToken(curDate);
+  const isTokenValid = await authService.verifyResetToken(token, email);
 
-    try {
-      const isTokenValid = await authService.isTokenValid({
-        token,
-        email,
-        curDate,
-      });
-
-      if (!isTokenValid) {
-        res.json({
-          message: "Token has expired. Please try password reset again.",
-          showForm: false,
-        });
-      } else {
-        res.json({
-          showForm: true,
-        });
-      }
-    } catch (error) {
-      res.status(500).json("Unknown error", error);
-    }
-  } catch (error) {
-    throw error;
+  if (!isTokenValid) {
+    res.json({
+      message: "Token has expired. Please try password reset again.",
+      showForm: false,
+    });
+  } else {
+    res.json({
+      showForm: true,
+    });
   }
 };
 
 const resetPassword = async (req, res) => {
   const { password, password2, token, email } = req.body;
 
-  const isValidPassword =
-    typeof password === "string" && password.trim().length >= 6;
+  await authService.resetPassword(password, password2, token, email);
 
-  if (password !== password2)
-    return res.json({ message: "Password do not match.", status: "error" });
-
-  if (!isValidPassword)
-    return res.json({
-      status: "error",
-      message: "Password length must be at least 6 characters",
-    });
-
-  try {
-    const isTokenValid = await authService.isTokenValid({
-      token,
-      email,
-      curDate,
-    });
-
-    if (!isTokenValid)
-      return res.json({
-        status: "error",
-        message:
-          "Token not found. Please try the reset password process again.",
-      });
-
-    try {
-      await authService.setTokenStatus(email);
-
-      const hashedPassword = await hashPassword(password);
-
-      try {
-        await userService.changeUserPassword(hashedPassword, email);
-        await mail.resetPasswordMail(email);
-        res.json({
-          status: "OK",
-          message: "Password reset. Please login with your new password.",
-        });
-      } catch (error) {
-        res.json(error);
-      }
-    } catch (error) {
-      res.json(error);
-    }
-  } catch (error) {
-    res.json(error);
-  }
+  res.json({
+    status: "OK",
+    message: "Password reset. Please login with your new password.",
+  });
 };
-
-const refreshToken = async (req, res) => {};
 
 module.exports = {
   createAccount,

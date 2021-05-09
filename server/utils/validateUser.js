@@ -1,7 +1,7 @@
-const validateUser = (user) => {
-  const validEmail = typeof user.email === "string" && user.email.trim() != "";
+const validateUser = (email, password) => {
+  const validEmail = typeof email === "string" && email.trim() !== "";
   const validPassword =
-    typeof user.password === "string" && user.password.trim().length >= 6;
+    typeof password === "string" && password.trim().length >= 6;
 
   return validEmail && validPassword;
 };

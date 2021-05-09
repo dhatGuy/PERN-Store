@@ -40,7 +40,9 @@ describe("/api/auth/signup", () => {
           username: "test",
         })
         .expect(401);
-      expect(res.body.error).toContain("username taken already");
+
+      expect(res.body).toHaveProperty("message", "username taken already");
+      expect(res.body).toHaveProperty("status", "error");
     });
 
     it("should return error if email is taken", async () => {
@@ -53,8 +55,9 @@ describe("/api/auth/signup", () => {
           username: "newtest",
         })
         .expect(401);
-      expect(res.body).toHaveProperty("error");
-      expect(res.body.error).toContain("email taken already");
+
+      expect(res.body).toHaveProperty("message", "email taken already");
+      expect(res.body).toHaveProperty("status", "error");
     });
   });
 });
@@ -85,10 +88,10 @@ describe("/api/auth/login", () => {
     const res = await api
       .post("/api/auth/login")
       .send({ email: "tt@email.com", password: "qwecret" })
-      .expect(500);
+      .expect(403);
 
-    expect(res.body).toHaveProperty("error");
-    expect(res.body.error).toBe("Email or password incorrect.");
+    expect(res.body).toHaveProperty("status", "error");
+    expect(res.body).toHaveProperty("message", "Email or password incorrect.");
   });
 });
 

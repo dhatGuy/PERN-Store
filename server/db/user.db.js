@@ -5,7 +5,7 @@ const getAllUsersDb = async () => {
     const { rows: users } = await pool.query("select * from users");
     return users;
   } catch (error) {
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -19,7 +19,7 @@ const createUserDb = async ({ username, password, email, fullname }) => {
     );
     return user[0];
   } catch (error) {
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -33,7 +33,7 @@ const getUserByIdDb = async (id) => {
     );
     return user[0];
   } catch (error) {
-    throw error;
+    throw new Error(error);
   }
 };
 const getUserByUsernameDb = async (username) => {
@@ -46,7 +46,7 @@ const getUserByUsernameDb = async (username) => {
     );
     return user[0];
   } catch (error) {
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -60,7 +60,7 @@ const getUserByEmailDb = async (email) => {
     );
     return user[0];
   } catch (error) {
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -82,7 +82,7 @@ const updateUserDb = async ({
     );
     return user[0];
   } catch (error) {
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -95,7 +95,7 @@ const deleteUserDb = async (id) => {
     ]);
     return user[0];
   } catch (error) {
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -109,7 +109,7 @@ const createUserGoogleDb = async ({ sub, given_name, email, name }) => {
     );
     return rows[0];
   } catch (error) {
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -120,7 +120,7 @@ const changeUserPasswordDb = async (hashedPassword, email) => {
       email,
     ]);
   } catch (error) {
-    throw error;
+    throw new Error(error);
   }
 };
 

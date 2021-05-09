@@ -1,45 +1,233 @@
 const bcrypt = require("bcrypt");
-const { setTokenStatusDb, createResetTokenDb, deleteResetTokenDb, isValidTokenDb } = require("../db/auth.db");
+const jwt = require("jsonwebtoken");
+const {
+  setTokenStatusDb,
+  createResetTokenDb,
+  deleteResetTokenDb,
+  isValidTokenDb,
+} = require("../db/auth.db");
+const validateUser = require("../utils/validateUser");
+const { ErrorHandler } = require("../utils/error");
+const { changeUserPasswordDb } = require("../db/user.db");
+const {
+  getUserByEmailDb,
+  getUserByUsernameDb,
+  createUserDb,
+  createUserGoogleDb,
+} = require("../db/user.db");
+const { createCartDb } = require("../db/cart.db");
+const mail = require("../utils/mail");
+const { OAuth2Client } = require("google-auth-library");
+const crypto = require("crypto");
+const moment = require("moment");
+let curDate = moment().format();
 
 class AuthService {
-  async hashPassword(password) {
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
-    return hashedPassword;
+  async signUp(user) {
+    try {
+      const { password, email, fullname, username } = user;
+      if (!email || !password || !fullname || !username) {
+        throw new ErrorHandler(401, "all fields required");
+      }
+
+      if (validateUser(email, password)) {
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const userByEmail = await getUserByEmailDb(email);
+        const userByUsername = await getUserByUsernameDb(username);
+
+        if (userByEmail) {
+          throw new ErrorHandler(401, "email taken already");
+        }
+
+        if (userByUsername) {
+          throw new ErrorHandler(401, "username taken already");
+        }
+
+        const { user_id: userId } = await createUserDb({
+          ...user,
+          password: hashedPassword,
+        });
+
+        const { id: cartId } = await createCartDb(userId);
+
+        // await mail.signupMail(email, fullname.split(" ")[0]);
+
+        return {
+          userId,
+          cartId,
+        };
+      } else {
+        throw new ErrorHandler(401, "Input validation error");
+      }
+    } catch (error) {
+      throw new ErrorHandler(error.statusCode, error.message);
+    }
   }
 
-  async comparePassword(password, passwordHash) {
-    return await bcrypt.compare(password, passwordHash);
+  async login(email, password) {
+    try {
+      if (!validateUser(email, password)) {
+        throw new ErrorHandler(403, "Invalid login");
+      }
+
+      const user = await getUserByEmailDb(email);
+
+      if (!user) {
+        throw new ErrorHandler(403, "Email or password incorrect.");
+      }
+
+      const { password: dbPassword, user_id, roles, cart_id } = user;
+      const isCorrectPassword = await bcrypt.compare(password, dbPassword);
+
+      if (!isCorrectPassword) {
+        throw new ErrorHandler(403, "Email or password incorrect.");
+      }
+
+      const token = this.generateToken({ id: user_id, roles, cart_id });
+      const refreshToken = this.generateToken({
+        id: user_id,
+        roles,
+        cart_id,
+      });
+      return {
+        token,
+        refreshToken,
+        user: {
+          user_id,
+        },
+      };
+    } catch (error) {
+      throw new ErrorHandler(error.statusCode, error.message);
+    }
   }
 
-  async setTokenStatus(email){
+  async googleLogin(token) {
     try {
-      return await setTokenStatusDb(email);
+      const ticket = await this.verifyGoogleIdToken(token);
+      const { name, email, sub, given_name } = ticket.getPayload();
+
+      try {
+        await createUserGoogleDb({ sub, given_name, email, name });
+        const { user_id, cart_id, roles } = await getUserByEmailDb(email);
+
+        const token = this.generateToken({
+          id: user_id,
+          roles,
+          cart_id,
+        });
+
+        const refreshToken = this.generateToken({
+          id: user_id,
+          roles,
+          cart_id,
+        });
+
+        return {
+          token,
+          refreshToken,
+          user: {
+            user_id,
+          },
+        };
+      } catch (error) {
+        throw new ErrorHandler(error.statusCode, error.message);
+      }
     } catch (error) {
-      throw error;
+      throw new ErrorHandler(401, error.message);
     }
   }
 
-  async createResetToken(data){
-    try {
-      return await createResetTokenDb(data);
-    } catch (error) {
-      throw error;
+  async forgotPassword(email) {
+    const user = await getUserByEmailDb(email);
+
+    if (user) {
+      try {
+        await setTokenStatusDb(email);
+
+        //Create a random reset token
+        var fpSalt = crypto.randomBytes(64).toString("base64");
+
+        //token expires after one hour
+        var expireDate = moment().add(1, "h").format();
+
+        await createResetTokenDb({ email, expireDate, fpSalt });
+
+        await mail.forgotPasswordMail(fpSalt, email);
+      } catch (error) {
+        throw new ErrorHandler(error.statusCode, error.message);
+      }
+    } else {
+      throw new ErrorHandler(400, "Email not found");
     }
   }
-  async deleteResetToken(date){
+
+  async verifyResetToken(token, email) {
     try {
-      return await deleteResetTokenDb(date);
+      await deleteResetTokenDb(curDate);
+      const isTokenValid = await isValidTokenDb({
+        token,
+        email,
+        curDate,
+      });
+
+      return isTokenValid;
     } catch (error) {
-      throw error;
+      throw new ErrorHandler(error.statusCode, error.message);
     }
   }
-  async isTokenValid(data){
-    try {
-      return await isValidTokenDb(data);
-    } catch (error) {
-      throw error;
+
+  async resetPassword(password, password2, token, email) {
+    const isValidPassword =
+      typeof password === "string" && password.trim().length >= 6;
+
+    if (password !== password2) {
+      throw new ErrorHandler(400, "Password do not match.");
     }
+
+    if (!isValidPassword) {
+      throw new ErrorHandler(
+        400,
+        "Password length must be at least 6 characters"
+      );
+    }
+
+    try {
+      const isTokenValid = await isValidTokenDb({
+        token,
+        email,
+        curDate,
+      });
+
+      if (!isTokenValid)
+        throw new ErrorHandler(
+          400,
+          "Token not found. Please try the reset password process again."
+        );
+
+      await setTokenStatusDb(email);
+
+      const salt = await bcrypt.genSalt();
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      await changeUserPasswordDb(hashedPassword, email);
+      await mail.resetPasswordMail(email);
+    } catch (error) {
+      throw new ErrorHandler(error.statusCode, error.message);
+    }
+  }
+
+  async verifyGoogleIdToken(token) {
+    const client = new OAuth2Client(process.env.CLIENT_ID);
+    return await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.CLIENT_ID,
+    });
+  }
+
+  generateToken(data) {
+    return jwt.sign(data, process.env.SECRET);
   }
 }
 
