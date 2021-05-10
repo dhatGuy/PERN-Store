@@ -45,18 +45,18 @@ class AuthService {
           throw new ErrorHandler(401, "username taken already");
         }
 
-        const { user_id: userId } = await createUserDb({
+        const { user_id: userId, fullname, email } = await createUserDb({
           ...user,
           password: hashedPassword,
         });
 
         const { id: cartId } = await createCartDb(userId);
 
-        // await mail.signupMail(email, fullname.split(" ")[0]);
-
         return {
           userId,
           cartId,
+          fullname,
+          email,
         };
       } else {
         throw new ErrorHandler(401, "Input validation error");

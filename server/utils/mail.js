@@ -1,5 +1,6 @@
 require("dotenv").config();
 const nodemailer = require("nodemailer");
+const { ErrorHandler } = require("./error");
 const html = require("./signup");
 
 const url =
@@ -28,12 +29,9 @@ const signupMail = async (to, name) => {
   };
 
   try {
-    await transport.sendMail(message).then((data) => {
-      console.log(data);
-    });
+    await transport.sendMail(message);
   } catch (error) {
-    console.log(error);
-    return error;
+    throw new ErrorHandler(500, error.message);
   }
 };
 
@@ -53,11 +51,9 @@ const forgotPasswordMail = async (token, email) => {
 
   try {
     const res = await transport.sendMail(message);
-    console.log(res);
     return res;
   } catch (error) {
-    console.log(error);
-    return error;
+    throw new ErrorHandler(500, error.message);
   }
 };
 
@@ -71,10 +67,9 @@ const resetPasswordMail = async (email) => {
 
   try {
     await transport
-      .sendMail(message)
-      .then((data) => console.log(data.response));
+      .sendMail(message);
   } catch (error) {
-    return error;
+    throw new ErrorHandler(500, error.message);
   }
 };
 

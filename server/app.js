@@ -20,7 +20,9 @@ app.use(cookieParser());
 
 app.use("/api", routes);
 
-app.get("/api", () => console.log("route is working"));
+app.get("/", (req, res) =>
+  res.send("<h1 style='text-align: center'>E-COMMERCE API</h1>")
+);
 app.use(unknownEndpoint);
 app.use(handleError);
 

@@ -9,13 +9,14 @@ const {
   getAllUsersDb,
   getUserByUsernameDb,
 } = require("../db/user.db");
+const { ErrorHandler } = require("../utils/error");
 
 class UserService {
   createUser = async (user) => {
     try {
       return await createUserDb(user);
     } catch (error) {
-      throw error;
+      throw new ErrorHandler(error.statusCode, error.message);
     }
   };
   getUserByEmail = async (email) => {
@@ -23,7 +24,7 @@ class UserService {
       const user = await getUserByEmailDb(email);
       return user;
     } catch (error) {
-      throw error;
+      throw new ErrorHandler(error.statusCode, error.message);
     }
   };
   getUserByUsername = async (username) => {
@@ -31,7 +32,7 @@ class UserService {
       const user = await getUserByUsernameDb(username);
       return user;
     } catch (error) {
-      throw error;
+      throw new ErrorHandler(error.statusCode, error.message);
     }
   };
   getUserById = async (id) => {
@@ -42,21 +43,21 @@ class UserService {
       user.cart_id = undefined;
       return user;
     } catch (error) {
-      throw error;
+      throw new ErrorHandler(error.statusCode, error.message);
     }
   };
   createGoogleAccount = async (user) => {
     try {
       return await createUserGoogleDb(user);
     } catch (error) {
-      throw error;
+      throw new ErrorHandler(error.statusCode, error.message);
     }
   };
   changeUserPassword = async (password, email) => {
     try {
       return await changeUserPasswordDb(password, email);
     } catch (error) {
-      throw error;
+      throw new ErrorHandler(error.statusCode, error.message);
     }
   };
   updateUser = async (user) => {
@@ -72,10 +73,10 @@ class UserService {
         username && getUser.username.toLowerCase() !== username.toLowerCase();
 
       if (emailChanged && typeof findUserByEmail === "object") {
-        errors["email"] = `Email is already taken`;
+        errors["email"] = "Email is already taken";
       }
       if (usernameChanged && typeof findUserByUsername === "object") {
-        errors["username"] = `Username is already taken`;
+        errors["username"] = "Username is already taken";
       }
 
       if (Object.keys(errors).length > 0) {
@@ -84,7 +85,7 @@ class UserService {
 
       return await updateUserDb(user);
     } catch (error) {
-      throw error;
+      throw new ErrorHandler(error.statusCode, error.message);
     }
   };
 
@@ -92,15 +93,15 @@ class UserService {
     try {
       return await deleteUserDb(id);
     } catch (error) {
-      throw error;
+      throw new ErrorHandler(error.statusCode, error.message);
     }
   };
 
-  getAllUsers = async (id) => {
+  getAllUsers = async () => {
     try {
       return await getAllUsersDb();
     } catch (error) {
-      throw error;
+      throw new ErrorHandler(error.statusCode, error.message);
     }
   };
 }

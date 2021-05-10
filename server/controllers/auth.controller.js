@@ -1,9 +1,11 @@
 const authService = require("../services/auth.service");
+const mail = require("../utils/mail");
 
 const createAccount = async (req, res) => {
   const user = await authService.signUp(req.body);
+  await mail.signupMail(user.email, user.fullname.split(" ")[0]);
 
-  res.status(201).json(user);
+  res.status(201).json({ userId: user.userId, cartId: user.cartId });
 };
 
 const loginUser = async (req, res) => {

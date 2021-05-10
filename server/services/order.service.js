@@ -3,13 +3,14 @@ const {
   getAllOrdersDb,
   getOrderDb,
 } = require("../db/orders.db");
+const { ErrorHandler } = require("../utils/error");
 
 class OrderService {
   createOrder = async (data) => {
     try {
       return await createOrderDb(data);
     } catch (error) {
-      throw error;
+      throw new ErrorHandler(error.statusCode, error.message);
     }
   };
 
@@ -17,9 +18,9 @@ class OrderService {
     const limit = 5;
     const offset = (page - 1) * limit;
     try {
-      return await getAllOrdersDb({userId, limit, offset});
+      return await getAllOrdersDb({ userId, limit, offset });
     } catch (error) {
-      throw error;
+      throw new ErrorHandler(error.statusCode, error.message);
     }
   };
 
@@ -27,7 +28,7 @@ class OrderService {
     try {
       return await getOrderDb(data);
     } catch (error) {
-      throw error;
+      throw new ErrorHandler(error.statusCode, error.message);
     }
   };
 }

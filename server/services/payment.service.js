@@ -1,4 +1,5 @@
 const Stripe = require("stripe");
+const { ErrorHandler } = require("../utils/error");
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 class PaymentService {
@@ -8,10 +9,10 @@ class PaymentService {
         amount,
         currency: "ngn",
         payment_method_types: ["card"],
-        receipt_email: email
+        receipt_email: email,
       });
     } catch (error) {
-      throw error;
+      throw new ErrorHandler(error.statusCode, error.message);
     }
   };
 }

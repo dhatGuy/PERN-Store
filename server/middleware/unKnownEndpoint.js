@@ -1,5 +1,8 @@
+const { ErrorHandler } = require("../utils/error");
+
+// eslint-disable-next-line no-unused-vars
 const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: "unknown endpoint" });
+  throw new ErrorHandler(401, "unknown endpoint");
 };
 
 module.exports = unknownEndpoint;

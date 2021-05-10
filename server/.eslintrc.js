@@ -9,9 +9,11 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 12,
   },
+  parser: "babel-eslint",
+  plugins: ["babel"],
   rules: {
     indent: ["error", 2],
-    // "no-console": "warn",
+    "no-console": "warn",
     "linebreak-style": ["error", "windows"],
     quotes: ["error", "double"],
     semi: ["error", "always"],

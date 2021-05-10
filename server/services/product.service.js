@@ -4,7 +4,9 @@ const {
   getProductDb,
   updateProductDb,
   deleteProductDb,
+  getProductByNameDb,
 } = require("../db/product.db");
+const { ErrorHandler } = require("../utils/error");
 
 class ProductService {
   getAllProducts = async (page) => {
@@ -13,7 +15,7 @@ class ProductService {
     try {
       return await getAllProductsDb({ limit, offset });
     } catch (error) {
-      throw error;
+      throw new ErrorHandler(error.statusCode, error.message);
     }
   };
 
@@ -21,7 +23,7 @@ class ProductService {
     try {
       return await createProductDb(data);
     } catch (error) {
-      throw error;
+      throw new ErrorHandler(error.statusCode, error.message);
     }
   };
 
@@ -29,7 +31,7 @@ class ProductService {
     try {
       return await getProductDb(id);
     } catch (error) {
-      throw error;
+      throw new ErrorHandler(error.statusCode, error.message);
     }
   };
 
@@ -37,7 +39,7 @@ class ProductService {
     try {
       return await getProductByNameDb(name);
     } catch (error) {
-      throw error;
+      throw new ErrorHandler(error.statusCode, error.message);
     }
   };
 
@@ -45,7 +47,7 @@ class ProductService {
     try {
       return await updateProductDb(data);
     } catch (error) {
-      throw error;
+      throw new ErrorHandler(error.statusCode, error.message);
     }
   };
 
@@ -53,7 +55,7 @@ class ProductService {
     try {
       return await deleteProductDb(id);
     } catch (error) {
-      throw error;
+      throw new ErrorHandler(error.statusCode, error.message);
     }
   };
 }
