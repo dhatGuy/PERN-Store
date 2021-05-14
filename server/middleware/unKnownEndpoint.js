@@ -1,4 +1,4 @@
-const { ErrorHandler } = require("../utils/error");
+const { ErrorHandler } = require("../helpers/error");
 
 // eslint-disable-next-line no-unused-vars
 const unknownEndpoint = (request, response) => {

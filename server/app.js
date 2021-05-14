@@ -7,7 +7,7 @@ const routes = require("./routes");
 const helmet = require("helmet");
 const compression = require("compression");
 const unknownEndpoint = require("./middleware/unKnownEndpoint");
-const { handleError } = require("./utils/error");
+const { handleError } = require("./helpers/error");
 
 const app = express();
 

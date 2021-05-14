@@ -1,9 +1,12 @@
 const authService = require("../services/auth.service");
-const mail = require("../utils/mail");
+const mail = require("../helpers/mail");
 
 const createAccount = async (req, res) => {
   const user = await authService.signUp(req.body);
-  await mail.signupMail(user.email, user.fullname.split(" ")[0]);
+
+  if (process.env.NODE_ENV !== "test") {
+    await mail.signupMail(user.email, user.fullname.split(" ")[0]);
+  }
 
   res.status(201).json({ userId: user.userId, cartId: user.cartId });
 };

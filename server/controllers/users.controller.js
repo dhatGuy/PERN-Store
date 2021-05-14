@@ -1,6 +1,6 @@
 const userService = require("../services/user.service");
-const { ErrorHandler } = require("../utils/error");
-const { hashPassword } = require("../utils/hashPassword");
+const { ErrorHandler } = require("../helpers/error");
+const { hashPassword } = require("../helpers/hashPassword");
 
 const getAllUsers = async (req, res) => {
   const results = await userService.getAllUsers();
@@ -29,9 +29,6 @@ const getUserById = async (req, res) => {
   if (+id === req.user.id || req.user.roles.includes("admin")) {
     try {
       const user = await userService.getUserById(id);
-      user.password = undefined;
-      user.google_id = undefined;
-      user.cart_id = undefined;
       return res.status(200).json(user);
     } catch (error) {
       throw new ErrorHandler(error.statusCode, "User not found");
@@ -44,9 +41,7 @@ const getUserProfile = async (req, res) => {
   const { id } = req.user;
 
   const user = await userService.getUserById(id);
-  user.password = undefined;
-  user.google_id = undefined;
-  user.cart_id = undefined;
+
   return res.status(200).json(user);
 };
 
@@ -62,11 +57,11 @@ const updateUser = async (req, res) => {
         city,
         state,
         country,
-        id: req.user.id,
+        id: req.params.id,
       });
       return res.status(201).json(results);
     } catch (error) {
-      throw new ErrorHandler(500, error.message);
+      throw new ErrorHandler(error.statusCode, error.message);
     }
   }
   throw new ErrorHandler(401, "Unauthorized");
@@ -76,10 +71,10 @@ const deleteUser = async (req, res) => {
   const { id } = req.params;
   if (+id === req.user.id || req.user.roles.includes("admin")) {
     try {
-      const results = await userService.deleteUser(id);
-      res.status(200).json(results);
+      const result = await userService.deleteUser(id);
+      res.status(200).json(result);
     } catch (error) {
-      throw new ErrorHandler(500, error.message);
+      throw new ErrorHandler(error.statusCode, error.message);
     }
   }
   throw new ErrorHandler(401, "Unauthorized");

@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { ErrorHandler } = require("../utils/error");
+const { ErrorHandler } = require("../helpers/error");
 
 const verifyToken = (req, res, next) => {
   const token = req.header("auth-token");

@@ -7,7 +7,7 @@ const {
   decreaseItemQuantityDb,
   emptyCartDb,
 } = require("../db/cart.db");
-const { ErrorHandler } = require("../utils/error");
+const { ErrorHandler } = require("../helpers/error");
 
 class CartService {
   createCart = async (userId) => {

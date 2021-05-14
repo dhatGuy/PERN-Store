@@ -1,7 +1,7 @@
 const supertest = require("supertest");
-const app = require("../app");
+const app = require("../../app");
 const api = supertest(app);
-const pool = require("../config");
+const pool = require("../../config");
 const bcrypt = require("bcrypt");
 
 beforeAll(async () => {
@@ -11,7 +11,7 @@ beforeAll(async () => {
 describe("/api/auth/signup", () => {
   it("should create an account for user", async () => {
     const res = await api.post("/api/auth/signup").send({
-      email: "odunsiolakunbi@gmail.com",
+      email: "email@email.com",
       password: "secret",
       fullname: "test db",
       username: "test",
@@ -27,7 +27,7 @@ describe("/api/auth/signup", () => {
       const hashedPassword = await bcrypt.hash("secret", 1);
       await pool.query(
         "INSERT INTO users(username, password, email, fullname) VALUES($1, $2, $3, $4) returning user_id",
-        ["test", hashedPassword, "odunsiolakunbi@gmail.com", "test db"]
+        ["test", hashedPassword, "email@email.com", "test db"]
       );
     });
     it("should return error if username is taken", async () => {
@@ -49,7 +49,7 @@ describe("/api/auth/signup", () => {
       const res = await api
         .post("/api/auth/signup")
         .send({
-          email: "odunsiolakunbi@gmail.com",
+          email: "email@email.com",
           password: "secret",
           fullname: "test db",
           username: "newtest",
@@ -65,7 +65,7 @@ describe("/api/auth/signup", () => {
 describe("/api/auth/login", () => {
   beforeEach(async () => {
     await api.post("/api/auth/signup").send({
-      email: "odunsiolakunbi@gmail.com",
+      email: "email@email.com",
       password: "secret",
       fullname: "test db",
       username: "test",
@@ -75,7 +75,7 @@ describe("/api/auth/login", () => {
   it("should login a user", async () => {
     const res = await api
       .post("/api/auth/login")
-      .send({ email: "odunsiolakunbi@gmail.com", password: "secret" });
+      .send({ email: "email@email.com", password: "secret" });
 
     expect(res.body).toHaveProperty("token");
     expect(res.body).toHaveProperty("user");

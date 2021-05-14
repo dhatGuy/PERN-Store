@@ -1,12 +1,14 @@
+const { ErrorHandler } = require("../helpers/error");
+
 module.exports = (req, res, next) => {
   const { roles } = req.user;
   if (roles && roles.includes("admin")) {
     req.user = {
       ...req.user,
-      roles
+      roles,
     };
     return next();
   } else {
-    return res.status(401).json({ message: "require admin role" });
+    throw new ErrorHandler(401, "require admin role");
   }
 };

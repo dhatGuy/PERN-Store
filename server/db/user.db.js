@@ -6,10 +6,10 @@ const getAllUsersDb = async () => {
 };
 
 const createUserDb = async ({ username, password, email, fullname }) => {
-  const {
-    rows: user,
-  } = await pool.query(
-    "INSERT INTO users(username, password, email, fullname) VALUES($1, $2, $3, $4) returning user_id",
+  const { rows: user } = await pool.query(
+    `INSERT INTO users(username, password, email, fullname) 
+    VALUES($1, $2, $3, $4) 
+    returning user_id, username, email, fullname, roles, address, city, state, country, created_at`,
     [username, password, email, fullname]
   );
   return user[0];

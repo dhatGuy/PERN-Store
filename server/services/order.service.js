@@ -3,7 +3,7 @@ const {
   getAllOrdersDb,
   getOrderDb,
 } = require("../db/orders.db");
-const { ErrorHandler } = require("../utils/error");
+const { ErrorHandler } = require("../helpers/error");
 
 class OrderService {
   createOrder = async (data) => {

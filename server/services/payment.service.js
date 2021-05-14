@@ -1,5 +1,5 @@
 const Stripe = require("stripe");
-const { ErrorHandler } = require("../utils/error");
+const { ErrorHandler } = require("../helpers/error");
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 class PaymentService {

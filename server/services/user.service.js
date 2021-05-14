@@ -9,7 +9,7 @@ const {
   getAllUsersDb,
   getUserByUsernameDb,
 } = require("../db/user.db");
-const { ErrorHandler } = require("../utils/error");
+const { ErrorHandler } = require("../helpers/error");
 
 class UserService {
   createUser = async (user) => {
@@ -80,11 +80,12 @@ class UserService {
       }
 
       if (Object.keys(errors).length > 0) {
-        throw errors;
+        throw new ErrorHandler(401, JSON.stringify(errors));
       }
 
       return await updateUserDb(user);
     } catch (error) {
+      // console.log(JSON.stringify(error))
       throw new ErrorHandler(error.statusCode, error.message);
     }
   };

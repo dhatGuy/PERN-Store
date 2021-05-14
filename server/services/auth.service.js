@@ -6,8 +6,8 @@ const {
   deleteResetTokenDb,
   isValidTokenDb,
 } = require("../db/auth.db");
-const validateUser = require("../utils/validateUser");
-const { ErrorHandler } = require("../utils/error");
+const validateUser = require("../helpers/validateUser");
+const { ErrorHandler } = require("../helpers/error");
 const { changeUserPasswordDb } = require("../db/user.db");
 const {
   getUserByEmailDb,
@@ -16,7 +16,7 @@ const {
   createUserGoogleDb,
 } = require("../db/user.db");
 const { createCartDb } = require("../db/cart.db");
-const mail = require("../utils/mail");
+const mail = require("../helpers/mail");
 const { OAuth2Client } = require("google-auth-library");
 const crypto = require("crypto");
 const moment = require("moment");
@@ -45,18 +45,18 @@ class AuthService {
           throw new ErrorHandler(401, "username taken already");
         }
 
-        const { user_id: userId, fullname, email } = await createUserDb({
+        const newUser = await createUserDb({
           ...user,
           password: hashedPassword,
         });
 
-        const { id: cartId } = await createCartDb(userId);
+        const { id: cartId } = await createCartDb(newUser.user_id);
 
         return {
-          userId,
+          userId: newUser.user_id,
           cartId,
-          fullname,
-          email,
+          fullname: newUser.fullname,
+          email: newUser.email,
         };
       } else {
         throw new ErrorHandler(401, "Input validation error");

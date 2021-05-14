@@ -6,7 +6,7 @@ const {
   deleteProductDb,
   getProductByNameDb,
 } = require("../db/product.db");
-const { ErrorHandler } = require("../utils/error");
+const { ErrorHandler } = require("../helpers/error");
 
 class ProductService {
   getAllProducts = async (page) => {
