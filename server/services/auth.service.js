@@ -252,7 +252,7 @@ class AuthService {
 
   async signRefreshToken(data) {
     try {
-      return jwt.sign(data, process.env.REFRESH_SECRET, { expiresIn: "1hr" });
+      return jwt.sign(data, process.env.REFRESH_SECRET, { expiresIn: "1h" });
     } catch (error) {
       logger.error(error);
       throw new ErrorHandler(500, error.message);
