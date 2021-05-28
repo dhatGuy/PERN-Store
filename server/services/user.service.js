@@ -85,7 +85,6 @@ class UserService {
 
       return await updateUserDb(user);
     } catch (error) {
-      // console.log(JSON.stringify(error))
       throw new ErrorHandler(error.statusCode, error.message);
     }
   };

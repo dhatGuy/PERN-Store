@@ -20,6 +20,7 @@ const mail = require("../helpers/mail");
 const { OAuth2Client } = require("google-auth-library");
 const crypto = require("crypto");
 const moment = require("moment");
+const { logger } = require("../utils/logger");
 let curDate = moment().format();
 
 class AuthService {
@@ -78,15 +79,15 @@ class AuthService {
         throw new ErrorHandler(403, "Email or password incorrect.");
       }
 
-      const { password: dbPassword, user_id, roles, cart_id } = user;
+      const { password: dbPassword, user_id, roles, cart_id, fullname, username } = user;
       const isCorrectPassword = await bcrypt.compare(password, dbPassword);
 
       if (!isCorrectPassword) {
         throw new ErrorHandler(403, "Email or password incorrect.");
       }
 
-      const token = this.generateToken({ id: user_id, roles, cart_id });
-      const refreshToken = this.generateToken({
+      const token = await this.signToken({ id: user_id, roles, cart_id });
+      const refreshToken = await this.signRefreshToken({
         id: user_id,
         roles,
         cart_id,
@@ -96,6 +97,8 @@ class AuthService {
         refreshToken,
         user: {
           user_id,
+          fullname,
+          username
         },
       };
     } catch (error) {
@@ -112,13 +115,13 @@ class AuthService {
         await createUserGoogleDb({ sub, given_name, email, name });
         const { user_id, cart_id, roles } = await getUserByEmailDb(email);
 
-        const token = this.generateToken({
+        const token = this.signToken({
           id: user_id,
           roles,
           cart_id,
         });
 
-        const refreshToken = this.generateToken({
+        const refreshToken = this.signRefreshToken({
           id: user_id,
           roles,
           cart_id,
@@ -137,6 +140,18 @@ class AuthService {
     } catch (error) {
       throw new ErrorHandler(401, error.message);
     }
+  }
+
+  async generateRefreshToken(data) {
+    const payload = await this.verifyRefreshToken(data);
+
+    const token = await this.signToken(payload);
+    const refreshToken = await this.signRefreshToken(payload);
+
+    return {
+      token,
+      refreshToken,
+    };
   }
 
   async forgotPassword(email) {
@@ -226,8 +241,36 @@ class AuthService {
     });
   }
 
-  generateToken(data) {
-    return jwt.sign(data, process.env.SECRET);
+  async signToken(data) {
+    try {
+      return jwt.sign(data, process.env.SECRET, { expiresIn: "60s" });
+    } catch (error) {
+      logger.error(error);
+      throw new ErrorHandler(500, "An error occurred");
+    }
+  }
+
+  async signRefreshToken(data) {
+    try {
+      return jwt.sign(data, process.env.REFRESH_SECRET, { expiresIn: "1hr" });
+    } catch (error) {
+      logger.error(error);
+      throw new ErrorHandler(500, error.message);
+    }
+  }
+
+  async verifyRefreshToken(token) {
+    try {
+      const payload = jwt.verify(token, process.env.REFRESH_SECRET);
+      return {
+        id: payload.id,
+        roles: payload.roles,
+        cart_id: payload.cart_id
+      };
+    } catch (error) {
+      logger.error(error);
+      throw new ErrorHandler(500, error.message);
+    }
   }
 }
 

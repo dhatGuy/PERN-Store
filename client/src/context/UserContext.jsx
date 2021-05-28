@@ -1,4 +1,5 @@
 import API from "api/axios.config";
+import WithAxios from "helpers/WithAxios";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import authService from "services/auth.service";
 
@@ -8,13 +9,12 @@ const UserProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
   const [authData, setAuthData] = useState({
     token: "",
-    expiresAt: "",
   });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     if (isLoggedIn) {
-      authService.getCurrentUser().then((res) => setUserData(res.data));
+      authService.getCurrentUser().then((res) => setUserData(res?.data));
     }
   }, [isLoggedIn]);
 
@@ -51,35 +51,33 @@ const UserProvider = ({ children }) => {
     setIsLoggedIn(true);
     setUserData(user);
     setAuthData({
-      token,
-      expiresAt: "",
+      token
     });
     localStorage.setItem("token", JSON.stringify(token));
-    // localStorage.setItem("expiresAt", JSON.stringify(token));
   };
 
   const logout = () => {
-    setUserData();
-    authService.logout();
-    setAuthData({
-      token: "",
-      expiresAt: "",
-    });
+    setUserData(null);
+    setAuthData(null);
     setIsLoggedIn(false);
+    authService.logout();
   };
 
   return (
     <UserContext.Provider
       value={{
         userData,
+        setUserData,
         setUserState: (data) => setUserInfo(data),
         logout,
         isLoggedIn,
+        setIsLoggedIn,
         authData,
+        setAuthData,
         updateUserData,
       }}
     >
-      {children}
+      <WithAxios>{children}</WithAxios>
     </UserContext.Provider>
   );
 };

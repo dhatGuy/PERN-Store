@@ -1,11 +1,12 @@
 import Spinner from "components/Spinner";
+import history from "helpers/history";
 import Layout from "layout/Layout";
 import Cart from "pages/Cart";
 import Login from "pages/Login";
 import Register from "pages/Register";
 import { lazy, Suspense } from "react";
 import { Toaster } from "react-hot-toast";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Router, Switch, Route } from "react-router-dom";
 import { ProtectedRoute } from "routes/protected.route";
 
 const ProductDetails = lazy(() => import("pages/ProductDetails"));
@@ -18,7 +19,7 @@ const Account = lazy(()=> import("pages/Account"))
 
 function App() {
   return (
-    <Router>
+    <Router history={history}>
       <Suspense
         fallback={
           <Layout>

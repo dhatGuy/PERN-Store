@@ -37,7 +37,7 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.cart (
     id integer NOT NULL,
-    user_id integer NOT NULL
+    user_id integer
 );
 
 

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "cross-env NODE_ENV=production node index",
+    "dev": "cross-env NODE_ENV=development node index",
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
     "test:watch": "cross-env NODE_ENV=test jest --verbose --runInBand --watch",
     "lint": "eslint .",
@@ -39,6 +40,7 @@
     "morgan": "^1.10.0",
     "nodemailer": "^6.4.17",
     "pg": "^8.5.1",
+    "pino": "^6.11.3",
     "stripe": "^8.138.0",
     "swagger-ui-express": "^4.1.6"
   },
@@ -47,6 +49,7 @@
     "cross-env": "^7.0.3",
     "eslint": "^7.25.0",
     "eslint-plugin-babel": "^5.3.1",
+    "pino-pretty": "^4.8.0",
     "supertest": "^6.1.3"
   }
 }

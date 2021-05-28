@@ -1,5 +1,6 @@
 const authService = require("../services/auth.service");
 const mail = require("../helpers/mail");
+const { ErrorHandler } = require("../helpers/error");
 
 const createAccount = async (req, res) => {
   const user = await authService.signUp(req.body);
@@ -21,7 +22,7 @@ const loginUser = async (req, res) => {
   });
   res.status(200).json({
     token: user.token,
-    user,
+    user: user.user,
   });
 };
 
@@ -61,6 +62,20 @@ const verifyResetToken = async (req, res) => {
   }
 };
 
+const refreshToken = async (req, res) => {
+  if (!req.cookies.refreshToken) {
+    throw new ErrorHandler(401, "Token missing");
+  }
+  const tokens = await authService.generateRefreshToken(
+    req.cookies.refreshToken
+  );
+  res.header("auth-token", tokens.token);
+  res.cookie("refreshToken", tokens.refreshToken, {
+    httpOnly: true,
+  });
+  res.json(tokens);
+};
+
 const resetPassword = async (req, res) => {
   const { password, password2, token, email } = req.body;
 
@@ -79,4 +94,5 @@ module.exports = {
   forgotPassword,
   verifyResetToken,
   resetPassword,
+  refreshToken,
 };

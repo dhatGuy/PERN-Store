@@ -21,8 +21,7 @@ const Checkout = () => {
     if (cartData.items.length === 0) {
       return history.push("/cart");
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [cartData, history, state]);
 
   const nextStep = () =>
     setActiveStep((prevStep) => setActiveStep(prevStep + 1));

@@ -4,7 +4,7 @@ const { ErrorHandler } = require("../helpers/error");
 const verifyToken = (req, res, next) => {
   const token = req.header("auth-token");
   if (!token) {
-    throw new ErrorHandler(400, "Token missing");
+    throw new ErrorHandler(401, "Token missing");
   }
 
   try {
@@ -12,7 +12,7 @@ const verifyToken = (req, res, next) => {
     req.user = verified;
     next();
   } catch (error) {
-    throw new ErrorHandler(400, error.message || "Invalid Token");
+    throw new ErrorHandler(401, error.message || "Invalid Token");
   }
 };
 
