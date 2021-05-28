@@ -6,7 +6,8 @@ const baseURL =
     : "/api";
 
 const API = axios.create({
-  baseURL
+  baseURL,
+  withCredentials: true,
 });
 
 API.interceptors.request.use(

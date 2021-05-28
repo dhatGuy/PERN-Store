@@ -11,7 +11,7 @@ const { handleError } = require("./helpers/error");
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ credentials: true, origin: true }));
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(compression());
