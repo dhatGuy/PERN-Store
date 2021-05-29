@@ -29,6 +29,7 @@ const PaymentForm = ({ next }) => {
         <Label className="block text-grey-darker text-sm font-bold mb-4">
           <span>Fullname</span>
           <Input
+            disabled
             type="text"
             className="shadow appearance-none border rounded w-full text-grey-darker mt-2 px-2 py-2 border focus:outline-none"
             name="fullname"
@@ -41,6 +42,7 @@ const PaymentForm = ({ next }) => {
         <Label className="block text-grey-darker text-sm font-bold mb-4">
           <span>Email</span>
           <Input
+            disabled
             className="shadow appearance-none border rounded w-full text-grey-darker mt-2 px-2 py-2 border focus:outline-none"
             type="text"
             name="email"

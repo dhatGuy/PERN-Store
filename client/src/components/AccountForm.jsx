@@ -29,7 +29,7 @@ const AccountForm = ({ setShowSettings, userData }) => {
       setIsSaving(false);
     } catch (error) {
       setIsSaving(false);
-      setValidationError(error.response.data);
+      setValidationError(error.response.data.message);
     }
   };
 

@@ -80,7 +80,7 @@ class UserService {
       }
 
       if (Object.keys(errors).length > 0) {
-        throw new ErrorHandler(401, JSON.stringify(errors));
+        throw new ErrorHandler(401, errors);
       }
 
       return await updateUserDb(user);
