@@ -29,7 +29,11 @@ class ProductService {
 
   getProductById = async (id) => {
     try {
-      return await getProductDb(id);
+      const product = await getProductDb(id);
+      if (!product) {
+        throw new ErrorHandler(404, "product not found");
+      }
+      return product;
     } catch (error) {
       throw new ErrorHandler(error.statusCode, error.message);
     }
@@ -37,7 +41,10 @@ class ProductService {
 
   getProductByName = async (name) => {
     try {
-      return await getProductByNameDb(name);
+      const product = await getProductByNameDb(name);
+      if (!product) {
+        throw new ErrorHandler(404, "product not found");
+      }
     } catch (error) {
       throw new ErrorHandler(error.statusCode, error.message);
     }
@@ -45,6 +52,10 @@ class ProductService {
 
   updateProduct = async (data) => {
     try {
+      const product = await getProductDb(data.id);
+      if (!product) {
+        throw new ErrorHandler(404, "product not found");
+      }
       return await updateProductDb(data);
     } catch (error) {
       throw new ErrorHandler(error.statusCode, error.message);
@@ -53,6 +64,10 @@ class ProductService {
 
   removeProduct = async (id) => {
     try {
+      const product = await getProductDb(id);
+      if (!product) {
+        throw new ErrorHandler(404, "product not found");
+      }
       return await deleteProductDb(id);
     } catch (error) {
       throw new ErrorHandler(error.statusCode, error.message);

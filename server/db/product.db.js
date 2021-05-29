@@ -12,12 +12,12 @@ const getAllProductsDb = async ({ limit, offset }) => {
   return products;
 };
 
-const createProductDb = async ({ name, price, description }) => {
+const createProductDb = async ({ name, price, description, image_url }) => {
   const {
     rows: product,
   } = await pool.query(
-    "INSERT INTO products(name, price, description) VALUES($1, $2, $3) returning *",
-    [name, price, description]
+    "INSERT INTO products(name, price, description, image_url) VALUES($1, $2, $3, $4) returning *",
+    [name, price, description, image_url]
   );
   return product[0];
 };
@@ -46,12 +46,12 @@ const getProductByNameDb = async ({ name }) => {
   return product[0];
 };
 
-const updateProductDb = async ({ name, price, description, id }) => {
+const updateProductDb = async ({ name, price, description, image_url, id }) => {
   const {
     rows: product,
   } = await pool.query(
-    "UPDATE products set name = $1, price = $2, description = $3 where product_id = $4 returning *",
-    [name, price, description, id]
+    "UPDATE products set name = $1, price = $2, description = $3 image_url = $4 where product_id = $5 returning *",
+    [name, price, description,image_url, id]
   );
   return product[0];
 };
