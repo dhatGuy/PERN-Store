@@ -16,6 +16,7 @@ const Product = lazy(() => import("pages/ProductList"));
 const Checkout = lazy(() => import("pages/Checkout"));
 const ResetPassword = lazy(() => import("pages/ResetPassword"));
 const Account = lazy(()=> import("pages/Account"))
+const Confirmation = lazy(()=> import("pages/Confirmation"));
 
 function App() {
   return (
@@ -45,8 +46,11 @@ function App() {
             <Route exact path="/products/:id/">
               <ProductDetails />
             </Route>
-            <ProtectedRoute exact path="/checkout">
+            <ProtectedRoute exact path="/cart/checkout">
               <Checkout />
+            </ProtectedRoute>
+            <ProtectedRoute exact path="/cart/success">
+              <Confirmation />
             </ProtectedRoute>
             <ProtectedRoute exact path="/orders">
               <Orders />

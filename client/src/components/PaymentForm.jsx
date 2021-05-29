@@ -12,12 +12,14 @@ import { formatCurrency } from "helpers/formatCurrency";
 import PulseLoader from "react-spinners/PulseLoader";
 import API from "api/axios.config";
 import OrderService from "services/order.service";
+import { useHistory } from "react-router";
 
 const PaymentForm = ({ previousStep, addressData, nextStep }) => {
   const { cartSubtotal, cartTotal, cartData, setCartData } = useCart();
   const [error, setError] = useState()
   const [isProcessing, setIsProcessing] = useState(false);
   const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUB_KEY);
+  const history = useHistory()
 
   const handleSubmit = async (e, elements, stripe) => {
     e.preventDefault();
@@ -59,7 +61,12 @@ const PaymentForm = ({ previousStep, addressData, nextStep }) => {
       OrderService.createOrder(cartSubtotal, cartTotal, data.id).then(res=>{
         setCartData({...cartData, items: []})
         setIsProcessing(false);
-        nextStep()
+        history.push({
+          pathname: "/cart/success",
+          state: {
+            fromPaymentPage: true,
+          },
+        });
       })
     } catch (error) {
       setIsProcessing(false);

@@ -63,7 +63,7 @@ const Cart = () => {
         <TableFooter className="flex flex-col justify-end items-end">
           <div className="mb-2">Total: {formatCurrency(cartSubtotal)}</div>
           <Button tag={Link} to={{
-            pathname: "/checkout",
+            pathname: "/cart/checkout",
             state: {
               fromCartPage: true
             }
