@@ -4,6 +4,7 @@ module.exports = {
     tags: ["Products"], // operation's tag
     description: "Update product", // short desc
     operationId: "updateProduct", // unique operation id
+    summary: "Update a product",
     parameters: [], // expected params
     security: [
       {

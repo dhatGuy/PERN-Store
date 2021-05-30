@@ -67,12 +67,12 @@ module.exports = {
         properties: {
           product_id: {
             type: "number", // data-type
-            description: "product identification number", // desc
+            description: "Product identification number", // desc
             example: "23", // example of an id
           },
           name: {
             type: "string", // data-type
-            description: "Product's name", // desc
+            description: "Product name", // desc
           },
           price: {
             type: "integer", // data-type
@@ -84,15 +84,52 @@ module.exports = {
           },
           image_url: {
             type: "string", // data-type
-            description: "product's image url", // desc
+            description: "Product image url", // desc
           },
           avg_rating: {
             type: "string", // data type
-            description: "product's total average rating", // desc
+            description: "Product total average rating", // desc
           },
           count: {
             type: "integer", // data type
-            description: "total number of reviews", // desc
+            description: "Total number of reviews", // desc
+          },
+        },
+      },
+      CartItem: {
+        type: "object", // data type
+        properties: {
+          product_id: {
+            type: "number", // data-type
+            description: "Product identification number", // desc
+            example: "23", // example of an id
+          },
+          name: {
+            type: "string", // data-type
+            description: "Product name", // desc
+          },
+          price: {
+            type: "integer", // data-type
+            description: "Product price", // desc
+            example: 456.79
+          },
+          description: {
+            type: "string", // data-type
+            description: "Product description", // desc
+          },
+          image_url: {
+            type: "string", // data-type
+            description: "Product image url", // desc
+          },
+          subtotal: {
+            type: "integer", // data type
+            description: "Product total price", // desc
+            example: 3009.10
+          },
+          quantity: {
+            type: "number", // data type
+            description: "Total number in cart", // desc
+            example: 5
           },
         },
       },
@@ -229,6 +266,11 @@ module.exports = {
         name: "auth-token",
         in: "header",
       },
+      cookie: {
+        type: "apiKey",
+        in: "cookie",
+        name: "refreshToken"
+      }
     },
   },
 };

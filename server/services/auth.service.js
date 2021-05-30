@@ -112,16 +112,20 @@ class AuthService {
       const { name, email, sub, given_name } = ticket.getPayload();
 
       try {
-        await createUserGoogleDb({ sub, given_name, email, name });
-        const { user_id, cart_id, roles } = await getUserByEmailDb(email);
+        const user = await getUserByEmailDb(email);
+        if(!user){
+          await createUserGoogleDb({ sub, given_name, email, name });
+        }
+        const { user_id, cart_id, roles, fullname, username } =
+          await getUserByEmailDb(email);
 
-        const token = this.signToken({
+        const token = await this.signToken({
           id: user_id,
           roles,
           cart_id,
         });
 
-        const refreshToken = this.signRefreshToken({
+        const refreshToken = await this.signRefreshToken({
           id: user_id,
           roles,
           cart_id,
@@ -132,6 +136,8 @@ class AuthService {
           refreshToken,
           user: {
             user_id,
+            fullname,
+            username,
           },
         };
       } catch (error) {

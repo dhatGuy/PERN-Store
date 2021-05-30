@@ -3,6 +3,7 @@ module.exports = {
   delete: {
     tags: ["Users"], // operation's tag
     description: "Deleting a user", // short desc
+    summary: "Delete a user",
     operationId: "deleteUser", // unique operation id
     security: [
       {

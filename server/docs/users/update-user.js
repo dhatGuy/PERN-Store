@@ -3,6 +3,7 @@ module.exports = {
   put: {
     tags: ["Users"], // operation's tag
     description: "Update user", // short desc
+    summary: "Update a user",
     operationId: "updateUser", // unique operation id
     security: [
       {

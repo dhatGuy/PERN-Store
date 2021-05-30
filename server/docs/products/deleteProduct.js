@@ -3,6 +3,7 @@ module.exports = {
   delete: {
     tags: ["Products"], // operation's tag
     description: "Delete product", // short desc
+    summary: "Delete a product",
     operationId: "deleteProduct", // unique operation id
     parameters: [
       {
@@ -27,10 +28,10 @@ module.exports = {
         description: "Product deleted successfully", // response desc
       },
       401: {
-        description: "Unauthorized"
+        description: "Unauthorized",
       },
       404: {
-        description: "Product not found"
+        description: "Product not found",
       },
       // response code
       500: {

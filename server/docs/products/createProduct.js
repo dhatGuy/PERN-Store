@@ -3,6 +3,7 @@ module.exports = {
   post: {
     tags: ["Products"], // operation's tag
     description: "Create product", // short desc
+    summary: "Create a product",
     operationId: "createProduct", // unique operation id
     parameters: [], // expected params
     security: [

@@ -3,6 +3,7 @@ module.exports = {
   get: {
     tags: ["Users"], // operation's tag.
     description: "Get a user", // operation's desc.
+    summary: "Get user by id",
     operationId: "getUser", // unique operation id
     security: [
       {
