@@ -7,6 +7,10 @@ A small full-stack e-commerce project built with Postgres, Express, React and No
 
 <!-- ![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png) -->
 
+## API Documentation
+
+[API Docs](https://nameless-journey-88760.herokuapp.com/api/docs/)
+
 ## Demo
 
 [Run demo](https://pern-store.netlify.app)
