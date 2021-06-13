@@ -5,8 +5,6 @@
 
 A small full-stack e-commerce project built with Postgres, Express, React and Node.
 
-<!-- ![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png) -->
-
 ## API Documentation
 
 [API Docs](https://nameless-journey-88760.herokuapp.com/api/docs/)
@@ -98,6 +96,18 @@ To run tests, run the following command
 
 To run this project, you will need to add the following environment variables to your .env file
 
+#### client/.env
+
+`REACT_APP_GOOGLE_CLIENT_ID`
+
+`REACT_APP_GOOGLE_CLIENT_SECRET`
+
+`REACT_APP_API_URL`
+
+`REACT_APP_STRIPE_PUB_KEY`
+
+### server/.env
+
 `PGUSER`
 
 `PGHOST`
@@ -120,19 +130,11 @@ To run this project, you will need to add the following environment variables to
 
 `GMAIL_EMAIL`
 
-`REACT_APP_GOOGLE_CLIENT_ID`
-
-`REACT_APP_GOOGLE_CLIENT_SECRET`
-
-`REACT_APP_API_URL`
-
-`REACT_APP_STRIPE_PUB_KEY`
-
 `STRIPE_SECRET_KEY`
 
 ## Feedback
 
-Joseph Odunsi - [@_odunsi_](https://twitter.com/_odunsi_) - odunsiolakunbi@gmail.com
+Joseph Odunsi - [@odunsi](https://twitter.com/_odunsi_) - odunsiolakunbi@gmail.com
 
 Project Link: [https://github.com/dhatguy/PERN-Store](https://github.com/dhatguy/PERN-Store)
 
