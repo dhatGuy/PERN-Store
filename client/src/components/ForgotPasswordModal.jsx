@@ -40,7 +40,7 @@ const ForgotPasswordModal = () => {
       })
       .catch((error) => {
         setIsSending(false);
-        setMsg(error.response.data);
+        setMsg(error.response.data.message);
       });
   };
   return (
@@ -54,49 +54,56 @@ const ForgotPasswordModal = () => {
           Forgot password?
         </span>
         <Modal isOpen={isOpen} onClose={toggleModal}>
-            <form onSubmit={handleSubmit(onSubmitReset)}>
-          <ModalHeader>Forgot Password</ModalHeader>
-          <ModalBody>
-              
-            <Label>
-              <span className="font-semibold">Email</span>
-              <Input
-              name="email"
-                className="mt-1 border py-2 pl-2"
-                valid
-                type="email"
-                inputMode="email"
-                ref={register({
-                  required: "Email required",
-                  pattern: {
-                    // eslint-disable-next-line no-useless-escape
-                    value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-                    message: "Email not valid",
-                  },
-                })}
-              />
-            </Label>
-            {errors.email && errors.email.type === "required" && (
-              <HelperText className="mt-2" valid={false}>{errors.email.message}</HelperText>
-            )}
-            {errors.email && errors.email.type === "pattern" && (
-              <HelperText className="mt-2" valid={false}>{errors.email.message}</HelperText>
-            )}
-            {msg && <HelperText className="mt-2" valid={false}>{msg}</HelperText>}
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              onClick={handleSubmit(onSubmitReset)}
-              disabled={isSending}
-              className="w-full sm:w-auto"
-            >
-              {isSending ? (
-                <PulseLoader size={10} color={"#0a138b"} />
-              ) : (
-                "Send email"
+          <form onSubmit={handleSubmit(onSubmitReset)}>
+            <ModalHeader>Forgot Password</ModalHeader>
+            <ModalBody>
+              <Label>
+                <span className="font-semibold">Email</span>
+                <Input
+                  name="email"
+                  className="mt-1 border py-2 pl-2"
+                  valid
+                  type="email"
+                  inputMode="email"
+                  ref={register({
+                    required: "Email required",
+                    pattern: {
+                      // eslint-disable-next-line no-useless-escape
+                      value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                      message: "Email not valid",
+                    },
+                  })}
+                />
+              </Label>
+              {errors.email && errors.email.type === "required" && (
+                <HelperText className="mt-2" valid={false}>
+                  {errors.email.message}
+                </HelperText>
               )}
-            </Button>
-          </ModalFooter>
+              {errors.email && errors.email.type === "pattern" && (
+                <HelperText className="mt-2" valid={false}>
+                  {errors.email.message}
+                </HelperText>
+              )}
+              {msg && (
+                <HelperText className="mt-2" valid={false}>
+                  {msg}
+                </HelperText>
+              )}
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                onClick={handleSubmit(onSubmitReset)}
+                disabled={isSending}
+                className="w-full sm:w-auto"
+              >
+                {isSending ? (
+                  <PulseLoader size={10} color={"#0a138b"} />
+                ) : (
+                  "Send email"
+                )}
+              </Button>
+            </ModalFooter>
           </form>
         </Modal>
       </>
