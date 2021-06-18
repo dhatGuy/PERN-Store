@@ -29,7 +29,6 @@ const Login = () => {
       }, 1500);
     } catch (error) {
       setIsLoading(false);
-      setError(error.response?.data.message);
     }
   };
 
