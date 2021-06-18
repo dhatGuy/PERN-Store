@@ -116,12 +116,13 @@ class AuthService {
   async googleLogin(token) {
     try {
       const ticket = await this.verifyGoogleIdToken(token);
-      const { name, email, sub, given_name } = ticket.getPayload();
+      const { name, email, sub } = ticket.getPayload();
+      const defaultUsername = name.replace(/ /g, "").toLowerCase();
 
       try {
         const user = await getUserByEmailDb(email);
-        if (!user) {
-          await createUserGoogleDb({ sub, given_name, email, name });
+        if (!user?.google_id) {
+          await createUserGoogleDb({ sub, defaultUsername, email, name });
         }
         const { user_id, cart_id, roles, fullname, username } =
           await getUserByEmailDb(email);

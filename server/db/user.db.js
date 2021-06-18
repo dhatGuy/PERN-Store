@@ -16,18 +16,14 @@ const createUserDb = async ({ username, password, email, fullname }) => {
 };
 
 const getUserByIdDb = async (id) => {
-  const {
-    rows: user,
-  } = await pool.query(
+  const { rows: user } = await pool.query(
     "select users.*, cart.id as cart_id from users left join cart on cart.user_id = users.user_id where users.user_id = $1",
     [id]
   );
   return user[0];
 };
 const getUserByUsernameDb = async (username) => {
-  const {
-    rows: user,
-  } = await pool.query(
+  const { rows: user } = await pool.query(
     "select users.*, cart.id as cart_id from users left join cart on cart.user_id = users.user_id where lower(users.username) = lower($1)",
     [username]
   );
@@ -35,9 +31,7 @@ const getUserByUsernameDb = async (username) => {
 };
 
 const getUserByEmailDb = async (email) => {
-  const {
-    rows: user,
-  } = await pool.query(
+  const { rows: user } = await pool.query(
     "select users.*, cart.id as cart_id from users left join cart on cart.user_id = users.user_id where lower(email) = lower($1)",
     [email]
   );
@@ -63,20 +57,19 @@ const updateUserDb = async ({
 };
 
 const deleteUserDb = async (id) => {
-  const {
-    rows: user,
-  } = await pool.query("DELETE FROM users where user_id = $1 returning *", [
-    id,
-  ]);
+  const { rows: user } = await pool.query(
+    "DELETE FROM users where user_id = $1 returning *",
+    [id]
+  );
   return user[0];
 };
 
-const createUserGoogleDb = async ({ sub, given_name, email, name }) => {
+const createUserGoogleDb = async ({ sub, defaultUsername, email, name }) => {
   const { rows } = await pool.query(
     `INSERT INTO users(google_id,username, email, fullname) 
       VALUES($1, $2, $3, $4) ON CONFLICT (email) 
       DO UPDATE SET google_id = $1, fullname = $4 returning *`,
-    [sub, given_name, email, name]
+    [sub, defaultUsername, email, name]
   );
   return rows[0];
 };
