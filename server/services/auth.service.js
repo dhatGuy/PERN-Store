@@ -16,7 +16,7 @@ const {
   createUserGoogleDb,
 } = require("../db/user.db");
 const { createCartDb } = require("../db/cart.db");
-const mail = require("../helpers/mail");
+const mail = require("./mail.service");
 const { OAuth2Client } = require("google-auth-library");
 const crypto = require("crypto");
 const moment = require("moment");
@@ -79,7 +79,14 @@ class AuthService {
         throw new ErrorHandler(403, "Email or password incorrect.");
       }
 
-      const { password: dbPassword, user_id, roles, cart_id, fullname, username } = user;
+      const {
+        password: dbPassword,
+        user_id,
+        roles,
+        cart_id,
+        fullname,
+        username,
+      } = user;
       const isCorrectPassword = await bcrypt.compare(password, dbPassword);
 
       if (!isCorrectPassword) {
@@ -98,7 +105,7 @@ class AuthService {
         user: {
           user_id,
           fullname,
-          username
+          username,
         },
       };
     } catch (error) {
@@ -113,7 +120,7 @@ class AuthService {
 
       try {
         const user = await getUserByEmailDb(email);
-        if(!user){
+        if (!user) {
           await createUserGoogleDb({ sub, given_name, email, name });
         }
         const { user_id, cart_id, roles, fullname, username } =
@@ -271,7 +278,7 @@ class AuthService {
       return {
         id: payload.id,
         roles: payload.roles,
-        cart_id: payload.cart_id
+        cart_id: payload.cart_id,
       };
     } catch (error) {
       logger.error(error);
