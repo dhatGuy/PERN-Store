@@ -1,5 +1,5 @@
 const authService = require("../services/auth.service");
-const mail = require("../helpers/mail");
+const mail = require("../services/mail.service");
 const { ErrorHandler } = require("../helpers/error");
 
 const createAccount = async (req, res) => {
