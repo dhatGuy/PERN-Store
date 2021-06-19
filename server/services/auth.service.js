@@ -79,6 +79,10 @@ class AuthService {
         throw new ErrorHandler(403, "Email or password incorrect.");
       }
 
+      if (user.google_id && !user.password) {
+        throw new ErrorHandler(403, "Login in with Google");
+      }
+
       const {
         password: dbPassword,
         user_id,
@@ -122,7 +126,13 @@ class AuthService {
       try {
         const user = await getUserByEmailDb(email);
         if (!user?.google_id) {
-          await createUserGoogleDb({ sub, defaultUsername, email, name });
+          const user = await createUserGoogleDb({
+            sub,
+            defaultUsername,
+            email,
+            name,
+          });
+          await createCartDb(user.user_id);
         }
         const { user_id, cart_id, roles, fullname, username } =
           await getUserByEmailDb(email);

@@ -36,6 +36,7 @@ const Login = () => {
     const { email, password } = data;
 
     try {
+      setError("");
       setIsLoading(true);
       const data = await authService.login(email, password);
       toast.success("Login successful 🔓");
