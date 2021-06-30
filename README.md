@@ -8,7 +8,7 @@ A small full-stack e-commerce project built with Postgres, Express, React and No
 
 ## API Documentation
 
-[API Docs](https://nameless-journey-88760.herokuapp.com/api/docs/)
+[Documentation](https://nameless-journey-88760.herokuapp.com/api/docs/)
 
 ## Demo
 
@@ -16,11 +16,11 @@ A small full-stack e-commerce project built with Postgres, Express, React and No
 
 ## Screenshots
 
-![Product Name Screen Shot](https://user-images.githubusercontent.com/51405947/104136952-a3509100-5399-11eb-94a6-0f9b07fbf1a2.png)
+![Homepage Screen Shot](https://user-images.githubusercontent.com/51405947/104136952-a3509100-5399-11eb-94a6-0f9b07fbf1a2.png)
 
 ## ER Diagram
 
-![ERD](https://user-images.githubusercontent.com/51405947/122548661-8e9fb580-d029-11eb-88d1-8b10506fc4cb.png)
+[![ERD](https://user-images.githubusercontent.com/51405947/122548661-8e9fb580-d029-11eb-88d1-8b10506fc4cb.png)](https://dbdiagram.io/d/5fe320fa9a6c525a03bc19db)
 
 ## Run Locally
 
@@ -131,11 +131,15 @@ To run this project, you will need to add the following environment variables to
 
 `REFRESH_SECRET`
 
-`GMAIL_PASSWORD`
-
 `GMAIL_EMAIL`
 
 `STRIPE_SECRET_KEY`
+
+`OAUTH_CLIENT_SECRET`
+
+`OAUTH_CLIENT_ID`
+
+`OAUTH_REFRESH_TOKEN`
 
 ## Feedback
 
