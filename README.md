@@ -42,19 +42,30 @@ Install dependencies
   npm install
 ```
 
-Start the server
+Go to server directory and install dependencies
 
 ```bash
-  npm run server
+  npm install
+```
+Go to client directory and install dependencies
+
+```bash
+  npm install
 ```
 
-Start the client
+Go to server directory and start the server
+
+```bash
+  npm run dev
+```
+
+Go to client directory and start the client
 
 ```bash
   npm run client
 ```
 
-Start both client and server concurrently
+Start both client and server concurrently from the root directory
 
 ```bash
   npm run dev
@@ -67,14 +78,8 @@ To deploy this project run
 ```bash
   npm run deploy
 ```
-
-## Running Tests
-
-To run tests, run the following command
-
-```bash
-  npm run test
-```
+Check this article for [guidance](https://dev.to/stlnick/how-to-deploy-a-full-stack-mern-app-with-heroku-netlify-ncb) 
+on how to deploy.
 
 ## Tech
 
@@ -89,17 +94,9 @@ To run tests, run the following command
 - [react-Spinners](https://www.npmjs.com/package/react-spinners)
 - [react-helmet-async](https://www.npmjs.com/package/react-helmet-async)
 
-## Contributing
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file
+To run this project, you will need to add the following environment variables to your .env files in both client and server directory
 
 #### client/.env
 
@@ -115,7 +112,7 @@ To run this project, you will need to add the following environment variables to
 
 `PGUSER`
 
-`PGHOST`
+`PGHOST=`
 
 `PGPASSWORD`
 
@@ -140,6 +137,14 @@ To run this project, you will need to add the following environment variables to
 `OAUTH_CLIENT_ID`
 
 `OAUTH_REFRESH_TOKEN`
+
+## Contributing
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## Feedback
 
