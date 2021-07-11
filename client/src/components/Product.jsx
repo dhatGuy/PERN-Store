@@ -29,17 +29,6 @@ const Product = ({ product }) => {
           {product.name}
         </h2>
         <p className="">{formatCurrency(product.price)}</p>
-        <span className="flex items-center">
-          <ReactStars
-            count={5}
-            size={24}
-            edit={false}
-            value={+product.avg_rating}
-            activeColor="#ffd700"
-          />
-          {""}({+product.count})
-        </span>
-
         <Button
           iconLeft={ShoppingCart}
           className="mt-4 transition duration-200 ease-out lg:bg-opacity-0 group-hover:bg-opacity-100"
