@@ -79,7 +79,7 @@ CREATE TABLE public.users
     address character varying(200),
     city character varying(100),
     state character varying(100),
-    country character varying(100),s
+    country character varying(100),
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id)
 );
