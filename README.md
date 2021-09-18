@@ -47,6 +47,7 @@ Go to server directory and install dependencies
 ```bash
   npm install
 ```
+
 Go to client directory and install dependencies
 
 ```bash
@@ -78,7 +79,8 @@ To deploy this project run
 ```bash
   npm run deploy
 ```
-Check this article for [guidance](https://dev.to/stlnick/how-to-deploy-a-full-stack-mern-app-with-heroku-netlify-ncb) 
+
+Check this article for [guidance](https://dev.to/stlnick/how-to-deploy-a-full-stack-mern-app-with-heroku-netlify-ncb)
 on how to deploy.
 
 ## Tech
@@ -128,15 +130,9 @@ To run this project, you will need to add the following environment variables to
 
 `REFRESH_SECRET`
 
-`GMAIL_EMAIL`
+`SMTP_FROM`
 
 `STRIPE_SECRET_KEY`
-
-`OAUTH_CLIENT_SECRET`
-
-`OAUTH_CLIENT_ID`
-
-`OAUTH_REFRESH_TOKEN`
 
 ## Contributing
 
