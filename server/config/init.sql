@@ -24,6 +24,11 @@ CREATE TABLE public.order_item
     PRIMARY KEY (id)
 );
 
+CREATE TYPE "payment" AS ENUM (
+  'PAYSTACK',
+  'STRIPE'
+);
+
 CREATE TABLE public.orders
 (
     order_id SERIAL NOT NULL,
@@ -32,7 +37,8 @@ CREATE TABLE public.orders
     date timestamp without time zone DEFAULT CURRENT_DATE NOT NULL,
     amount real,
     total integer,
-    stripe_payment_id character varying(100),
+    ref "character varying(100)",
+    payment_method payment,
     PRIMARY KEY (order_id)
 );
 
