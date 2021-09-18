@@ -79,11 +79,9 @@ const PaymentForm = ({ previousStep, addressData, nextStep }) => {
 
   return (
     <div className="w-full md:w-1/2">
-      <h1 className="text-3xl font-semibold text-center mb-2">
-        Payment details
-      </h1>
+      <h1 className="text-3xl font-semibold text-center mb-2">Checkout</h1>
       <OrderSummary />
-      <h1 className="font-medium text-2xl">Payment Method</h1>
+      <h1 className="font-medium text-2xl">Pay with Stripe</h1>
       <Elements stripe={stripePromise}>
         <ElementsConsumer>
           {({ stripe, elements }) => (
@@ -99,7 +97,7 @@ const PaymentForm = ({ previousStep, addressData, nextStep }) => {
                   type="submit"
                   size="small"
                 >
-                  {isProcessing ? (
+                  {isProcessing || !stripe ? (
                     <PulseLoader size={10} color={"#0a138b"} />
                   ) : (
                     `Pay ${formatCurrency(cartSubtotal)}`
@@ -111,8 +109,6 @@ const PaymentForm = ({ previousStep, addressData, nextStep }) => {
         </ElementsConsumer>
       </Elements>
       <PaystackBtn
-        amount={1000}
-        email="odunsiolakunbi@gmail.com"
         isProcessing={isProcessing}
         setIsProcessing={setIsProcessing}
       />
