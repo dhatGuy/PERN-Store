@@ -18,9 +18,9 @@ A small full-stack e-commerce project built with Postgres, Express, React and No
 
 ![Homepage Screen Shot](https://user-images.githubusercontent.com/51405947/104136952-a3509100-5399-11eb-94a6-0f9b07fbf1a2.png)
 
-## ER Diagram
+## Database Schema
 
-[![ERD](https://user-images.githubusercontent.com/51405947/122548661-8e9fb580-d029-11eb-88d1-8b10506fc4cb.png)](https://dbdiagram.io/d/5fe320fa9a6c525a03bc19db)
+[![ERD](https://user-images.githubusercontent.com/51405947/133893279-8872c475-85ff-47c4-8ade-7d9ef9e5325a.png)](https://dbdiagram.io/d/5fe320fa9a6c525a03bc19db)
 
 ## Run Locally
 
