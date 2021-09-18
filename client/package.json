@@ -23,6 +23,7 @@
     "react-helmet-async": "^1.0.7",
     "react-hook-form": "^6.15.5",
     "react-hot-toast": "^1.0.1",
+    "react-paystack": "^3.0.5",
     "react-rating-stars-component": "^2.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",

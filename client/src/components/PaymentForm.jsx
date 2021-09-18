@@ -1,29 +1,30 @@
-import React, { useState } from "react";
 import {
   CardElement,
   Elements,
   ElementsConsumer,
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import OrderSummary from "./OrderSummary";
 import { Button, HelperText } from "@windmill/react-ui";
+import API from "api/axios.config";
 import { useCart } from "context/CartContext";
 import { formatCurrency } from "helpers/formatCurrency";
-import PulseLoader from "react-spinners/PulseLoader";
-import API from "api/axios.config";
-import OrderService from "services/order.service";
+import React, { useState } from "react";
 import { useHistory } from "react-router";
+import PulseLoader from "react-spinners/PulseLoader";
+import OrderService from "services/order.service";
+import OrderSummary from "./OrderSummary";
+import PaystackBtn from "./PaystackBtn";
 
 const PaymentForm = ({ previousStep, addressData, nextStep }) => {
   const { cartSubtotal, cartTotal, cartData, setCartData } = useCart();
-  const [error, setError] = useState()
+  const [error, setError] = useState();
   const [isProcessing, setIsProcessing] = useState(false);
   const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUB_KEY);
-  const history = useHistory()
+  const history = useHistory();
 
   const handleSubmit = async (e, elements, stripe) => {
     e.preventDefault();
-    setError()
+    setError();
     const { fullname, email, address, city, state } = addressData;
     if (!stripe || !elements) {
       return;
@@ -32,7 +33,7 @@ const PaymentForm = ({ previousStep, addressData, nextStep }) => {
       setIsProcessing(true);
       const { data } = await API.post("/payment", {
         amount: (cartSubtotal * 100).toFixed(),
-        email
+        email,
       });
 
       const card = elements.getElement(CardElement);
@@ -50,24 +51,26 @@ const PaymentForm = ({ previousStep, addressData, nextStep }) => {
           },
         },
       });
-      if(result.error){
-        setError(result.error)
+      if (result.error) {
+        setError(result.error);
       }
 
       await stripe.confirmCardPayment(data.client_secret, {
         payment_method: result.paymentMethod.id,
       });
 
-      OrderService.createOrder(cartSubtotal, cartTotal, data.id).then(res=>{
-        setCartData({...cartData, items: []})
-        setIsProcessing(false);
-        history.push({
-          pathname: "/cart/success",
-          state: {
-            fromPaymentPage: true,
-          },
-        });
-      })
+      OrderService.createOrder(cartSubtotal, cartTotal, data.id, "STRIPE").then(
+        () => {
+          setCartData({ ...cartData, items: [] });
+          setIsProcessing(false);
+          history.push({
+            pathname: "/cart/success",
+            state: {
+              fromPaymentPage: true,
+            },
+          });
+        }
+      );
     } catch (error) {
       setIsProcessing(false);
       // throw error
@@ -76,7 +79,9 @@ const PaymentForm = ({ previousStep, addressData, nextStep }) => {
 
   return (
     <div className="w-full md:w-1/2">
-      <h1 className="text-3xl font-semibold text-center mb-2">Payment details</h1>
+      <h1 className="text-3xl font-semibold text-center mb-2">
+        Payment details
+      </h1>
       <OrderSummary />
       <h1 className="font-medium text-2xl">Payment Method</h1>
       <Elements stripe={stripePromise}>
@@ -105,6 +110,12 @@ const PaymentForm = ({ previousStep, addressData, nextStep }) => {
           )}
         </ElementsConsumer>
       </Elements>
+      <PaystackBtn
+        amount={1000}
+        email="odunsiolakunbi@gmail.com"
+        isProcessing={isProcessing}
+        setIsProcessing={setIsProcessing}
+      />
     </div>
   );
 };

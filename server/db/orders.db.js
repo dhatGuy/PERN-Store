@@ -5,14 +5,13 @@ const createOrderDb = async ({
   amount,
   itemTotal,
   userId,
-  stripePaymentId,
+  ref,
+  paymentMethod,
 }) => {
   // create an order
-  const {
-    rows: order,
-  } = await pool.query(
-    "INSERT INTO orders(user_id, status, amount, total, stripe_payment_id) VALUES($1, 'complete', $2, $3, $4) returning *",
-    [userId, amount, itemTotal, stripePaymentId]
+  const { rows: order } = await pool.query(
+    "INSERT INTO orders(user_id, status, amount, total, ref, payment_method) VALUES($1, 'complete', $2, $3, $4, $5) returning *",
+    [userId, amount, itemTotal, ref, paymentMethod]
   );
 
   // copy cart items from the current cart_item table into order_item table
@@ -28,11 +27,10 @@ const createOrderDb = async ({
 };
 
 const getAllOrdersDb = async ({ userId, limit, offset }) => {
-  const {
-    rowCount,
-  } = await pool.query("SELECT * from orders WHERE orders.user_id = $1", [
-    userId,
-  ]);
+  const { rowCount } = await pool.query(
+    "SELECT * from orders WHERE orders.user_id = $1",
+    [userId]
+  );
   const orders = await pool.query(
     `SELECT order_id, user_id, status, date::date, amount, total 
       from orders WHERE orders.user_id = $1 order by order_id desc limit $2 offset $3`,
