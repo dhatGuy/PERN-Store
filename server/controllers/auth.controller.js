@@ -3,28 +3,40 @@ const mail = require("../services/mail.service");
 const { ErrorHandler } = require("../helpers/error");
 
 const createAccount = async (req, res) => {
-  const user = await authService.signUp(req.body);
+  const { token, refreshToken, user } = await authService.signUp(req.body);
 
   if (process.env.NODE_ENV !== "test") {
     await mail.signupMail(user.email, user.fullname.split(" ")[0]);
   }
 
-  res.status(201).json({ userId: user.userId, cartId: user.cartId });
+  res.header("auth-token", token);
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    sameSite: process.env.NODE_ENV === "development" ? true : "none",
+    secure: process.env.NODE_ENV === "development" ? false : true,
+  });
+  res.status(201).json({
+    token,
+    user,
+  });
 };
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
-  const user = await authService.login(email, password);
+  const { token, refreshToken, user } = await authService.login(
+    email,
+    password
+  );
 
-  res.header("auth-token", user.token);
-  res.cookie("refreshToken", user.refreshToken, {
+  res.header("auth-token", token);
+  res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
     sameSite: process.env.NODE_ENV === "development" ? true : "none",
     secure: process.env.NODE_ENV === "development" ? false : true,
   });
   res.status(200).json({
-    token: user.token,
-    user: user.user,
+    token,
+    user,
   });
 };
 

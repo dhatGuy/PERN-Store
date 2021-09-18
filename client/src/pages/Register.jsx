@@ -5,15 +5,14 @@ import Layout from "layout/Layout";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
+import { Link, Redirect, useLocation } from "react-router-dom";
 import PulseLoader from "react-spinners/PulseLoader";
 
 const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const { state } = useLocation();
-  const history = useHistory();
-  const { isLoggedIn } = useUser();
+  const { isLoggedIn, setUserState } = useUser();
   const { register, errors, handleSubmit, watch } = useForm();
   const password = useRef({});
   password.current = watch("password", "");
@@ -29,11 +28,11 @@ const Register = () => {
         password,
         fullname: name,
       })
-        .then(() => {
+        .then(({ data }) => {
           setError("");
           toast.success("Account created successfully.");
           setTimeout(() => {
-            history.push("/login");
+            setUserState(data);
             setIsLoading(!isLoading);
           }, 1000);
         })

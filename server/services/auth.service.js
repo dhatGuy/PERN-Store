@@ -51,13 +51,27 @@ class AuthService {
           password: hashedPassword,
         });
 
-        const { id: cartId } = await createCartDb(newUser.user_id);
+        const { id: cart_id } = await createCartDb(newUser.user_id);
+        const token = await this.signToken({
+          id: newUser.user_id,
+          roles: newUser.roles,
+          cart_id,
+        });
+        const refreshToken = await this.signRefreshToken({
+          id: newUser.user_id,
+          roles: newUser.roles,
+          cart_id,
+        });
 
         return {
-          userId: newUser.user_id,
-          cartId,
-          fullname: newUser.fullname,
-          email: newUser.email,
+          token,
+          refreshToken,
+          user: {
+            user_id: newUser.user_id,
+            fullname: newUser.fullname,
+            username: newUser.username,
+            email: newUser.email,
+          },
         };
       } else {
         throw new ErrorHandler(401, "Input validation error");
