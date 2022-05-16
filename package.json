@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
-    "concurrently": "^7.0.0"
+    "concurrently": "^7.2.0"
   },
   "devDependencies": {},
   "scripts": {
