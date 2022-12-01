@@ -4,11 +4,11 @@
 
 # PERN STORE
 
-A small full-stack e-commerce project built with Postgres, Express, React and Node.
+A full-stack e-commerce project built with Postgres, Express, React and Node.
 
-## API Documentation
+## Swagger API Documentation
 
-[Documentation](https://nameless-journey-88760.herokuapp.com/api/docs/)
+[Documentation](https://https://pern-store.onrender.com/api/docs/)
 
 ## Demo
 
