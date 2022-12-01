@@ -8,7 +8,7 @@ A full-stack e-commerce project built with Postgres, Express, React and Node.
 
 ## Swagger API Documentation
 
-[Documentation](https://https://pern-store.onrender.com/api/docs/)
+[Documentation](https://pern-store.onrender.com/api/docs/)
 
 ## Demo
 
@@ -114,7 +114,7 @@ To run this project, you will need to add the following environment variables to
 
 `PGUSER`
 
-`PGHOST=`
+`PGHOST`
 
 `PGPASSWORD`
 
