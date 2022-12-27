@@ -8,6 +8,7 @@
     "prebuild": "npm run build:tailwind && npm run sitemap",
     "start": "vite",
     "build": "vite build",
+    "preview": "vite preview",
     "sitemap": "babel-node ./src/sitemap/sitemap.generator.js"
   },
   "dependencies": {
