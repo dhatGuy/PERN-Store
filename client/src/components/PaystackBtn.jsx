@@ -35,7 +35,7 @@ const PaystackBtn = ({ isProcessing, setIsProcessing }) => {
   const config = {
     email: userData.email,
     amount: (cartSubtotal * 100).toFixed(2),
-    publicKey: process.env.REACT_APP_PAYSTACK_PUB_KEY,
+    publicKey: import.meta.env.VITE_PAYSTACK_PUB_KEY,
   };
 
   const initializePayment = usePaystackPayment(config);

@@ -1,16 +1,16 @@
-const { createContext, useState, useContext } = require("react");
+import { createContext, useContext, useState } from "react";
 
-const OrderContext = createContext()
+const OrderContext = createContext();
 
-const OrderProvider = ({children}) =>{
-  const [orders, setOrders] = useState(null)
+const OrderProvider = ({ children }) => {
+  const [orders, setOrders] = useState(null);
 
   return (
-    <OrderContext.Provider value={{orders, setOrders}}>
+    <OrderContext.Provider value={{ orders, setOrders }}>
       {children}
     </OrderContext.Provider>
-  )
-}
+  );
+};
 
 const useOrders = () => {
   const context = useContext(OrderContext);
@@ -20,4 +20,4 @@ const useOrders = () => {
   return context;
 };
 
-export {OrderProvider, useOrders}
+export { OrderProvider, useOrders };
