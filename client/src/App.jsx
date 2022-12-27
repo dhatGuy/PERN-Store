@@ -6,7 +6,7 @@ import Login from "pages/Login";
 import Register from "pages/Register";
 import { lazy, Suspense } from "react";
 import { Toaster } from "react-hot-toast";
-import { Router, Switch, Route } from "react-router-dom";
+import { Route, Router, Switch } from "react-router-dom";
 import { ProtectedRoute } from "routes/protected.route";
 
 const ProductDetails = lazy(() => import("pages/ProductDetails"));
@@ -15,8 +15,8 @@ const Orders = lazy(() => import("pages/Orders"));
 const Product = lazy(() => import("pages/ProductList"));
 const Checkout = lazy(() => import("pages/Checkout"));
 const ResetPassword = lazy(() => import("pages/ResetPassword"));
-const Account = lazy(()=> import("pages/Account"))
-const Confirmation = lazy(()=> import("pages/Confirmation"));
+const Account = lazy(() => import("pages/Account"));
+const Confirmation = lazy(() => import("pages/Confirmation"));
 
 function App() {
   return (

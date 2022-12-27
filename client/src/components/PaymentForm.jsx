@@ -19,7 +19,7 @@ const PaymentForm = ({ previousStep, addressData, nextStep }) => {
   const { cartSubtotal, cartTotal, cartData, setCartData } = useCart();
   const [error, setError] = useState();
   const [isProcessing, setIsProcessing] = useState(false);
-  const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUB_KEY);
+  const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUB_KEY);
   const history = useHistory();
 
   const handleSubmit = async (e, elements, stripe) => {

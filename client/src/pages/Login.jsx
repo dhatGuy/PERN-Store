@@ -126,7 +126,7 @@ const Login = () => {
           </Button>
           <GoogleLogin
             className="my-4 flex justify-center"
-            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+            clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
             buttonText="Log in with Google"
             onSuccess={handleGoogleLogin}
             onFailure={handleGoogleLogin}
