@@ -1,0 +1,66 @@
+version: "3.8"
+
+services:
+  server:
+    image: pern-store-server
+    container_name: pern-store-server
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    # restart: always
+    env_file:
+      - ./server/.env
+    environment:
+      - POSTGRES_HOST=pern-store-db
+      - POSTGRES_DB=pernstore
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=adminuser
+      # - POSTGRES_PORT=7890
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 9000:9000
+    depends_on:
+      - database
+  client:
+    image: pern-store-client
+    container_name: pern-store-client
+    restart: unless-stopped
+    env_file:
+      - ./client/.env
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    ports:
+      - 3000:3000
+    volumes:
+      - ./client:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - server
+  database:
+    container_name: pern-store-db
+    image: postgres
+    restart: always
+    env_file:
+      - ./server/.env
+    environment:
+      - POSTGRES_PASSWORD=adminuser
+    ports:
+      - 7890:5432
+    volumes:
+      - ./db:/var/lib/postgresql/data
+      - ./server/config/init.sql:/docker-entrypoint-initdb.d/init.sql
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "dhatguy@mail.com"
+      PGADMIN_DEFAULT_PASSWORD: "qwertyuiop"
+    ports:
+      - "16543:80"
+    depends_on:
+      - database
+volumes:
+  db:
+    driver: local

@@ -6,4 +6,4 @@ COPY . .
 
 RUN npm ci --no-audit || npm ci --no-audit --maxsockets 1
 
-CMD [ "npm", "run", "dev" ]
+CMD [ "npm", "start" ]
