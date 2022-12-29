@@ -6,4 +6,6 @@ COPY . .
 
 RUN npm ci --no-audit || npm ci --no-audit --maxsockets 1
 
+EXPOSE 9000
+
 CMD [ "npm", "start" ]

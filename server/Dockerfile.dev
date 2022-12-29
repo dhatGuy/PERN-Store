@@ -6,4 +6,6 @@ COPY . .
 
 RUN npm i --no-audit || npm i --no-audit --maxsockets 1
 
+EXPOSE 9000
+
 CMD [ "npm", "run", "dev" ]

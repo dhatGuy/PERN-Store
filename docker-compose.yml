@@ -15,9 +15,13 @@ services:
       - POSTGRES_DB=pernstore
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=adminuser
-      # - POSTGRES_PORT=7890
     volumes:
+      # Maps the server directory to
+      # the working directory in the container
       - ./server:/usr/src/app
+      # Maps the node_modules directory to
+      # the working directory in the container
+      # and also fixes bcrypt error
       - /usr/src/app/node_modules
     ports:
       - 9000:9000
@@ -46,11 +50,15 @@ services:
     env_file:
       - ./server/.env
     environment:
+      # other environment variables is in ./server/.env file
       - POSTGRES_PASSWORD=adminuser
     ports:
       - 7890:5432
     volumes:
       - ./db:/var/lib/postgresql/data
+      # When the PostgreSQL container is started it will run any scripts
+      # provided in the `docker-entrypoint-initdb.d` directory
+      # seed the database with the init.sql file
       - ./server/config/init.sql:/docker-entrypoint-initdb.d/init.sql
   pgadmin:
     image: dpage/pgadmin4
