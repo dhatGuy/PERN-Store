@@ -11,10 +11,6 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
-  "engines": {
-    "node": "14.x",
-    "npm": "6.14.7"
-  },
   "jest": {
     "testEnvironment": "node",
     "coveragePathIgnorePatterns": [
@@ -50,6 +46,7 @@
     "cross-env": "^7.0.3",
     "eslint": "^7.25.0",
     "eslint-plugin-babel": "^5.3.1",
+    "nodemon": "^2.0.20",
     "pino-pretty": "^4.8.0",
     "supertest": "^6.1.3"
   }
