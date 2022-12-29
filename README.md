@@ -72,6 +72,24 @@ Start both client and server concurrently from the root directory
   npm run dev
 ```
 
+## Run with docker
+
+To use this project make sure you have Docker installed
+
+### Run the development environment
+
+```bash
+docker-compose -f docker-compose.dev.yml up
+```
+
+### Run the production environment
+
+```bash
+docker-compose up
+```
+
+Go to http://localhost:3000 to view the app running on your browser.
+
 ## Deployment
 
 To deploy this project run
@@ -102,27 +120,27 @@ To run this project, you will need to add the following environment variables to
 
 #### client/.env
 
-`REACT_APP_GOOGLE_CLIENT_ID`
+`VITE_GOOGLE_CLIENT_ID`
 
-`REACT_APP_GOOGLE_CLIENT_SECRET`
+`VITE_GOOGLE_CLIENT_SECRET`
 
-`REACT_APP_API_URL`
+`VITE_API_URL`
 
-`REACT_APP_STRIPE_PUB_KEY`
+`VITE_STRIPE_PUB_KEY`
 
 ### server/.env
 
-`PGUSER`
+`POSTGRES_USER`
 
-`PGHOST`
+`POSTGRES_HOST`
 
-`PGPASSWORD`
+`POSTGRES_PASSWORD`
 
-`PGDATABASE`
+`POSTGRES_DATABASE`
 
-`PGDATABASE_TEST`
+`POSTGRES_DATABASE_TEST`
 
-`PGPORT`
+`POSTGRES_PORT`
 
 `PORT`
 
