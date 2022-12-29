@@ -72,9 +72,9 @@ Start both client and server concurrently from the root directory
   npm run dev
 ```
 
-## Run with docker
+## Running with docker
 
-To use this project make sure you have Docker installed
+Make sure you have Docker installed
 
 ### Run the development environment
 
