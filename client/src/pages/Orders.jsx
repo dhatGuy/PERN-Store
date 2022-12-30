@@ -33,7 +33,6 @@ const Orders = () => {
     orderService.getAllOrders(currentPage).then((res) => setOrders(res.data));
   }, [currentPage, setOrders]);
 
-
   if (orders?.length === 0) {
     return (
       <Layout loading={orders === null}>

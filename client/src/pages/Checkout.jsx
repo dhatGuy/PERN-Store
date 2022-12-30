@@ -22,10 +22,8 @@ const Checkout = () => {
     }
   }, [cartData, history, state]);
 
-  const nextStep = () =>
-    setActiveStep((prevStep) => setActiveStep(prevStep + 1));
-  const previousStep = () =>
-    setActiveStep((prevStep) => setActiveStep(prevStep - 1));
+  const nextStep = () => setActiveStep((prevStep) => setActiveStep(prevStep + 1));
+  const previousStep = () => setActiveStep((prevStep) => setActiveStep(prevStep - 1));
 
   const next = (data) => {
     setAddressData(data);
@@ -37,11 +35,7 @@ const Checkout = () => {
         {activeStep === 0 ? (
           <AddressForm next={next} />
         ) : (
-          <PaymentForm
-            nextStep={nextStep}
-            previousStep={previousStep}
-            addressData={addressData}
-          />
+          <PaymentForm nextStep={nextStep} previousStep={previousStep} addressData={addressData} />
         )}
       </div>
     </Layout>

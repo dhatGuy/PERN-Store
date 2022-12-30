@@ -17,7 +17,7 @@ import ReactStars from "react-rating-stars-component";
 import { useUser } from "context/UserContext";
 
 const ReviewModal = ({ product_id, reviews }) => {
-  const {userData} = useUser()
+  const { userData } = useUser();
   const review = reviews.reviews.find((elm) => elm.user_id === userData?.user_id);
   const { reviewExist } = reviews;
   const [rating, setRating] = useState(1);
@@ -68,9 +68,7 @@ const ReviewModal = ({ product_id, reviews }) => {
     <>
       {isOpen && <Backdrop />}
       <div>
-        <Button onClick={toggleModal}>
-          {reviewExist ? "Edit Review" : "Add Review"}
-        </Button>
+        <Button onClick={toggleModal}>{reviewExist ? "Edit Review" : "Add Review"}</Button>
       </div>
       <Modal isOpen={isOpen} onClose={toggleModal}>
         <ModalHeader>Add Review</ModalHeader>
@@ -104,11 +102,7 @@ const ReviewModal = ({ product_id, reviews }) => {
           </form>
         </ModalBody>
         <ModalFooter>
-          <Button
-            className="w-full sm:w-auto"
-            layout="outline"
-            onClick={toggleModal}
-          >
+          <Button className="w-full sm:w-auto" layout="outline" onClick={toggleModal}>
             Cancel
           </Button>
           <Button

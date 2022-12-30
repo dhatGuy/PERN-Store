@@ -174,8 +174,7 @@ const Register = () => {
               type="password"
               name="password2"
               ref={register({
-                validate: (value) =>
-                  value === password.current || "Passwords do not match",
+                validate: (value) => value === password.current || "Passwords do not match",
               })}
             />
             {errors.password2 && (

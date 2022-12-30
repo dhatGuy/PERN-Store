@@ -10,14 +10,19 @@ const CartItem = ({ item }) => {
     increment(item.product_id);
   };
   const decrease = () => {
-    decrement(item.product_id)
+    decrement(item.product_id);
   };
   return (
     <>
       <TableCell>{item.name}</TableCell>
       <TableCell>{formatCurrency(item.price)}</TableCell>
       <TableCell className="flex items-center">
-        <Button size="small" layout="outline" disabled={item.quantity === 1} onClick={() => decrease()}>
+        <Button
+          size="small"
+          layout="outline"
+          disabled={item.quantity === 1}
+          onClick={() => decrease()}
+        >
           -
         </Button>
         <span className="mr-2 ml-2">{item.quantity}</span>
@@ -27,7 +32,9 @@ const CartItem = ({ item }) => {
       </TableCell>
       <TableCell>{formatCurrency(item.subtotal)}</TableCell>
       <TableCell>
-        <Button layout="Link" onClick={() => deleteItem(item.product_id)}><span>X</span></Button>
+        <Button layout="Link" onClick={() => deleteItem(item.product_id)}>
+          <span>X</span>
+        </Button>
       </TableCell>
     </>
   );

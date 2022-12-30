@@ -54,14 +54,9 @@ const ResetPassword = () => {
             <h1 className="text-4xl font-bold text-center">Reset Password</h1>
           </header>
           <div className="mx-auto max-w-lg shadow-2xl p-8 md:p-10">
-            <form
-              className="flex flex-col"
-              onSubmit={handleSubmit(handlePasswordReset)}
-            >
+            <form className="flex flex-col" onSubmit={handleSubmit(handlePasswordReset)}>
               <Label className="mb-4">
-                <span className="block text-gray-700 text-sm font-bold mb-2">
-                  Password
-                </span>
+                <span className="block text-gray-700 text-sm font-bold mb-2">Password</span>
                 <Input
                   className="rounded w-full text-gray-700 focus:outline-none border px-2 py-2 focus:border-purple-600 transition duration-500"
                   type="password"
@@ -87,17 +82,14 @@ const ResetPassword = () => {
                 )}
               </Label>
               <Label className="mb-4">
-                <span className="block text-gray-700 text-sm font-bold mb-2">
-                  Confirm Password
-                </span>
+                <span className="block text-gray-700 text-sm font-bold mb-2">Confirm Password</span>
                 <Input
                   className="rounded w-full text-gray-700 focus:outline-none border px-2 py-2 focus:border-purple-600 transition duration-500"
                   type="password"
                   inputMode="password"
                   name="password2"
                   ref={register({
-                    validate: (value) =>
-                      value === password.current || "Passwords do not match",
+                    validate: (value) => value === password.current || "Passwords do not match",
                   })}
                 />
               </Label>
@@ -112,11 +104,7 @@ const ResetPassword = () => {
                 </HelperText>
               )}
               <Button type="submit" disabled={isResetting}>
-                {isResetting ? (
-                  <PulseLoader size={10} color={"#0a138b"} />
-                ) : (
-                  "Reset Password"
-                )}
+                {isResetting ? <PulseLoader size={10} color={"#0a138b"} /> : "Reset Password"}
               </Button>
             </form>
           </div>

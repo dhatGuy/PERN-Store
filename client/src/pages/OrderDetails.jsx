@@ -28,10 +28,7 @@ const OrderDetails = () => {
         <div className="border-t-2">
           <h1 className="font-bold text-xl">Items in your order</h1>
           {items?.map((item) => (
-            <Card
-              key={item.product_id}
-              className="flex my-4 p-2 md:flex-row flex-col"
-            >
+            <Card key={item.product_id} className="flex my-4 p-2 md:flex-row flex-col">
               <img
                 className="sm:w-full md:w-1/2 lg:w-1/3 object-contain md:object-cover"
                 loading="lazy"
@@ -42,9 +39,7 @@ const OrderDetails = () => {
               <CardBody>
                 <h1 className="font-semibold text-gray-600">{item.name}</h1>
                 <p className="mb-2">{formatCurrency(item.price)}</p>
-                <p className="text-gray-600 dark:text-gray-400">
-                  {item.description}
-                </p>
+                <p className="text-gray-600 dark:text-gray-400">{item.description}</p>
                 <p className="mt-2">Quantity: {item.quantity}</p>
               </CardBody>
             </Card>

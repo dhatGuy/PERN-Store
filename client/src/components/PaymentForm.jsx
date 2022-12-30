@@ -1,8 +1,4 @@
-import {
-  CardElement,
-  Elements,
-  ElementsConsumer,
-} from "@stripe/react-stripe-js";
+import { CardElement, Elements, ElementsConsumer } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { Button, HelperText } from "@windmill/react-ui";
 import API from "api/axios.config";
@@ -59,18 +55,16 @@ const PaymentForm = ({ previousStep, addressData, nextStep }) => {
         payment_method: result.paymentMethod.id,
       });
 
-      OrderService.createOrder(cartSubtotal, cartTotal, data.id, "STRIPE").then(
-        () => {
-          setCartData({ ...cartData, items: [] });
-          setIsProcessing(false);
-          history.push({
-            pathname: "/cart/success",
-            state: {
-              fromPaymentPage: true,
-            },
-          });
-        }
-      );
+      OrderService.createOrder(cartSubtotal, cartTotal, data.id, "STRIPE").then(() => {
+        setCartData({ ...cartData, items: [] });
+        setIsProcessing(false);
+        history.push({
+          pathname: "/cart/success",
+          state: {
+            fromPaymentPage: true,
+          },
+        });
+      });
     } catch (error) {
       setIsProcessing(false);
       // throw error
@@ -92,11 +86,7 @@ const PaymentForm = ({ previousStep, addressData, nextStep }) => {
                 <Button onClick={previousStep} layout="outline" size="small">
                   Back
                 </Button>
-                <Button
-                  disabled={!stripe || isProcessing}
-                  type="submit"
-                  size="small"
-                >
+                <Button disabled={!stripe || isProcessing} type="submit" size="small">
                   {isProcessing || !stripe ? (
                     <PulseLoader size={10} color={"#0a138b"} />
                   ) : (
@@ -108,10 +98,7 @@ const PaymentForm = ({ previousStep, addressData, nextStep }) => {
           )}
         </ElementsConsumer>
       </Elements>
-      <PaystackBtn
-        isProcessing={isProcessing}
-        setIsProcessing={setIsProcessing}
-      />
+      <PaystackBtn isProcessing={isProcessing} setIsProcessing={setIsProcessing} />
     </div>
   );
 };

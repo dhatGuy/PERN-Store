@@ -6,8 +6,8 @@ const ProductContext = createContext();
 const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [page, setPage] = useState(1)
-  
+  const [page, setPage] = useState(1);
+
   useEffect(() => {
     setIsLoading(true);
     productService.getProducts(page).then((response) => {
@@ -25,13 +25,12 @@ const ProductProvider = ({ children }) => {
   );
 };
 
-const useProduct = () =>{
-  const context = useContext(ProductContext)
-  if(context === undefined) {
-    throw new Error('useProduct must be used within a ProductProvider')
+const useProduct = () => {
+  const context = useContext(ProductContext);
+  if (context === undefined) {
+    throw new Error("useProduct must be used within a ProductProvider");
   }
-  return context
-}
-
+  return context;
+};
 
 export { ProductContext, ProductProvider, useProduct };

@@ -13,18 +13,16 @@ const PaystackBtn = ({ isProcessing, setIsProcessing }) => {
   const history = useHistory();
 
   const onSuccess = (data) => {
-    orderService
-      .createOrder(cartSubtotal, cartTotal, data.reference, "PAYSTACK")
-      .then(() => {
-        setCartData({ ...cartData, items: [] });
-        setIsProcessing(false);
-        history.push({
-          pathname: "/cart/success",
-          state: {
-            fromPaymentPage: true,
-          },
-        });
+    orderService.createOrder(cartSubtotal, cartTotal, data.reference, "PAYSTACK").then(() => {
+      setCartData({ ...cartData, items: [] });
+      setIsProcessing(false);
+      history.push({
+        pathname: "/cart/success",
+        state: {
+          fromPaymentPage: true,
+        },
       });
+    });
   };
 
   const onClose = () => {
