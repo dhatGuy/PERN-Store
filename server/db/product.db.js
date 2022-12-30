@@ -13,9 +13,7 @@ const getAllProductsDb = async ({ limit, offset }) => {
 };
 
 const createProductDb = async ({ name, price, description, image_url }) => {
-  const {
-    rows: product,
-  } = await pool.query(
+  const { rows: product } = await pool.query(
     "INSERT INTO products(name, price, description, image_url) VALUES($1, $2, $3, $4) returning *",
     [name, price, description, image_url]
   );
@@ -47,19 +45,15 @@ const getProductByNameDb = async ({ name }) => {
 };
 
 const updateProductDb = async ({ name, price, description, image_url, id }) => {
-  const {
-    rows: product,
-  } = await pool.query(
+  const { rows: product } = await pool.query(
     "UPDATE products set name = $1, price = $2, description = $3 image_url = $4 where product_id = $5 returning *",
-    [name, price, description,image_url, id]
+    [name, price, description, image_url, id]
   );
   return product[0];
 };
 
 const deleteProductDb = async ({ id }) => {
-  const {
-    rows,
-  } = await pool.query(
+  const { rows } = await pool.query(
     "DELETE FROM products where product_id = $1 returning *",
     [id]
   );

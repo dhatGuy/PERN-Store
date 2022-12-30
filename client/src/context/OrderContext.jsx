@@ -5,11 +5,7 @@ const OrderContext = createContext();
 const OrderProvider = ({ children }) => {
   const [orders, setOrders] = useState(null);
 
-  return (
-    <OrderContext.Provider value={{ orders, setOrders }}>
-      {children}
-    </OrderContext.Provider>
-  );
+  return <OrderContext.Provider value={{ orders, setOrders }}>{children}</OrderContext.Provider>;
 };
 
 const useOrders = () => {

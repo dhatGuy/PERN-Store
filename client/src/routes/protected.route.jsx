@@ -3,7 +3,7 @@ import React from "react";
 import { Redirect, Route } from "react-router-dom";
 
 export const ProtectedRoute = ({ children, ...rest }) => {
-  const { isLoggedIn} = useUser()
+  const { isLoggedIn } = useUser();
   return (
     <Route
       {...rest}

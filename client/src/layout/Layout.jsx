@@ -28,10 +28,7 @@ const Layout = ({ children, title, loading }) => {
         <meta property="og:url" content="https://pern-store.netlify.app/" />
         <meta property="og:site_name" content="PERN Store" />
         <meta property="og:image" content="android-chrome-512x512.png" />
-        <meta
-          property="og:image:secure_url"
-          content="android-chrome-512x512.png"
-        />
+        <meta property="og:image:secure_url" content="android-chrome-512x512.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@_odunsi_" />
         <meta name="twitter:creator" content="@_odunsi_" />

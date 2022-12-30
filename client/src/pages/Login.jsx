@@ -118,11 +118,7 @@ const Login = () => {
             <ForgotPasswordModal />
           </div>
           <Button type="submit" disabled={isLoading}>
-            {isLoading ? (
-              <PulseLoader color={"#0a138b"} size={10} loading={isLoading} />
-            ) : (
-              "Login"
-            )}
+            {isLoading ? <PulseLoader color={"#0a138b"} size={10} loading={isLoading} /> : "Login"}
           </Button>
           <GoogleLogin
             className="my-4 flex justify-center"

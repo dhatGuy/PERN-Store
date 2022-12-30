@@ -12,10 +12,7 @@ const WithAxios = ({ children }) => {
         (response) => response,
         async (error) => {
           const originalRequest = error.config;
-          if (
-            error.response.status === 401 &&
-            originalRequest.url === "/auth/refresh-token"
-          ) {
+          if (error.response.status === 401 && originalRequest.url === "/auth/refresh-token") {
             return new Promise((resolve, reject) => {
               setIsLoggedIn(false);
               setAuthData(null);

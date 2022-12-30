@@ -22,7 +22,7 @@ const ProductDetails = () => {
       setIsLoading(true);
       const { data: product } = await productService.getProduct(id);
       setProduct(product);
-      setIsLoading(false)
+      setIsLoading(false);
     }
     fetchData();
   }, [id]);
@@ -40,9 +40,7 @@ const ProductDetails = () => {
               className="lg:w-1/2 w-full lg:h-auto h-64 object-contain md:object-cover object-center rounded"
             />
             <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
-              <h1 className="text-3xl title-font font-medium mb-1">
-                {product?.name}
-              </h1>
+              <h1 className="text-3xl title-font font-medium mb-1">{product?.name}</h1>
               <div className="flex mb-4">
                 <span className="flex items-center">
                   <ReactStars
@@ -53,9 +51,7 @@ const ProductDetails = () => {
                     activeColor="#ffd700"
                   />
                   <span className="ml-3">
-                    {+product?.count > 0
-                      ? `${+product.count} Ratings`
-                      : "No ratings available"}
+                    {+product?.count > 0 ? `${+product.count} Ratings` : "No ratings available"}
                   </span>
                 </span>
               </div>

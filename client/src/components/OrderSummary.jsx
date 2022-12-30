@@ -18,16 +18,12 @@ const OrderSummary = () => {
           />
           <div className="flex flex-col space-y-1">
             <span className="text-2xl font-semibold">{item.name}</span>
-            <span className="text-xl font-medium">
-              {formatCurrency(item.price)}
-            </span>
+            <span className="text-xl font-medium">{formatCurrency(item.price)}</span>
             <span className="">Quantity: {item.quantity}</span>
           </div>
         </div>
       ))}
-      <p className="text-3xl font-semibold text-right p-2">
-        Total: {formatCurrency(cartSubtotal)}
-      </p>
+      <p className="text-3xl font-semibold text-right p-2">Total: {formatCurrency(cartSubtotal)}</p>
     </div>
   );
 };

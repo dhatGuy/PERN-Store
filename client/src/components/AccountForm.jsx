@@ -46,9 +46,7 @@ const AccountForm = ({ setShowSettings, userData }) => {
           className="border-t border-gray-200 grid grid-cols-1"
         >
           <Label className="bg-gray-50 px-4 py-5">
-            <span className="text-sm font-medium text-gray-500 w-1/4">
-              Full name
-            </span>
+            <span className="text-sm font-medium text-gray-500 w-1/4">Full name</span>
             <Input
               name="fullname"
               ref={register}
@@ -62,22 +60,16 @@ const AccountForm = ({ setShowSettings, userData }) => {
               ref={register}
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
             />
-            {validationError && (
-              <HelperText valid={false}>{validationError.username}</HelperText>
-            )}
+            {validationError && <HelperText valid={false}>{validationError.username}</HelperText>}
           </Label>
           <div className="bg-gray-50 px-4 py-5 ">
-            <span className="text-sm font-medium text-gray-500">
-              Email address
-            </span>
+            <span className="text-sm font-medium text-gray-500">Email address</span>
             <Input
               name="email"
               ref={register}
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
             />
-            {validationError && (
-              <HelperText valid={false}>{validationError.email}</HelperText>
-            )}
+            {validationError && <HelperText valid={false}>{validationError.email}</HelperText>}
           </div>
           <div className="bg-white px-4 py-5 ">
             <span className="text-sm font-medium text-gray-500">Address</span>
@@ -113,17 +105,9 @@ const AccountForm = ({ setShowSettings, userData }) => {
           </div>
           <div className="px-4 py-5 space-x-4">
             <Button disabled={isSaving} type="submit">
-              {isSaving ? (
-                <PulseLoader color={"#0a138b"} size={10} loading={isSaving} />
-              ) : (
-                "Save"
-              )}
+              {isSaving ? <PulseLoader color={"#0a138b"} size={10} loading={isSaving} /> : "Save"}
             </Button>
-            <Button
-              disabled={isSaving}
-              onClick={() => setShowSettings(false)}
-              layout="outline"
-            >
+            <Button disabled={isSaving} onClick={() => setShowSettings(false)} layout="outline">
               Cancel
             </Button>
           </div>

@@ -3,15 +3,12 @@ class LocalCart {
 
   getItems = () => JSON.parse(localStorage.getItem("__cart")) || [];
 
-  getItem = (id) =>
-    this.getItems().find((product) => product.product_id === id);
+  getItem = (id) => this.getItems().find((product) => product.product_id === id);
 
   saveItems = (data) => localStorage.setItem("__cart", JSON.stringify(data));
 
   removeItem = (id) =>
-    this.saveItems(
-      this.getItems().filter((product) => product.product_id !== id)
-    );
+    this.saveItems(this.getItems().filter((product) => product.product_id !== id));
 
   incrementQuantity = (id) =>
     this.saveItems(
@@ -55,7 +52,7 @@ class LocalCart {
       this.saveItems([...this.getItems(), product]);
     }
   };
-  clearCart = () => localStorage.removeItem("__cart")
+  clearCart = () => localStorage.removeItem("__cart");
 }
 
 export default new LocalCart();

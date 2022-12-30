@@ -111,7 +111,7 @@ module.exports = {
           price: {
             type: "integer", // data-type
             description: "Product price", // desc
-            example: 456.79
+            example: 456.79,
           },
           description: {
             type: "string", // data-type
@@ -124,12 +124,12 @@ module.exports = {
           subtotal: {
             type: "integer", // data type
             description: "Product total price", // desc
-            example: 3009.10
+            example: 3009.1,
           },
           quantity: {
             type: "number", // data type
             description: "Total number in cart", // desc
-            example: 5
+            example: 5,
           },
         },
       },
@@ -269,8 +269,8 @@ module.exports = {
       cookie: {
         type: "apiKey",
         in: "cookie",
-        name: "refreshToken"
-      }
+        name: "refreshToken",
+      },
     },
   },
 };

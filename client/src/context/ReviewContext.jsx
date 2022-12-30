@@ -5,9 +5,7 @@ const ReviewContext = createContext();
 const ReviewProvider = ({ children }) => {
   const [reviews, setReviews] = useState(null);
   return (
-    <ReviewContext.Provider value={{ reviews, setReviews }}>
-      {children}
-    </ReviewContext.Provider>
+    <ReviewContext.Provider value={{ reviews, setReviews }}>{children}</ReviewContext.Provider>
   );
 };
 

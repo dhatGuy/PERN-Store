@@ -1,5 +1,5 @@
 {
-  "name": "ecomm-api",
+  "name": "server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,7 +9,8 @@
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
     "test:watch": "cross-env NODE_ENV=test jest --verbose --runInBand --watch",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write ."
   },
   "jest": {
     "testEnvironment": "node",
@@ -44,10 +45,12 @@
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "cross-env": "^7.0.3",
-    "eslint": "^7.25.0",
+    "eslint": "^7.32.0",
     "eslint-plugin-babel": "^5.3.1",
+    "eslint-plugin-prettier": "^4.2.1",
     "nodemon": "^2.0.20",
     "pino-pretty": "^4.8.0",
+    "prettier": "^2.8.1",
     "supertest": "^6.1.3"
   }
 }

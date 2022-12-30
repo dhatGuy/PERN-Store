@@ -18,9 +18,7 @@ const CartProvider = ({ children }) => {
       const saveLocalCart = async () => {
         const cartObj = localCart
           .getItems()
-          .map(({ product_id, quantity }) =>
-            cartService.addToCart(product_id, quantity)
-          );
+          .map(({ product_id, quantity }) => cartService.addToCart(product_id, quantity));
         await Promise.all(cartObj);
         localCart.clearCart();
         cartService.getCart().then((res) => {
@@ -53,10 +51,7 @@ const CartProvider = ({ children }) => {
   const addItem = async (product, quantity) => {
     if (isLoggedIn) {
       try {
-        const { data } = await cartService.addToCart(
-          product.product_id,
-          quantity
-        );
+        const { data } = await cartService.addToCart(product.product_id, quantity);
         setCartData({ items: [...data.data] });
       } catch (error) {
         return error;
