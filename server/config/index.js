@@ -1,5 +1,6 @@
 require("dotenv").config();
 const { Pool } = require("pg");
+const { logger } = require("../utils/logger");
 
 const isProduction = process.env.NODE_ENV === "production";
 const database =
@@ -8,7 +9,7 @@ const database =
     : process.env.POSTGRES_DB;
 
 const connectionString = `postgresql://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:${process.env.POSTGRES_PORT}/${database}`;
-
+logger.log(connectionString);
 const pool = new Pool({
   connectionString,
   /*
