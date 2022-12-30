@@ -19,6 +19,6 @@ module.exports = {
     {
       name: "Cart",
       description: "API for cart",
-    }
+    },
   ],
 };

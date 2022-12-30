@@ -40,21 +40,13 @@
       "description": "API for reviews"
     }
   ],
-  "schemes": [
-    "http"
-  ],
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
   "paths": {
     "/users": {
       "get": {
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "summary": "Get all users available",
         "responses": {
           "200": {
@@ -70,9 +62,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "description": "Create new user in system",
         "summary": "Create a new user",
         "parameters": [
@@ -115,9 +105,7 @@
         }
       ],
       "get": {
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "description": "Get a single user by id",
         "summary": "Get a single user",
         "parameters": [
@@ -149,9 +137,7 @@
       },
       "put": {
         "summary": "Update user with give ID",
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "security": [
           {
             "JWT": []
@@ -183,9 +169,7 @@
             "JWT": []
           }
         ],
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "parameters": [
           {
             "name": "id",
@@ -210,9 +194,7 @@
     },
     "/auth/login": {
       "post": {
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "description": "Login into the system",
         "summary": "Login",
         "parameters": [
@@ -232,9 +214,7 @@
     },
     "/auth/signup": {
       "post": {
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "description": "Create an account",
         "summary": "Sign up",
         "parameters": [

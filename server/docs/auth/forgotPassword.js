@@ -13,11 +13,11 @@ module.exports = {
         "application/json": {
           schema: {
             type: "object",
-            properties:{
-              email:{
+            properties: {
+              email: {
                 type: "string",
-              }
-            }
+              },
+            },
           },
         },
       },

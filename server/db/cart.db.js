@@ -1,9 +1,7 @@
 const pool = require("../config");
 
 const createCartDb = async (userId) => {
-  const {
-    rows: cart,
-  } = await pool.query(
+  const { rows: cart } = await pool.query(
     "INSERT INTO cart(user_id) values($1) returning cart.id",
     [userId]
   );
@@ -45,9 +43,7 @@ const addItemDb = async ({ cart_id, product_id, quantity }) => {
 
 // delete item from cart
 const deleteItemDb = async ({ cart_id, product_id }) => {
-  const {
-    rows,
-  } = await pool.query(
+  const { rows } = await pool.query(
     "delete from cart_item where cart_id = $1 AND product_id = $2 returning *",
     [cart_id, product_id]
   );

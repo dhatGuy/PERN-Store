@@ -20,7 +20,7 @@ beforeEach(async () => {
       hashedPassword,
       "admin@email.com",
       "admin",
-      "{\"customer\", \"admin\"}",
+      '{"customer", "admin"}',
     ]
   );
 
