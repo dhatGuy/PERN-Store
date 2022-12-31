@@ -4,12 +4,15 @@ import { OrderProvider } from "context/OrderContext";
 import { ProductProvider } from "context/ProductContext";
 import { ReviewProvider } from "context/ReviewContext";
 import { UserProvider } from "context/UserContext";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App";
 import "./tailwind.output.css";
 
-ReactDOM.render(
+const container = document.getElementById("root");
+const root = createRoot(container);
+
+root.render(
   <HelmetProvider>
     <Windmill>
       <UserProvider>
@@ -24,6 +27,5 @@ ReactDOM.render(
         </ProductProvider>
       </UserProvider>
     </Windmill>
-  </HelmetProvider>,
-  document.getElementById("root")
+  </HelmetProvider>
 );
