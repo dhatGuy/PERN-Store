@@ -1,6 +1,5 @@
 import { useCart } from "context/CartContext";
 import { formatCurrency } from "helpers/formatCurrency";
-import React from "react";
 
 const OrderSummary = () => {
   const { cartData, cartSubtotal } = useCart();

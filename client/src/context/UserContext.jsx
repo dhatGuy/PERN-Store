@@ -1,6 +1,6 @@
 import API from "api/axios.config";
 import WithAxios from "helpers/WithAxios";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import authService from "services/auth.service";
 
 const UserContext = createContext();

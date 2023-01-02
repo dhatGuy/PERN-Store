@@ -1,7 +1,6 @@
 import { Button, TableCell } from "@windmill/react-ui";
 import { useCart } from "context/CartContext";
 import { formatCurrency } from "helpers/formatCurrency";
-import React from "react";
 
 const CartItem = ({ item }) => {
   const { decrement, increment, deleteItem } = useCart();

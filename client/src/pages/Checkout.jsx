@@ -1,26 +1,26 @@
-import Layout from "layout/Layout";
-import React, { useEffect, useState } from "react";
 import AddressForm from "components/AddressForm";
 import PaymentForm from "components/PaymentForm";
-import { useHistory, useLocation } from "react-router";
 import { useCart } from "context/CartContext";
+import Layout from "layout/Layout";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
 
 const Checkout = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [addressData, setAddressData] = useState();
   const { state } = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { cartData } = useCart();
 
   useEffect(() => {
     if (!state?.fromCartPage) {
-      return history.push("/cart");
+      return navigate("/cart");
     }
 
     if (cartData.items.length === 0) {
-      return history.push("/cart");
+      return navigate("/cart");
     }
-  }, [cartData, history, state]);
+  }, [cartData, navigate, state]);
 
   const nextStep = () => setActiveStep((prevStep) => setActiveStep(prevStep + 1));
   const previousStep = () => setActiveStep((prevStep) => setActiveStep(prevStep - 1));

@@ -1,6 +1,5 @@
 import { Button, CardBody } from "@windmill/react-ui";
 import { useCart } from "context/CartContext";
-import React from "react";
 import { ShoppingCart } from "react-feather";
 import { Link } from "react-router-dom";
 import { formatCurrency } from "../helpers/formatCurrency";

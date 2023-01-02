@@ -1,6 +1,5 @@
 import { Card, CardBody } from "@windmill/react-ui";
 import { format, parseISO } from "date-fns";
-import React from "react";
 import ReactStars from "react-rating-stars-component";
 
 const ReviewCard = ({ reviews }) => {

@@ -3,7 +3,6 @@ import Product from "components/Product";
 import Spinner from "components/Spinner";
 import { useProduct } from "context/ProductContext";
 import Layout from "layout/Layout";
-import React from "react";
 
 const ProductList = () => {
   const { products, setPage } = useProduct();

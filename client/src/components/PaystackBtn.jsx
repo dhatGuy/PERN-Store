@@ -1,23 +1,21 @@
 import { Button } from "@windmill/react-ui";
 import { useCart } from "context/CartContext";
 import { useUser } from "context/UserContext";
-import React from "react";
 import toast from "react-hot-toast";
 import { usePaystackPayment } from "react-paystack";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router-dom";
 import orderService from "services/order.service";
 
 const PaystackBtn = ({ isProcessing, setIsProcessing }) => {
   const { cartSubtotal, cartTotal, cartData, setCartData } = useCart();
   const { userData } = useUser();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const onSuccess = (data) => {
     orderService.createOrder(cartSubtotal, cartTotal, data.reference, "PAYSTACK").then(() => {
       setCartData({ ...cartData, items: [] });
       setIsProcessing(false);
-      history.push({
-        pathname: "/cart/success",
+      navigate("/cart/success", {
         state: {
           fromPaymentPage: true,
         },

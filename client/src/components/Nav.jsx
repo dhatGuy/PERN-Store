@@ -1,10 +1,9 @@
-import { Badge, Button, Dropdown, DropdownItem } from "@windmill/react-ui";
+import { Badge, Button, Dropdown, DropdownItem, Transition } from "@windmill/react-ui";
 import { useCart } from "context/CartContext";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { LogOut, ShoppingCart, User } from "react-feather";
 import { useUser } from "context/UserContext";
-import { Transition } from "@windmill/react-ui";
+import { useState } from "react";
+import { LogOut, ShoppingCart, User } from "react-feather";
+import { Link } from "react-router-dom";
 
 const Nav = () => {
   const { cartTotal } = useCart();

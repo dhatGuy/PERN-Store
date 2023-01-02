@@ -1,6 +1,5 @@
 import Nav from "components/Nav";
 import Spinner from "components/Spinner";
-import React from "react";
 import { Helmet } from "react-helmet-async";
 
 const Layout = ({ children, title, loading }) => {
@@ -11,7 +10,7 @@ const Layout = ({ children, title, loading }) => {
         <title>{title || "Home"} | PERN Store </title>
         <meta
           name="description"
-          content="Ecommerce store built with React, Node, Express and Postgres"
+          content="E-commerce store built with React, Node, Express and Postgres"
         />
         <meta
           name="robots"
@@ -23,7 +22,7 @@ const Layout = ({ children, title, loading }) => {
         <meta property="og:title" content="PERN Store" />
         <meta
           property="og:description"
-          content="Ecommerce store built with React, Node, Express and Postgres"
+          content="E-commerce store built with React, Node, Express and Postgres"
         />
         <meta property="og:url" content="https://pern-store.netlify.app/" />
         <meta property="og:site_name" content="PERN Store" />
@@ -34,7 +33,7 @@ const Layout = ({ children, title, loading }) => {
         <meta name="twitter:creator" content="@_odunsi_" />
         <meta
           name="twitter:description"
-          content="Ecommerce store built with React, Node, Express and Postgres"
+          content="E-commerce store built with React, Node, Express and Postgres"
         />
         <meta name="twitter:title" content="PERN Store" />
         <meta name="twitter:image" content="android-chrome-512x512.png" />
@@ -58,7 +57,7 @@ const Layout = ({ children, title, loading }) => {
 
         <footer className="mt-auto flex justify-center py-2">
           <p className="text-sm text-gray-600 sm:ml-4 sm:pl-4 sm:py-2 sm:mt-0 mt-4">
-            © 2021 PERN Store —
+            &copy; {new Date().getFullYear()} PERN Store —
             <a
               href="https://github.com/dhatguy"
               className="text-gray-500 ml-1"

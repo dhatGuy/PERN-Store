@@ -1,6 +1,6 @@
 import { Button, HelperText, Input, Label } from "@windmill/react-ui";
 import { useUser } from "context/UserContext";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import PulseLoader from "react-spinners/PulseLoader";
 

@@ -2,10 +2,10 @@ import { Button, HelperText, Input, Label } from "@windmill/react-ui";
 import API from "api/axios.config";
 import { useUser } from "context/UserContext";
 import Layout from "layout/Layout";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Link, Redirect, useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import PulseLoader from "react-spinners/PulseLoader";
 
 const Register = () => {
@@ -46,7 +46,7 @@ const Register = () => {
   };
 
   if (isLoggedIn) {
-    return <Redirect to={state?.from || "/"} />;
+    return <Navigate to={state?.from || "/"} />;
   }
   return (
     <Layout title="Create account">

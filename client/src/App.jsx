@@ -1,5 +1,4 @@
 import Spinner from "components/Spinner";
-import history from "helpers/history";
 import Layout from "layout/Layout";
 import {
   Account,
@@ -16,12 +15,12 @@ import {
 } from "pages";
 import { Suspense } from "react";
 import { Toaster } from "react-hot-toast";
-import { Route, Router, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "routes/protected.route";
 
 function App() {
   return (
-    <Router history={history}>
+    <BrowserRouter>
       <Suspense
         fallback={
           <Layout>
@@ -31,47 +30,59 @@ function App() {
       >
         <>
           <Toaster position="top-right" />
-          <Switch>
-            <ProtectedRoute exact path="/profile">
-              <Account />
-            </ProtectedRoute>
-            <Route path="/signup">
-              <Register />
-            </Route>
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route exact path={["/", "/products"]}>
-              <ProductList />
-            </Route>
-            <Route exact path="/products/:id/">
-              <ProductDetails />
-            </Route>
-            <ProtectedRoute exact path="/cart/checkout">
-              <Checkout />
-            </ProtectedRoute>
-            <ProtectedRoute exact path="/cart/success">
-              <Confirmation />
-            </ProtectedRoute>
-            <ProtectedRoute exact path="/orders">
-              <Orders />
-            </ProtectedRoute>
-            <ProtectedRoute exact path="/orders/:id/">
-              <OrderDetails />
-            </ProtectedRoute>
-            <Route path="/cart">
-              <Cart />
-            </Route>
-            <Route path="/reset-password">
-              <ResetPassword />
-            </Route>
-            <Route path="*">
-              <h1>404 Error Found</h1>
-            </Route>
-          </Switch>
+          <Routes>
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Account />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/signup" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route index element={<ProductList />} />
+            <Route path="/products/:id/" element={<ProductDetails />} />
+            <Route
+              path="/cart/checkout"
+              element={
+                <ProtectedRoute>
+                  <Checkout />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/cart/success"
+              element={
+                <ProtectedRoute>
+                  <Confirmation />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders"
+              element={
+                <ProtectedRoute>
+                  <Orders />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders/:id/"
+              element={
+                <ProtectedRoute>
+                  <OrderDetails />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/cart" element={<Cart />} />
+
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="*" element={<h1>404 Error Found</h1>}></Route>
+          </Routes>
         </>
       </Suspense>
-    </Router>
+    </BrowserRouter>
   );
 }
 

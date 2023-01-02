@@ -1,20 +1,20 @@
-import React, { useState } from "react";
 import {
+  Backdrop,
+  Button,
+  HelperText,
+  Label,
   Modal,
-  ModalHeader,
   ModalBody,
   ModalFooter,
-  Button,
-  Label,
+  ModalHeader,
   Textarea,
-  HelperText,
-  Backdrop,
 } from "@windmill/react-ui";
-import reviewService from "services/review.service";
-import toast from "react-hot-toast";
-import { useHistory } from "react-router-dom";
-import ReactStars from "react-rating-stars-component";
 import { useUser } from "context/UserContext";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import ReactStars from "react-rating-stars-component";
+import { useNavigate } from "react-router-dom";
+import reviewService from "services/review.service";
 
 const ReviewModal = ({ product_id, reviews }) => {
   const { userData } = useUser();
@@ -23,7 +23,7 @@ const ReviewModal = ({ product_id, reviews }) => {
   const [rating, setRating] = useState(1);
   const [content, setContent] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const addReview = () => {
     reviewService
@@ -32,7 +32,7 @@ const ReviewModal = ({ product_id, reviews }) => {
         toast.success("Review added successfully");
         setRating(1);
         setContent("");
-        history.go(0);
+        navigate(0);
       })
       .catch((error) => {
         toast.error("Error: ", error.response);
@@ -46,7 +46,7 @@ const ReviewModal = ({ product_id, reviews }) => {
         toast.success("Review updated successfully");
         setRating(1);
         setContent("");
-        history.go(0);
+        navigate(0);
       })
       .catch((error) => {
         toast.error("Error: ", error.response);
