@@ -5,14 +5,13 @@
   "scripts": {
     "build:tailwind": "tailwindcss build src/tailwind.css -o src/tailwind.output.css",
     "prestart": "npm run build:tailwind",
-    "prebuild": "npm run build:tailwind && npm run sitemap",
+    "prebuild": "npm run build:tailwind",
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
-    "format": "prettier --write . --ignore-path .eslintignore",
-    "sitemap": "babel-node ./src/sitemap/sitemap.generator.js"
+    "format": "prettier --write . --ignore-path .eslintignore"
   },
   "dependencies": {
     "@stripe/react-stripe-js": "^1.16.1",
