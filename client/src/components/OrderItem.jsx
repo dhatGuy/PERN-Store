@@ -1,7 +1,6 @@
 import { Badge, TableCell } from "@windmill/react-ui";
 import { format, parseISO } from "date-fns";
 import { formatCurrency } from "helpers/formatCurrency";
-import React from "react";
 
 const OrderItem = ({ order }) => {
   return (

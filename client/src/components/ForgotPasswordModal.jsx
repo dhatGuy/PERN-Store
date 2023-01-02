@@ -9,11 +9,11 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@windmill/react-ui";
-import React, { useState } from "react";
-import toast from "react-hot-toast";
-import authService from "services/auth.service";
-import PulseLoader from "react-spinners/PulseLoader";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import PulseLoader from "react-spinners/PulseLoader";
+import authService from "services/auth.service";
 
 const ForgotPasswordModal = () => {
   const [isOpen, setIsOpen] = useState(false);

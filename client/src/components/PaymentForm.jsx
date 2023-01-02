@@ -4,8 +4,8 @@ import { Button, HelperText } from "@windmill/react-ui";
 import API from "api/axios.config";
 import { useCart } from "context/CartContext";
 import { formatCurrency } from "helpers/formatCurrency";
-import React, { useState } from "react";
-import { useHistory } from "react-router";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PulseLoader from "react-spinners/PulseLoader";
 import OrderService from "services/order.service";
 import OrderSummary from "./OrderSummary";
@@ -16,7 +16,7 @@ const PaymentForm = ({ previousStep, addressData, nextStep }) => {
   const [error, setError] = useState();
   const [isProcessing, setIsProcessing] = useState(false);
   const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUB_KEY);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e, elements, stripe) => {
     e.preventDefault();
@@ -58,8 +58,7 @@ const PaymentForm = ({ previousStep, addressData, nextStep }) => {
       OrderService.createOrder(cartSubtotal, cartTotal, data.id, "STRIPE").then(() => {
         setCartData({ ...cartData, items: [] });
         setIsProcessing(false);
-        history.push({
-          pathname: "/cart/success",
+        navigate("/cart/success", {
           state: {
             fromPaymentPage: true,
           },

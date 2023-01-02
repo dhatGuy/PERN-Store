@@ -1,18 +1,18 @@
 import { Button, HelperText, Input, Label } from "@windmill/react-ui";
-import PulseLoader from "react-spinners/PulseLoader";
 import useQuery from "helpers/useQuery";
 import Layout from "layout/Layout";
-import React, { useEffect, useRef, useState } from "react";
-import toast from "react-hot-toast";
-import { useHistory } from "react-router-dom";
-import authService from "services/auth.service";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import PulseLoader from "react-spinners/PulseLoader";
+import authService from "services/auth.service";
 
 const ResetPassword = () => {
   const [msg, setMsg] = useState("");
   const [resetmsg, setResetMsg] = useState("");
   const [isResetting, setIsResetting] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
   const query = useQuery();
   const token = query.get("token");
   const email = query.get("email");
@@ -39,7 +39,7 @@ const ResetPassword = () => {
         }
         toast.success(data.message);
         setTimeout(() => {
-          history.push("/login");
+          navigate("/login");
         }, 2000);
       })
       .catch((err) => {

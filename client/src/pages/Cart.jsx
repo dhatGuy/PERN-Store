@@ -1,20 +1,19 @@
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableFooter,
+  TableHeader,
+  TableRow,
+} from "@windmill/react-ui";
 import CartItem from "components/CartItem";
 import { useCart } from "context/CartContext";
-import Layout from "layout/Layout";
-import React from "react";
-import { Link } from "react-router-dom";
-import {
-  TableContainer,
-  Table,
-  TableHeader,
-  TableBody,
-  TableRow,
-  TableCell,
-  TableFooter,
-  Button,
-} from "@windmill/react-ui";
-import { ShoppingCart } from "react-feather";
 import { formatCurrency } from "helpers/formatCurrency";
+import Layout from "layout/Layout";
+import { ShoppingCart } from "react-feather";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
   const { cartData, isLoading, cartSubtotal } = useCart();
@@ -62,11 +61,9 @@ const Cart = () => {
           <div className="mb-2">Total: {formatCurrency(cartSubtotal)}</div>
           <Button
             tag={Link}
-            to={{
-              pathname: "/cart/checkout",
-              state: {
-                fromCartPage: true,
-              },
+            to={"/cart/checkout"}
+            state={{
+              fromCartPage: true,
             }}
           >
             Checkout

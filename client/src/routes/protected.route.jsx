@@ -1,24 +1,13 @@
 import { useUser } from "context/UserContext";
-import React from "react";
-import { Redirect, Route } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
-export const ProtectedRoute = ({ children, ...rest }) => {
+export const ProtectedRoute = ({ redirectPath = "/login", children }) => {
   const { isLoggedIn } = useUser();
-  return (
-    <Route
-      {...rest}
-      render={({ location }) => {
-        return isLoggedIn ? (
-          children
-        ) : (
-          <Redirect
-            to={{
-              pathname: "/login",
-              state: { from: location },
-            }}
-          />
-        );
-      }}
-    />
-  );
+  const location = useLocation();
+
+  if (!isLoggedIn) {
+    return <Navigate to={redirectPath} state={{ from: location }} replace />;
+  }
+
+  return children;
 };

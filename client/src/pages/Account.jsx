@@ -3,10 +3,10 @@ import AccountForm from "components/AccountForm";
 import { useUser } from "context/UserContext";
 import Layout from "layout/Layout";
 import { useState } from "react";
-import toast from "react-hot-toast";
-import authService from "services/auth.service";
-import PulseLoader from "react-spinners/PulseLoader";
 import { Edit2 } from "react-feather";
+import toast from "react-hot-toast";
+import PulseLoader from "react-spinners/PulseLoader";
+import authService from "services/auth.service";
 
 const Account = () => {
   const { userData } = useUser();

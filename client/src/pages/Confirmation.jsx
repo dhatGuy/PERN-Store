@@ -1,20 +1,20 @@
-import React, { useEffect } from "react";
-import { Link, useHistory, useLocation } from "react-router-dom";
 import { Button } from "@windmill/react-ui";
 import { useUser } from "context/UserContext";
-import { CheckCircle } from "react-feather";
 import Layout from "layout/Layout";
+import { useEffect } from "react";
+import { CheckCircle } from "react-feather";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Confirmation = () => {
   const { state } = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { userData } = useUser();
 
   useEffect(() => {
     if (!state?.fromPaymentPage) {
-      return history.push("/");
+      return navigate("/");
     }
-  }, [history, state]);
+  }, [state]);
 
   return (
     <Layout>

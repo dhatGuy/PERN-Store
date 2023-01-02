@@ -2,11 +2,11 @@ import { Button, HelperText, Input, Label } from "@windmill/react-ui";
 import ForgotPasswordModal from "components/ForgotPasswordModal";
 import { useUser } from "context/UserContext";
 import Layout from "layout/Layout";
-import React, { useState } from "react";
+import { useState } from "react";
 import GoogleLogin from "react-google-login";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Link, Redirect, useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import PulseLoader from "react-spinners/PulseLoader";
 import authService from "services/auth.service";
 
@@ -53,10 +53,10 @@ const Login = () => {
   };
 
   if (redirectToReferrer) {
-    return <Redirect to={state?.from || "/"} />;
+    return <Navigate to={state?.from || "/"} />;
   }
   if (isLoggedIn) {
-    return <Redirect to={state?.from || "/"} />;
+    return <Navigate to={state?.from || "/"} />;
   }
 
   return (

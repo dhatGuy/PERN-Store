@@ -11,23 +11,20 @@ import {
 import OrderItem from "components/OrderItem";
 import { useOrders } from "context/OrderContext";
 import Layout from "layout/Layout";
-import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import orderService from "services/order.service";
 
 const Orders = () => {
   const { orders, setOrders } = useOrders();
   const [currentPage, setCurrentPage] = useState(1);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handlePage = (num) => {
     setCurrentPage(num);
   };
   const goToDetails = (order) => {
-    history.push({
-      pathname: `orders/${order.order_id}`,
-      state: { order },
-    });
+    navigate(`orders/${order.order_id}`, { state: { order } });
   };
   useEffect(() => {
     orderService.getAllOrders(currentPage).then((res) => setOrders(res.data));
