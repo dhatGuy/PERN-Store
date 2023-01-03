@@ -1,24 +1,24 @@
 import { Button, HelperText, Input, Label } from "@windmill/react-ui";
 import { useUser } from "context/UserContext";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import PulseLoader from "react-spinners/PulseLoader";
 
 const AccountForm = ({ setShowSettings, userData }) => {
-  const { register, handleSubmit, setValue } = useForm();
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      fullname: userData?.fullname,
+      email: userData?.email,
+      username: userData?.username,
+      address: userData?.address,
+      country: userData?.country,
+      city: userData?.city,
+      state: userData?.state,
+    },
+  });
   const [validationError, setValidationError] = useState();
   const [isSaving, setIsSaving] = useState(false);
   const { updateUserData } = useUser();
-
-  useEffect(() => {
-    setValue("fullname", userData?.fullname);
-    setValue("email", userData?.email);
-    setValue("username", userData?.username);
-    setValue("address", userData?.address);
-    setValue("country", userData?.country);
-    setValue("city", userData?.city);
-    setValue("state", userData?.state);
-  }, [setValue, userData]);
 
   const onSubmit = async (data) => {
     setValidationError();
@@ -66,7 +66,14 @@ const AccountForm = ({ setShowSettings, userData }) => {
             <span className="text-sm font-medium text-gray-500">Email address</span>
             <Input
               name="email"
-              ref={register}
+              ref={register({
+                required: "Email required",
+                pattern: {
+                  // eslint-disable-next-line no-useless-escape
+                  value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                  message: "Email not valid",
+                },
+              })}
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
             />
             {validationError && <HelperText valid={false}>{validationError.email}</HelperText>}

@@ -1,21 +1,21 @@
 import { Button, HelperText, Input, Label } from "@windmill/react-ui";
 import { useUser } from "context/UserContext";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
 const PaymentForm = ({ next }) => {
   const { userData } = useUser();
-  const { register, handleSubmit, errors, setValue } = useForm();
-
-  useEffect(() => {
-    setValue("fullname", userData?.fullname);
-    setValue("email", userData?.email);
-    setValue("address", userData?.address);
-    setValue("country", userData?.country);
-    setValue("city", userData?.city);
-    setValue("state", userData?.state);
-  }, [setValue, userData]);
+  const { register, handleSubmit, errors, setValue } = useForm({
+    defaultValues: {
+      fullname: userData?.fullname,
+      email: userData?.email,
+      username: userData?.username,
+      address: userData?.address,
+      country: userData?.country,
+      city: userData?.city,
+      state: userData?.state,
+    },
+  });
 
   return (
     <div className="w-full">

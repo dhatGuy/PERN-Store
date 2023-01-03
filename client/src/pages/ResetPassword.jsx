@@ -10,7 +10,7 @@ import authService from "services/auth.service";
 
 const ResetPassword = () => {
   const [msg, setMsg] = useState("");
-  const [resetmsg, setResetMsg] = useState("");
+  const [resetMsg, setResetMsg] = useState("");
   const [isResetting, setIsResetting] = useState(false);
   const navigate = useNavigate();
   const query = useQuery();
@@ -72,12 +72,12 @@ const ResetPassword = () => {
                 />
                 {errors.password && errors.password.type === "required" && (
                   <HelperText className="pt-2" valid={false}>
-                    {resetmsg.message}
+                    {resetMsg.message}
                   </HelperText>
                 )}
                 {errors.password && errors.password.type === "minLength" && (
                   <HelperText className="pt-2" valid={false}>
-                    {resetmsg.message}
+                    {resetMsg.message}
                   </HelperText>
                 )}
               </Label>
@@ -95,12 +95,12 @@ const ResetPassword = () => {
               </Label>
               {errors.password && errors.password.type === "required" && (
                 <HelperText className="pt-2" valid={false}>
-                  {resetmsg.message}
+                  {resetMsg.message}
                 </HelperText>
               )}
-              {resetmsg && (
+              {resetMsg && (
                 <HelperText className="pt-2" valid={false}>
-                  {resetmsg.message || ""}
+                  {resetMsg.message || ""}
                 </HelperText>
               )}
               <Button type="submit" disabled={isResetting}>
