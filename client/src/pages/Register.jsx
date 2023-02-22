@@ -13,7 +13,12 @@ const Register = () => {
   const [error, setError] = useState("");
   const { state } = useLocation();
   const { isLoggedIn, setUserState } = useUser();
-  const { register, errors, handleSubmit, watch } = useForm();
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    watch,
+  } = useForm();
   const password = useRef({});
   password.current = watch("password", "");
 
@@ -64,7 +69,7 @@ const Register = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
               type="text"
               name="username"
-              ref={register({
+              {...register("username", {
                 minLength: {
                   value: 4,
                   message: "Username must be greater than 3 characters",
@@ -73,12 +78,7 @@ const Register = () => {
               })}
             />
           </div>
-          {errors.username && errors.username.type === "required" && (
-            <HelperText className="pt-2" valid={false}>
-              {errors.username.message}
-            </HelperText>
-          )}
-          {errors.username && errors.username.type === "minLength" && (
+          {errors?.username && (
             <HelperText className="pt-2" valid={false}>
               {errors.username.message}
             </HelperText>
@@ -91,7 +91,7 @@ const Register = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
               type="text"
               name="name"
-              ref={register({
+              {...register("name", {
                 required: "Name cannot be empty",
                 minLength: {
                   value: 6,
@@ -100,12 +100,7 @@ const Register = () => {
               })}
             />
           </div>
-          {errors.name && errors.name.type === "required" && (
-            <HelperText className="pt-2" valid={false}>
-              {errors.name.message}
-            </HelperText>
-          )}
-          {errors.name && errors.name.type === "minLength" && (
+          {errors.name && (
             <HelperText className="pt-2" valid={false}>
               {errors.name.message}
             </HelperText>
@@ -118,7 +113,7 @@ const Register = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
               type="email"
               name="email"
-              ref={register({
+              {...register("email", {
                 required: "Email required",
                 pattern: {
                   // eslint-disable-next-line no-useless-escape
@@ -128,12 +123,7 @@ const Register = () => {
               })}
             />
           </div>
-          {errors.email && errors.email.type === "required" && (
-            <HelperText className="pt-2" valid={false}>
-              {errors.email.message}
-            </HelperText>
-          )}
-          {errors.email && errors.email.type === "pattern" && (
+          {errors.email && (
             <HelperText className="pt-2" valid={false}>
               {errors.email.message}
             </HelperText>
@@ -146,7 +136,7 @@ const Register = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
               type="password"
               name="password"
-              ref={register({
+              {...register("password", {
                 required: "Password required",
                 minLength: {
                   value: 6,
@@ -155,12 +145,7 @@ const Register = () => {
               })}
             />
           </div>
-          {errors.password && errors.password.type === "required" && (
-            <HelperText className="pt-2" valid={false}>
-              {errors.password.message}
-            </HelperText>
-          )}
-          {errors.password && errors.password.type === "pattern" && (
+          {errors.password && (
             <HelperText className="pt-2" valid={false}>
               {errors.password.message}
             </HelperText>
@@ -173,7 +158,7 @@ const Register = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
               type="password"
               name="password2"
-              ref={register({
+              {...register("password2", {
                 validate: (value) => value === password.current || "Passwords do not match",
               })}
             />

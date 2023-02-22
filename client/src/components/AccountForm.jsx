@@ -49,7 +49,7 @@ const AccountForm = ({ setShowSettings, userData }) => {
             <span className="text-sm font-medium text-gray-500 w-1/4">Full name</span>
             <Input
               name="fullname"
-              ref={register}
+              {...register("fullname")}
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
             />
           </Label>
@@ -57,7 +57,7 @@ const AccountForm = ({ setShowSettings, userData }) => {
             <span className="text-sm font-medium text-gray-500">Username</span>
             <Input
               name="username"
-              ref={register}
+              {...register("username")}
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
             />
             {validationError && <HelperText valid={false}>{validationError.username}</HelperText>}
@@ -66,7 +66,7 @@ const AccountForm = ({ setShowSettings, userData }) => {
             <span className="text-sm font-medium text-gray-500">Email address</span>
             <Input
               name="email"
-              ref={register({
+              {...register("email", {
                 required: "Email required",
                 pattern: {
                   // eslint-disable-next-line no-useless-escape
@@ -82,7 +82,7 @@ const AccountForm = ({ setShowSettings, userData }) => {
             <span className="text-sm font-medium text-gray-500">Address</span>
             <Input
               name="address"
-              ref={register}
+              {...register("address")}
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
             />
           </div>
@@ -90,7 +90,7 @@ const AccountForm = ({ setShowSettings, userData }) => {
             <span className="text-sm font-medium text-gray-500">City</span>
             <Input
               name="city"
-              ref={register}
+              {...register("city")}
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
             />
           </div>
@@ -98,7 +98,7 @@ const AccountForm = ({ setShowSettings, userData }) => {
             <span className="text-sm font-medium text-gray-500">State</span>
             <Input
               name="state"
-              ref={register}
+              {...register("state")}
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
             />
           </div>
@@ -106,7 +106,7 @@ const AccountForm = ({ setShowSettings, userData }) => {
             <span className="text-sm font-medium text-gray-500">Country</span>
             <Input
               name="country"
-              ref={register}
+              {...register("country")}
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
             />
           </div>

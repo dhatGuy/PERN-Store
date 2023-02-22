@@ -16,7 +16,16 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [redirectToReferrer, setRedirectToReferrer] = useState(false);
   const { state } = useLocation();
-  const { register, handleSubmit, errors } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
   const handleGoogleLogin = async (googleData) => {
     try {
@@ -75,7 +84,7 @@ const Login = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
               type="email"
               name="email"
-              ref={register({
+              {...register("email", {
                 required: true,
                 // eslint-disable-next-line no-useless-escape
                 pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
@@ -83,12 +92,12 @@ const Login = () => {
               placeholder="Enter a valid email"
             />
           </div>
-          {errors.email && errors.email.type === "required" && (
+          {errors?.email && errors?.email.type === "required" && (
             <HelperText className="mt-1 italic" valid={false}>
               Email required
             </HelperText>
           )}
-          {errors.email && errors.email.type === "pattern" && (
+          {errors?.email && errors?.email.type === "pattern" && (
             <HelperText className="mt-1 italic" valid={false}>
               Invalid email
             </HelperText>
@@ -101,12 +110,12 @@ const Login = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
               type="password"
               name="password"
-              ref={register({ required: true })}
+              {...register("password", { required: true })}
             />
           </div>
-          {errors.password && errors.password.type === "required" && (
+          {errors?.password && (
             <HelperText className="mt-1 italic" valid={false}>
-              Password required
+              {errors?.password?.type === "required" && "Password required"}
             </HelperText>
           )}
           {error && (
