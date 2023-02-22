@@ -10,13 +10,18 @@ import authService from "services/auth.service";
 
 const ResetPassword = () => {
   const [msg, setMsg] = useState("");
-  const [resetmsg, setResetMsg] = useState("");
+  const [resetMsg, setResetMsg] = useState("");
   const [isResetting, setIsResetting] = useState(false);
   const navigate = useNavigate();
   const query = useQuery();
   const token = query.get("token");
   const email = query.get("email");
-  const { register, handleSubmit, errors, watch } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm();
   const password = useRef({});
   password.current = watch("password", "");
 
@@ -62,7 +67,7 @@ const ResetPassword = () => {
                   type="password"
                   inputMode="password"
                   name="password"
-                  ref={register({
+                  {...register("password", {
                     required: "Password cannot be empty",
                     minLength: {
                       value: 6,
@@ -70,14 +75,9 @@ const ResetPassword = () => {
                     },
                   })}
                 />
-                {errors.password && errors.password.type === "required" && (
+                {resetMsg && (
                   <HelperText className="pt-2" valid={false}>
-                    {resetmsg.message}
-                  </HelperText>
-                )}
-                {errors.password && errors.password.type === "minLength" && (
-                  <HelperText className="pt-2" valid={false}>
-                    {resetmsg.message}
+                    {resetMsg.message || ""}
                   </HelperText>
                 )}
               </Label>
@@ -88,19 +88,19 @@ const ResetPassword = () => {
                   type="password"
                   inputMode="password"
                   name="password2"
-                  ref={register({
+                  {...register("password2", {
                     validate: (value) => value === password.current || "Passwords do not match",
                   })}
                 />
               </Label>
-              {errors.password && errors.password.type === "required" && (
+              {errors.password && (
                 <HelperText className="pt-2" valid={false}>
-                  {resetmsg.message}
+                  {resetMsg.message}
                 </HelperText>
               )}
-              {resetmsg && (
+              {resetMsg && (
                 <HelperText className="pt-2" valid={false}>
-                  {resetmsg.message || ""}
+                  {resetMsg.message || ""}
                 </HelperText>
               )}
               <Button type="submit" disabled={isResetting}>

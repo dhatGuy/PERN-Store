@@ -19,7 +19,11 @@ const ForgotPasswordModal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [msg, setMsg] = useState("");
   const [isSending, setIsSending] = useState(false);
-  const { handleSubmit, register, errors } = useForm();
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm();
 
   const toggleModal = () => {
     setMsg("");
@@ -65,7 +69,7 @@ const ForgotPasswordModal = () => {
                   valid
                   type="email"
                   inputMode="email"
-                  ref={register({
+                  {...register("email", {
                     required: "Email required",
                     pattern: {
                       // eslint-disable-next-line no-useless-escape
@@ -75,12 +79,12 @@ const ForgotPasswordModal = () => {
                   })}
                 />
               </Label>
-              {errors.email && errors.email.type === "required" && (
+              {errors?.email && errors?.email.type === "required" && (
                 <HelperText className="mt-2" valid={false}>
                   {errors.email.message}
                 </HelperText>
               )}
-              {errors.email && errors.email.type === "pattern" && (
+              {errors?.email && errors?.email.type === "pattern" && (
                 <HelperText className="mt-2" valid={false}>
                   {errors.email.message}
                 </HelperText>

@@ -1,21 +1,25 @@
 import { Button, HelperText, Input, Label } from "@windmill/react-ui";
 import { useUser } from "context/UserContext";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
 const PaymentForm = ({ next }) => {
   const { userData } = useUser();
-  const { register, handleSubmit, errors, setValue } = useForm();
-
-  useEffect(() => {
-    setValue("fullname", userData?.fullname);
-    setValue("email", userData?.email);
-    setValue("address", userData?.address);
-    setValue("country", userData?.country);
-    setValue("city", userData?.city);
-    setValue("state", userData?.state);
-  }, [setValue, userData]);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      fullname: userData?.fullname,
+      email: userData?.email,
+      username: userData?.username,
+      address: userData?.address,
+      country: userData?.country,
+      city: userData?.city,
+      state: userData?.state,
+    },
+  });
 
   return (
     <div className="w-full">
@@ -29,9 +33,9 @@ const PaymentForm = ({ next }) => {
           <Input
             disabled
             type="text"
-            className="shadow appearance-none border rounded w-full text-grey-darker mt-2 px-2 py-2 border focus:outline-none"
+            className="shadow appearance-none rounded w-full text-grey-darker mt-2 px-2 py-2 border focus:outline-none"
             name="fullname"
-            ref={register({ required: "Required" })}
+            {...register("fullname", { required: "Required" })}
           />
           {errors.fullname && <HelperText valid={false}>{errors.fullname.message}</HelperText>}
         </Label>
@@ -39,50 +43,50 @@ const PaymentForm = ({ next }) => {
           <span>Email</span>
           <Input
             disabled
-            className="shadow appearance-none border rounded w-full text-grey-darker mt-2 px-2 py-2 border focus:outline-none"
+            className="shadow appearance-none rounded w-full text-grey-darker mt-2 px-2 py-2 border focus:outline-none"
             type="text"
             name="email"
-            ref={register({ required: "Required" })}
+            {...register("email", { required: "Required" })}
           />
           {errors.email && <HelperText valid={false}>{errors.email.message}</HelperText>}
         </Label>
         <Label className="block text-grey-darker text-sm font-bold mb-4">
           <span>Address</span>
           <Input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker mt-2 px-2 py-2 border focus:outline-none"
+            className="shadow appearance-none rounded w-full text-grey-darker mt-2 px-2 py-2 border focus:outline-none"
             type="text"
             name="address"
-            ref={register({ required: "Required" })}
+            {...register("address", { required: "Required" })}
           />
           {errors.address && <HelperText valid={false}>{errors.address.message}</HelperText>}
         </Label>
         <Label className="block text-grey-darker text-sm font-bold mb-4">
           <span>Country</span>
           <Input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker mt-2 px-2 py-2 border focus:outline-none"
+            className="shadow appearance-none rounded w-full text-grey-darker mt-2 px-2 py-2 border focus:outline-none"
             type="text"
             name="country"
-            ref={register({ required: "Required" })}
+            {...register("country", { required: "Required" })}
           />
           {errors.country && <HelperText valid={false}>{errors.country.message}</HelperText>}
         </Label>
         <Label className="block text-grey-darker text-sm font-bold mb-4">
           <span>State/Region</span>
           <Input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker mt-2 px-2 py-2 border focus:outline-none"
+            className="shadow appearance-none rounded w-full text-grey-darker mt-2 px-2 py-2 border focus:outline-none"
             type="text"
             name="state"
-            ref={register({ required: "Required" })}
+            {...register("state", { required: "Required" })}
           />
           {errors.state && <HelperText valid={false}>{errors.state.message}</HelperText>}
         </Label>
         <Label className="block text-grey-darker text-sm font-bold mb-4">
           <span>City</span>
           <Input
-            className="shadow appearance-none border rounded w-full text-grey-darker mt-2 px-2 py-2 border focus:outline-none"
+            className="shadow appearance-none rounded w-full text-grey-darker mt-2 px-2 py-2 border focus:outline-none"
             type="text"
             name="city"
-            ref={register({ required: "Required" })}
+            {...register("city", { required: "Required" })}
           />
           {errors.city && <HelperText valid={false}>{errors.city.message}</HelperText>}
         </Label>
