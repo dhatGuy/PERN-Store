@@ -1,3 +1,4 @@
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Windmill } from "@windmill/react-ui";
 import { CartProvider } from "context/CartContext";
 import { OrderProvider } from "context/OrderContext";
@@ -12,20 +13,24 @@ import "./tailwind.output.css";
 const container = document.getElementById("root");
 const root = createRoot(container);
 
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
 root.render(
-  <HelmetProvider>
-    <Windmill>
-      <UserProvider>
-        <ProductProvider>
-          <ReviewProvider>
-            <CartProvider>
-              <OrderProvider>
-                <App />
-              </OrderProvider>
-            </CartProvider>
-          </ReviewProvider>
-        </ProductProvider>
-      </UserProvider>
-    </Windmill>
-  </HelmetProvider>
+  <GoogleOAuthProvider clientId={googleClientId}>
+    <HelmetProvider>
+      <Windmill>
+        <UserProvider>
+          <ProductProvider>
+            <ReviewProvider>
+              <CartProvider>
+                <OrderProvider>
+                  <App />
+                </OrderProvider>
+              </CartProvider>
+            </ReviewProvider>
+          </ProductProvider>
+        </UserProvider>
+      </Windmill>
+    </HelmetProvider>
+  </GoogleOAuthProvider>
 );

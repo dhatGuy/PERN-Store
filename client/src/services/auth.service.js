@@ -9,9 +9,9 @@ class AuthService {
     return data;
   }
 
-  async googleLogin(token) {
+  async googleLogin(code) {
     const { data } = await API.post("/auth/google", {
-      token,
+      code,
     });
     return data;
   }

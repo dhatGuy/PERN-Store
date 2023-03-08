@@ -41,9 +41,9 @@ const loginUser = async (req, res) => {
 };
 
 const googleLogin = async (req, res) => {
-  const { token } = req.body;
+  const { code } = req.body;
 
-  const user = await authService.googleLogin(token);
+  const user = await authService.googleLogin(code);
   res.header("auth-token", user.token);
   res.cookie("refreshToken", user.refreshToken, {
     httpOnly: true,

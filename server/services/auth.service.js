@@ -131,9 +131,9 @@ class AuthService {
     }
   }
 
-  async googleLogin(token) {
+  async googleLogin(code) {
     try {
-      const ticket = await this.verifyGoogleIdToken(token);
+      const ticket = await this.verifyGoogleIdToken(code);
       const { name, email, sub } = ticket.getPayload();
       const defaultUsername = name.replace(/ /g, "").toLowerCase();
 
@@ -272,12 +272,21 @@ class AuthService {
     }
   }
 
-  async verifyGoogleIdToken(token) {
-    const client = new OAuth2Client(process.env.CLIENT_ID);
-    return await client.verifyIdToken({
-      idToken: token,
-      audience: process.env.CLIENT_ID,
+  async verifyGoogleIdToken(code) {
+    // https://github.com/MomenSherif/react-oauth/issues/12#issuecomment-1131408898
+    const oauthClient = new OAuth2Client(
+      process.env.OAUTH_CLIENT_ID,
+      process.env.OAUTH_CLIENT_SECRET,
+      "postmessage"
+    );
+    const { tokens } = await oauthClient.getToken(code);
+
+    const ticket = await oauthClient.verifyIdToken({
+      idToken: tokens.id_token,
+      audience: process.env.OAUTH_CLIENT_ID,
     });
+
+    return ticket;
   }
 
   async signToken(data) {
