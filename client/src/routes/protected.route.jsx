@@ -1,5 +1,5 @@
 import { useUser } from "context/UserContext";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 export const ProtectedRoute = ({ redirectPath = "/login", children }) => {
   const { isLoggedIn } = useUser();
@@ -9,5 +9,5 @@ export const ProtectedRoute = ({ redirectPath = "/login", children }) => {
     return <Navigate to={redirectPath} state={{ from: location }} replace />;
   }
 
-  return children;
+  return children ? children : <Outlet />;
 };

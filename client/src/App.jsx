@@ -28,59 +28,24 @@ function App() {
           </Layout>
         }
       >
-        <>
-          <Toaster position="top-right" />
-          <Routes>
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <Account />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/signup" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route index element={<ProductList />} />
-            <Route path="/products/:id/" element={<ProductDetails />} />
-            <Route
-              path="/cart/checkout"
-              element={
-                <ProtectedRoute>
-                  <Checkout />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/cart/success"
-              element={
-                <ProtectedRoute>
-                  <Confirmation />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/orders"
-              element={
-                <ProtectedRoute>
-                  <Orders />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/orders/:id/"
-              element={
-                <ProtectedRoute>
-                  <OrderDetails />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/cart" element={<Cart />} />
+        <Toaster position="top-right" />
+        <Routes>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/profile" element={<Account />} />
+            <Route path="/cart/checkout" element={<Checkout />} />
+            <Route path="/cart/success" element={<Confirmation />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/orders/:id/" element={<OrderDetails />} />
+          </Route>
 
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="*" element={<h1>404 Error Found</h1>}></Route>
-          </Routes>
-        </>
+          <Route path="/signup" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route index element={<ProductList />} />
+          <Route path="/products/:id/" element={<ProductDetails />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="*" element={<h1>404 Error Found</h1>}></Route>
+        </Routes>
       </Suspense>
     </BrowserRouter>
   );
