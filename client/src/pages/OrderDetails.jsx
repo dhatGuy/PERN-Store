@@ -14,6 +14,7 @@ const OrderDetails = () => {
   useEffect(() => {
     orderService.getOrder(id).then((res) => setItems(res.data));
   }, [id]);
+
   return (
     <Layout>
       <div className="my-4">
