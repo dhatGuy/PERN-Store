@@ -18,6 +18,11 @@ const getProduct = async (req, res) => {
   res.status(200).json(product);
 };
 
+const getProductBySlug = async (req, res) => {
+  const product = await productService.getProductBySlug(req.params);
+  res.status(200).json(product);
+};
+
 const getProductByName = async (req, res) => {
   const product = await productService.getProductByName(req.params);
   res.status(200).json(product);
@@ -109,6 +114,7 @@ module.exports = {
   deleteProduct,
   getAllProducts,
   getProductByName,
+  getProductBySlug,
   getProductReviews,
   updateProductReview,
   createProductReview,

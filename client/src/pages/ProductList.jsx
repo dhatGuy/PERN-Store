@@ -24,7 +24,7 @@ const ProductList = () => {
 
   return (
     <Layout>
-      <div className="container py-20 mx-auto">
+      <div className="container py-20 mx-auto space-y-2">
         <Card className="flex flex-wrap h-full mx-2">
           {products?.map((prod) => (
             <div

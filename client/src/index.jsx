@@ -8,7 +8,7 @@ import { UserProvider } from "context/UserContext";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App";
-import "./tailwind.output.css";
+import "./index.css";
 
 const container = document.getElementById("root");
 const root = createRoot(container);

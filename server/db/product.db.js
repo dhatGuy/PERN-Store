@@ -32,6 +32,18 @@ const getProductDb = async ({ id }) => {
   return product[0];
 };
 
+const getProductBySlugDb = async ({ slug }) => {
+  const { rows: product } = await pool.query(
+    `select products.*, trunc(avg(reviews.rating),1) as avg_rating, count(reviews.*) from products
+        LEFT JOIN reviews
+        ON products.product_id = reviews.product_id
+        where products.slug = $1
+        group by products.product_id`,
+    [slug]
+  );
+  return product[0];
+};
+
 const getProductByNameDb = async ({ name }) => {
   const { rows: product } = await pool.query(
     `select products.*, trunc(avg(reviews.rating),1) as avg_rating, count(reviews.*) from products
@@ -67,4 +79,5 @@ module.exports = {
   updateProductDb,
   deleteProductDb,
   getAllProductsDb,
+  getProductBySlugDb,
 };
