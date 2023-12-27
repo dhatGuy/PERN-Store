@@ -38,7 +38,9 @@ const ProductDetails = () => {
         const { data: product } = await productService.getProduct(slug);
         setProduct(product);
       } catch (error) {
-        return navigate("/404");
+        return navigate("/404", {
+          replace: true,
+        });
       } finally {
         setIsFetching(false);
       }

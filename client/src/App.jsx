@@ -6,6 +6,7 @@ import {
   Checkout,
   Confirmation,
   Login,
+  NotFound,
   OrderDetails,
   Orders,
   ProductDetails,
@@ -44,7 +45,7 @@ function App() {
           <Route path="/products/:slug/" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="*" element={<h1>404 Error Found</h1>}></Route>
+          <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </Suspense>
     </BrowserRouter>
