@@ -1,7 +1,6 @@
-const windmill = require("@windmill/react-ui/config");
-
 /** @type {import('tailwindcss').Config} */
-const config = {
+module.exports = {
+  darkMode: "class",
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -12,12 +11,4 @@ const config = {
     extend: {},
   },
   plugins: [],
-};
-
-const windmillConfig = windmill(config);
-delete windmillConfig.purge;
-
-module.exports = {
-  ...windmillConfig,
-  ...config,
 };
