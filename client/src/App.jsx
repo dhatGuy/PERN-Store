@@ -41,7 +41,7 @@ function App() {
           <Route path="/signup" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route index element={<ProductList />} />
-          <Route path="/products/:id/" element={<ProductDetails />} />
+          <Route path="/products/:slug/" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="*" element={<h1>404 Error Found</h1>}></Route>
