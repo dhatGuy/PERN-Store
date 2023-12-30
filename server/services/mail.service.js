@@ -2,16 +2,47 @@ require("dotenv").config();
 const nodemailer = require("nodemailer");
 const { logger } = require("../utils/logger");
 const { ErrorHandler } = require("../helpers/error");
+const { google } = require("googleapis");
+const OAuth2 = google.auth.OAuth2;
 
-const transporter = nodemailer.createTransport({
-  port: process.env.SMTP_PORT,
-  host: process.env.SMTP_HOST,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASSWORD,
-  },
-  secure: true,
-});
+const createTransporter = async () => {
+  try {
+    const oauth2Client = new OAuth2(
+      process.env.CLIENT_ID,
+      process.env.CLIENT_SECRET,
+      "https://developers.google.com/oauthplayground"
+    );
+
+    oauth2Client.setCredentials({
+      refresh_token: process.env.REFRESH_TOKEN,
+    });
+
+    const accessToken = await new Promise((resolve, reject) => {
+      oauth2Client.getAccessToken((err, token) => {
+        if (err) {
+          logger.error(err);
+          reject();
+        }
+        resolve(token);
+      });
+    });
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        type: "OAuth2",
+        user: process.env.SMTP_USER,
+        accessToken,
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        refreshToken: process.env.REFRESH_TOKEN,
+      },
+    });
+    return transporter;
+  } catch (err) {
+    return err;
+  }
+};
 
 const url =
   process.env.NODE_ENV === "production"
@@ -34,7 +65,8 @@ const signupMail = async (to, name) => {
       `,
     };
 
-    await transporter.sendMail(message);
+    const emailTransporter = await createTransporter();
+    await emailTransporter.sendMail(message);
   } catch (error) {
     logger.error(error);
   }
@@ -60,8 +92,8 @@ const forgotPasswordMail = async (token, email) => {
         </p>`,
     };
 
-    const res = await transporter.sendMail(message);
-    return res;
+    const emailTransporter = await createTransporter();
+    return await emailTransporter.sendMail(message);
   } catch (error) {
     logger.error(error);
     throw new ErrorHandler(500, error.message);
@@ -77,7 +109,8 @@ const resetPasswordMail = async (email) => {
       html: "<p>Your password has been changed successfully.</p>",
     };
 
-    await transporter.sendMail(message);
+    const emailTransporter = await createTransporter();
+    await emailTransporter.sendMail(message);
   } catch (error) {
     logger.error(error);
     throw new ErrorHandler(500, error.message);

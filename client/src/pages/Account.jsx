@@ -23,8 +23,9 @@ const Account = () => {
           toast.success("Email has been sent successfully.");
         }
       })
-      .catch((error) => {
+      .catch(() => {
         setIsSending(false);
+        toast.error("An error occured. Please try again.");
       });
   };
 

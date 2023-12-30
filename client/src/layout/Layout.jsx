@@ -7,7 +7,7 @@ const Layout = ({ children, title, loading }) => {
     <>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>{title || "Home"} | PERN Store </title>
+        <title>{title ?? "Home"} | PERN Store </title>
         <meta
           name="description"
           content="E-commerce store built with React, Node, Express and Postgres"

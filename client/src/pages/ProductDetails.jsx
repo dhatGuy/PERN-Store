@@ -49,7 +49,7 @@ const ProductDetails = () => {
   }, [slug]);
 
   return (
-    <Layout loading={isFetching}>
+    <Layout loading={isFetching} title={product?.name}>
       <section className="body-font overflow-hidden">
         <div className="container px-5 py-24 mx-auto">
           <div className="lg:w-4/5 mx-auto flex flex-wrap">
