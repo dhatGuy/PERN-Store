@@ -10,10 +10,16 @@ const ProductProvider = ({ children }) => {
 
   useEffect(() => {
     setIsLoading(true);
-    productService.getProducts(page).then((response) => {
-      setProducts(response.data);
-      setIsLoading(false);
-    });
+    productService
+      .getProducts(page)
+      .then((response) => {
+        setProducts(response.data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+      });
   }, [page]);
 
   return (

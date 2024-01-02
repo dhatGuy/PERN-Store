@@ -5,6 +5,7 @@ import { CartProvider } from "context/CartContext";
 import { OrderProvider } from "context/OrderContext";
 import { ProductProvider } from "context/ProductContext";
 import { ReviewProvider } from "context/ReviewContext";
+import { SidebarProvider } from "context/SidebarContext";
 import { UserProvider } from "context/UserContext";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
@@ -21,20 +22,22 @@ root.render(
   <GoogleOAuthProvider clientId={googleClientId}>
     <HelmetProvider>
       <Windmill>
-        <UserProvider>
-          <ProductProvider>
-            <ReviewProvider>
-              <CartProvider>
-                <OrderProvider>
-                  <BrowserRouter>
-                    <GlobalHistory />
-                    <App />
-                  </BrowserRouter>
-                </OrderProvider>
-              </CartProvider>
-            </ReviewProvider>
-          </ProductProvider>
-        </UserProvider>
+        <SidebarProvider>
+          <UserProvider>
+            <ProductProvider>
+              <ReviewProvider>
+                <CartProvider>
+                  <OrderProvider>
+                    <BrowserRouter>
+                      <GlobalHistory />
+                      <App />
+                    </BrowserRouter>
+                  </OrderProvider>
+                </CartProvider>
+              </ReviewProvider>
+            </ProductProvider>
+          </UserProvider>
+        </SidebarProvider>
       </Windmill>
     </HelmetProvider>
   </GoogleOAuthProvider>

@@ -8,9 +8,16 @@ const getAllProducts = async (req, res) => {
   res.json(products);
 };
 
+const getAllProductsAdmin = async (req, res) => {
+  const { page = 1 } = req.query;
+
+  const products = await productService.getAllProductsAdmin(page);
+  res.json(products);
+};
+
 const createProduct = async (req, res) => {
   const newProduct = await productService.addProduct(req.body);
-  res.status(200).json(newProduct);
+  res.status(201).json(newProduct);
 };
 
 const getProduct = async (req, res) => {
@@ -44,7 +51,7 @@ const deleteProduct = async (req, res) => {
   const { id } = req.params;
 
   const deletedProduct = await productService.removeProduct(id);
-  res.status(200).json(deletedProduct);
+  res.status(200).json({});
 };
 
 // TODO create a service for reviews
@@ -109,6 +116,7 @@ const updateProductReview = async (req, res) => {
 
 module.exports = {
   getProduct,
+  getAllProductsAdmin,
   createProduct,
   updateProduct,
   deleteProduct,
