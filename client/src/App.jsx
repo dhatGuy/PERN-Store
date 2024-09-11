@@ -15,7 +15,7 @@ import {
   Register,
   ResetPassword,
 } from "pages";
-import { AdminProductList } from "pages/admin";
+import { ProductDetails as AdminProductDetails, AdminProductList, ProductEdit } from "pages/admin";
 import Dashboard from "pages/admin/Dashboard";
 import { Suspense } from "react";
 import { Toaster } from "react-hot-toast";
@@ -42,7 +42,8 @@ function App() {
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="/admin/products" element={<AdminProductList />} />
-            <Route path="/admin/products/:slug" element={<ProductDetails />} />
+            <Route path="/admin/products/:slug" element={<AdminProductDetails />} />
+            <Route path="/admin/products/:slug/edit" element={<ProductEdit />} />
             <Route path="/admin/orders" element={<Orders />} />
             <Route path="/admin/orders/:id" element={<OrderDetails />} />
             <Route path="/admin/account" element={<Account />} />
