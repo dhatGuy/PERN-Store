@@ -14,10 +14,13 @@
     "moduleDetection": "force",
     "isolatedModules": true,
     "sourceMap": true,
-    "baseUrl": "./src",
+    "baseUrl": "./",
     "paths": {
-      "~/*": ["src/*"],
-      "~/utils/*": ["src/utils/*"]
+      "~/utils/*": ["src/utils/*"],
+      "~/middlewares/*": ["src/middlewares/*"],
+      "~/helpers/*": ["src/helpers/*"],
+      "~/handlers/*": ["src/handlers/*"],
+      "~/*": ["src/*"]
     },
     "typeRoots": ["./node_modules/@types", "./src/types"]
   },

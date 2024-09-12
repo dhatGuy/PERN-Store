@@ -1,14 +1,24 @@
-const { logger } = require("../utils/logger");
+import { Request, Response } from "express";
+import { logger } from "~/utils/logger";
+
 class ErrorHandler extends Error {
-  constructor(statusCode, message) {
-    super();
+  status: string;
+  statusCode: number;
+
+  constructor(statusCode: number, message: string) {
+    super(message);
     this.status = "error";
     this.statusCode = statusCode;
     this.message = message;
   }
 }
 
-const handleError = (err, req, res, next) => {
+const handleError = (
+  err: ErrorHandler,
+  _req: Request,
+  res: Response,
+  next: () => void
+): void => {
   const { statusCode, message } = err;
   logger.error(err);
   res.status(statusCode || 500).json({
@@ -18,7 +28,5 @@ const handleError = (err, req, res, next) => {
   });
   next();
 };
-module.exports = {
-  ErrorHandler,
-  handleError,
-};
+
+export { ErrorHandler, handleError };

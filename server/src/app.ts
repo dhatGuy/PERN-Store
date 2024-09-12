@@ -6,9 +6,9 @@ import morgan from "morgan";
 // import routes from "./routes";
 import compression from "compression";
 import helmet from "helmet";
-import { httpLogger } from "utils/logger";
-// import unknownEndpoint from "./middleware/unKnownEndpoint";
-// import { handleError } from "./helpers/error";
+import { handleError } from "~/helpers/error";
+import unknownEndpoint from "~/middlewares/unKnownEndpoint";
+import { httpLogger } from "~/utils/logger";
 
 const app = express();
 
@@ -26,7 +26,7 @@ app.use(cookieParser());
 app.get("/", (req: Request, res: Response) =>
   res.send("<h1 style='text-align: center'>E-COMMERCE API</h1>")
 );
-// app.use(unknownEndpoint);
-// app.use(handleError);
+app.use(unknownEndpoint);
+app.use(handleError);
 
 export default app;
