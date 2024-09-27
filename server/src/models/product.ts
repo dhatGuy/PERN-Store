@@ -1,34 +1,31 @@
-import { query } from "database";
+import { sql } from "kysely";
 import { QueryResult } from "pg";
+import { db } from "~/database";
+import { query } from "~/database/database";
 
 class ProductStore {
-  async getAllProducts({
-    limit,
-    offset,
-  }: {
-    limit: number;
-    offset: number;
-  }): Promise<{ products: any[] }> {
-    const productsQueryResult: QueryResult = await query(
-      `SELECT 
-        products.*, 
-        TRUNC(AVG(reviews.rating)) AS avgRating, 
-        COUNT(DISTINCT reviews.*)::INT AS reviewCount,
-        COUNT(*) OVER() AS totalProducts
-      FROM products
-      LEFT JOIN reviews ON products.productId = reviews.productId
-      GROUP BY products.product_id
-      LIMIT $1 OFFSET $2`,
-      [limit, offset]
-    );
+  async index({ limit = 12, offset = 0 }: { limit?: number; offset?: number }) {
+    try {
+      const products = await db
+        .selectFrom("product")
+        .leftJoin("review", "product.id", "review.product_id")
+        .selectAll("product")
+        .select((_eb) => [
+          sql<number>`TRUNC(AVG(review.rating))`.as("avgRating"),
+          sql<number>`COUNT(DISTINCT review.*)::INT`.as("reviewCount"),
+        ])
+        .groupBy("product.id")
+        .limit(limit)
+        .offset(offset)
+        .execute();
 
-    const { rows: products } = productsQueryResult;
-    // const totalProducts = totalProductsQueryResult.rows[0].count;
-
-    return {
-      products,
-      // totalProducts,
-    };
+      return {
+        result: products,
+        total: products.length,
+      };
+    } catch (error) {
+      throw error;
+    }
   }
 
   async getAllProductsAdmin({
