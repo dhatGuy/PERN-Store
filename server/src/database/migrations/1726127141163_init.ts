@@ -27,19 +27,21 @@ export async function up(db: Kysely<any>): Promise<void> {
   // User table
   await db.schema
     .createTable("user")
-    .addColumn("id", "serial", (col) => col.primaryKey())
+    .addColumn("id", "uuid", (col) =>
+      col.primaryKey().defaultTo(sql`gen_random_uuid()`)
+    )
     .addColumn("password", "varchar", (col) => col.notNull())
     .addColumn("email", "varchar", (col) => col.notNull().unique())
     .addColumn("fullname", "varchar", (col) => col.notNull())
     .addColumn("username", "varchar", (col) => col.notNull().unique())
-    .addColumn("google_id", "varchar", (col) => col.notNull().unique())
+    .addColumn("google_id", "varchar", (col) => col.unique())
     .addColumn("roles", sql`user_role`, (col) =>
       col.notNull().defaultTo(sql`'customer'`)
     )
-    .addColumn("address", "varchar", (col) => col.notNull())
-    .addColumn("city", "varchar", (col) => col.notNull())
-    .addColumn("state", "varchar", (col) => col.notNull())
-    .addColumn("country", "varchar", (col) => col.notNull())
+    .addColumn("address", "varchar")
+    .addColumn("city", "varchar")
+    .addColumn("state", "varchar")
+    .addColumn("country", "varchar")
     .addColumn("updated_at", "timestamp", (col) =>
       col.defaultTo(sql`now()`).notNull()
     )
@@ -68,7 +70,7 @@ export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .createTable("cart")
     .addColumn("id", "serial", (col) => col.primaryKey())
-    .addColumn("user_id", "integer", (col) =>
+    .addColumn("user_id", "uuid", (col) =>
       col.notNull().references("user.id").onDelete("cascade")
     )
     .addColumn("updated_at", "timestamp", (col) =>
@@ -110,7 +112,7 @@ export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .createTable("order")
     .addColumn("id", "serial", (col) => col.primaryKey())
-    .addColumn("user_id", "integer", (col) =>
+    .addColumn("user_id", "uuid", (col) =>
       col.notNull().references("user.id").onDelete("cascade")
     )
     .addColumn("amount", "real", (col) => col.notNull())
@@ -148,7 +150,7 @@ export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .createTable("review")
     .addColumn("id", "serial", (col) => col.primaryKey())
-    .addColumn("user_id", "integer", (col) =>
+    .addColumn("user_id", "uuid", (col) =>
       col.notNull().references("user.id").onDelete("cascade")
     )
     .addColumn("product_id", "integer", (col) =>

@@ -9,6 +9,7 @@ import helmet from "helmet";
 import { handleError } from "~/helpers/error";
 import unknownEndpoint from "~/middlewares/unKnownEndpoint";
 import { mountRoutes } from "./handlers";
+import userRouter from "./modules/user/user.route";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(helmet());
 app.use(cookieParser());
 
 mountRoutes(app);
+app.use("/users", userRouter);
 
 app.get("/", (req: Request, res: Response) =>
   res.send("<h1 style='text-align: center'>E-COMMERCE API</h1>")

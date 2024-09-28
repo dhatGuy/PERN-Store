@@ -13,6 +13,15 @@ class ErrorHandler extends Error {
   }
 }
 
+class UserExistsError extends Error {
+  field: string;
+  constructor(message: string, field: string) {
+    super(message);
+    this.name = "UserExistsError";
+    this.field = field;
+  }
+}
+
 const handleError = (
   err: ErrorHandler,
   _req: Request,
@@ -29,4 +38,4 @@ const handleError = (
   next();
 };
 
-export { ErrorHandler, handleError };
+export { ErrorHandler, handleError, UserExistsError };
