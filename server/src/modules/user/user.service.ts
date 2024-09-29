@@ -1,28 +1,9 @@
 import { db } from "~/database";
 import { UserExistsError } from "~/helpers/error";
-import { hashPassword } from "~/helpers/hashPassword";
-import {
-  CreateUserInput,
-  createUserSchema,
-  UpdateUserInput,
-} from "./user.schema";
-
-// const {
-//   createUserDb,
-//   getUserByEmailDb,
-//   createUserGoogleDb,
-//   changeUserPasswordDb,
-//   getUserByIdDb,
-//   updateUserDb,
-//   deleteUserDb,
-//   getAllUsersDb,
-//   getUserByUsernameDb,
-// } = require("../db/user.db");
-// const { ErrorHandler } = require("../helpers/error");
+import { CreateUserInput, UpdateUserInput } from "./user.schema";
 
 export class UserService {
   createUser = async (data: CreateUserInput) => {
-    createUserSchema.parse(data);
     const { password, username, email, ...rest } = data;
 
     const existingUser = await db
@@ -45,15 +26,13 @@ export class UserService {
       }
     }
 
-    const hashedPassword = await hashPassword(password);
-
     const user = await db
       .insertInto("user")
       .values({
         ...rest,
         username,
         email,
-        password: hashedPassword,
+        password,
       })
       .returningAll()
       .executeTakeFirstOrThrow();

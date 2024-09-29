@@ -1,11 +1,13 @@
 import express from "express";
+import validateRequest from "~/middlewares/validateSchema";
 import { UserController } from "./user.controller";
+import { createUserSchema } from "./user.schema";
 const router = express.Router();
 const userController = new UserController();
 
 router
   .route("/")
-  .post(userController.createUser)
+  .post(validateRequest(createUserSchema), userController.createUser)
   .get(userController.getAllUsers);
 
 router

@@ -30,7 +30,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("id", "uuid", (col) =>
       col.primaryKey().defaultTo(sql`gen_random_uuid()`)
     )
-    .addColumn("password", "varchar", (col) => col.notNull())
+    .addColumn("password", "varchar")
     .addColumn("email", "varchar", (col) => col.notNull().unique())
     .addColumn("fullname", "varchar", (col) => col.notNull())
     .addColumn("username", "varchar", (col) => col.notNull().unique())
