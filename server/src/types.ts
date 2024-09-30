@@ -6,6 +6,18 @@ import {
   Updateable,
 } from "kysely";
 
+declare global {
+  namespace Express {
+    export interface Request {
+      user?: {
+        id: string;
+        cartId: number;
+        // Add other user properties as needed
+      };
+    }
+  }
+}
+
 export interface Database {
   product: ProductTable;
 }
