@@ -10,6 +10,7 @@ import { handleError } from "~/helpers/error";
 import unknownEndpoint from "~/middlewares/unKnownEndpoint";
 import authRouter from "./modules/auth/auth.route";
 import cartRouter from "./modules/cart/cart.route";
+import orderRouter from "./modules/order/order.route";
 import productRouter from "./modules/product/product.route";
 import userRouter from "./modules/user/user.route";
 
@@ -29,6 +30,7 @@ app.use("/users", userRouter);
 app.use("/auth", authRouter);
 app.use("/products", productRouter);
 app.use("/cart", cartRouter);
+app.use("/orders", orderRouter);
 
 app.get("/", (req: Request, res: Response) =>
   res.send("<h1 style='text-align: center'>E-COMMERCE API</h1>")

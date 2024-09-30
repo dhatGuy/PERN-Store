@@ -1,8 +1,15 @@
 import { sql } from "kysely";
 import { db } from "~/database";
+import { SharedCartService } from "~/services/cart.service";
 import { CartUpdateSchema } from "./cart.schema";
 
 export class CartService {
+  private sharedCartService: SharedCartService;
+
+  constructor() {
+    this.sharedCartService = new SharedCartService();
+  }
+
   createCart = async (userId: string) => {
     const cart = db
       .insertInto("cart")
@@ -25,7 +32,7 @@ export class CartService {
         ),
       ])
       .where("user_id", "=", userId)
-      .executeTakeFirst();
+      .executeTakeFirstOrThrow();
 
     return cart;
   };
@@ -82,6 +89,6 @@ export class CartService {
       .executeTakeFirst();
   };
   emptyCart = async (cartId: number) => {
-    await db.deleteFrom("cart_item").where("cart_id", "=", cartId).execute();
+    this.sharedCartService.emptyCart(cartId);
   };
 }

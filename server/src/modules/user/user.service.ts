@@ -1,6 +1,8 @@
+import { Updateable } from "kysely";
+import { User } from "kysely-codegen";
 import { db } from "~/database";
 import { UserExistsError } from "~/helpers/error";
-import { CreateUserInput, UpdateUserInput } from "./user.schema";
+import { CreateUserInput } from "./user.schema";
 
 export class UserService {
   createUser = async (data: CreateUserInput) => {
@@ -44,7 +46,7 @@ export class UserService {
       .selectFrom("user")
       .selectAll()
       .where("email", "=", email)
-      .executeTakeFirst();
+      .executeTakeFirstOrThrow();
     return user;
   };
   getUserByUsername = async (username: string) => {
@@ -52,7 +54,7 @@ export class UserService {
       .selectFrom("user")
       .selectAll()
       .where("username", "=", username)
-      .executeTakeFirst();
+      .executeTakeFirstOrThrow();
     return user;
   };
   getUserById = async (id: string) => {
@@ -60,7 +62,7 @@ export class UserService {
       .selectFrom("user")
       .selectAll()
       .where("id", "=", id)
-      .executeTakeFirst();
+      .executeTakeFirstOrThrow();
     return user;
   };
   // createGoogleAccount = async (user) => {
@@ -79,13 +81,13 @@ export class UserService {
       .executeTakeFirst();
   };
 
-  updateUser = async (user: UpdateUserInput, id: string) => {
+  updateUser = async (user: Updateable<User>, id: string) => {
     const { email, username } = user;
     const errors: { [key: string]: string } = {};
     try {
       const getUser = await this.getUserById(id);
-      const findUserByEmail = await this.getUserByEmail(email);
-      const findUserByUsername = await this.getUserByUsername(username);
+      const findUserByEmail = await this.getUserByEmail(email ?? "");
+      const findUserByUsername = await this.getUserByUsername(username ?? "");
       const emailChanged =
         email && getUser?.email.toLowerCase() !== email.toLowerCase();
       const usernameChanged =
@@ -114,7 +116,7 @@ export class UserService {
   };
 
   deleteUser = async (id: string) => {
-    await db.deleteFrom("user").where("id", "=", id).executeTakeFirst();
+    return await db.deleteFrom("user").where("id", "=", id).executeTakeFirst();
   };
 
   getAllUsers = async () => {

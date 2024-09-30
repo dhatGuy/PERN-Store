@@ -16,11 +16,11 @@
     "sourceMap": true,
     "baseUrl": "./",
     "paths": {
+      "~/*": ["src/*"],
       "~/utils/*": ["src/utils/*"],
       "~/middlewares/*": ["src/middlewares/*"],
       "~/helpers/*": ["src/helpers/*"],
-      "~/handlers/*": ["src/handlers/*"],
-      "~/*": ["src/*"]
+      "~/handlers/*": ["src/handlers/*"]
     },
     "typeRoots": ["./node_modules/@types", "./src/types"]
   },

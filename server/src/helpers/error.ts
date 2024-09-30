@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { ApiResponse } from "~/utils/apiResponse";
 import { logger } from "~/utils/logger";
 
 class ErrorHandler extends Error {
@@ -30,11 +31,26 @@ const handleError = (
 ): void => {
   const { statusCode, message } = err;
   logger.error(err);
-  res.status(statusCode || 500).json({
-    status: "error",
-    statusCode: statusCode || 500,
-    message: statusCode === 500 ? "An error occurred" : message,
-  });
+
+  if (err instanceof UserExistsError) {
+    res
+      .status(409)
+      .json(
+        ApiResponse.fieldError("User already exists", [
+          { id: err.field, error: err.message },
+        ])
+      );
+  }
+
+  const response =
+    statusCode === 401
+      ? ApiResponse.unauthorized()
+      : statusCode === 404
+        ? ApiResponse.notFound()
+        : ApiResponse.serverError();
+
+  res.status(statusCode || 500).json(response);
+
   next();
 };
 
