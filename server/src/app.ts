@@ -26,13 +26,12 @@ app.use(compression());
 app.use(helmet());
 app.use(cookieParser());
 
-// mountRoutes(app);
-app.use("/users", userRouter);
-app.use("/auth", authRouter);
-app.use("/products", productRouter);
-app.use("/cart", cartRouter);
-app.use("/orders", orderRouter);
-app.use("/payment", paymentRouter);
+app.use("/api/users", userRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/products", productRouter);
+app.use("/api/cart", cartRouter);
+app.use("/api/orders", orderRouter);
+app.use("/api/payment", paymentRouter);
 
 app.get("/", (req: Request, res: Response) =>
   res.send("<h1 style='text-align: center'>E-COMMERCE API</h1>")

@@ -20,12 +20,12 @@ export class AuthController {
         username,
       });
 
-      res.header("auth-token", user.token);
-      res.cookie("refreshToken", user.refreshToken, {
-        httpOnly: true,
-        sameSite: env.NODE_ENV === "development" ? true : "none",
-        secure: env.NODE_ENV === "development" ? false : true,
-      });
+      // res.header("auth-token", user.token);
+      // res.cookie("refreshToken", user.refreshToken, {
+      //   httpOnly: true,
+      //   sameSite: env.NODE_ENV === "development" ? true : "none",
+      //   secure: env.NODE_ENV === "development" ? false : true,
+      // });
 
       res.json(ApiResponse.success("Account created successfully", user));
     } catch (error) {

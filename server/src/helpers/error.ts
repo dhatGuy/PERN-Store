@@ -23,6 +23,15 @@ class UserExistsError extends Error {
   }
 }
 
+class ValidationError extends Error {
+  formFields: { id: string; error: string }[];
+  constructor(message: string, formFields: { id: string; error: string }[]) {
+    super(message);
+    this.name = "ValidationError";
+    this.formFields = formFields;
+  }
+}
+
 const handleError = (
   err: ErrorHandler,
   _req: Request,
@@ -42,6 +51,12 @@ const handleError = (
       );
   }
 
+  if (err instanceof ValidationError) {
+    res
+      .status(400)
+      .json(ApiResponse.fieldError("Validation error", err.formFields));
+  }
+
   const response =
     statusCode === 401
       ? ApiResponse.unauthorized()
@@ -54,4 +69,4 @@ const handleError = (
   next();
 };
 
-export { ErrorHandler, handleError, UserExistsError };
+export { ErrorHandler, handleError, UserExistsError, ValidationError };

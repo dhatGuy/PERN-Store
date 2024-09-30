@@ -1,19 +1,16 @@
 import crypto from "crypto";
 import { db } from "~/database";
-import { UserExistsError } from "~/helpers/error";
-import * as authUtils from "~/utils/auth";
+import { ValidationError } from "~/helpers/error";
 import {
-  LoginInput,
-  loginSchema,
-  ResetPasswordInput,
-  SignUpInput,
-  signUpSchema,
-} from "./auth.schema";
+  forgotPasswordMail,
+  resetPasswordMail,
+  signupMail,
+} from "~/services/mail.service";
+import * as authUtils from "~/utils/auth";
+import { LoginInput, ResetPasswordInput, SignUpInput } from "./auth.schema";
 
 export class AuthService {
   async signUp(input: SignUpInput) {
-    signUpSchema.parse(input);
-
     const hashedPassword = await authUtils.hashPassword(input.password);
 
     // check if user email exists
@@ -30,12 +27,23 @@ export class AuthService {
         .executeTakeFirst(),
     ]);
 
+    const validationErrors = [];
     if (checkEmail) {
-      throw new UserExistsError("Email is already registered", "email");
+      validationErrors.push({
+        id: "email",
+        error: "Email is already registered",
+      });
     }
 
     if (checkUsername) {
-      throw new UserExistsError("Username is already taken", "username");
+      validationErrors.push({
+        id: "username",
+        error: "Username is already taken",
+      });
+    }
+
+    if (validationErrors.length > 0) {
+      throw new ValidationError("Validation error", validationErrors);
     }
 
     const user = await db
@@ -45,18 +53,18 @@ export class AuthService {
         password: hashedPassword,
       })
       .returningAll()
-      .executeTakeFirst();
+      .executeTakeFirstOrThrow();
 
-    if (!user) {
-      throw new Error("Failed to create user");
-    }
-
-    // TODO: create cart for user
+    const cart = await db
+      .insertInto("cart")
+      .values({ user_id: user.id })
+      .returning("id")
+      .executeTakeFirstOrThrow();
 
     const token = authUtils.signToken({
       id: user.id,
       roles: user.roles,
-      // cart_id: user[0].cart_id,
+      cart_id: cart.id,
     });
 
     const refreshToken = authUtils.signRefreshToken({
@@ -64,6 +72,8 @@ export class AuthService {
       // roles: user[0].roles,
       // cart_id: user[0].cart_id,
     });
+
+    signupMail(user.email, user.fullname.split(" ")[0]);
 
     return {
       user,
@@ -73,11 +83,11 @@ export class AuthService {
   }
 
   async login(input: LoginInput) {
-    loginSchema.parse(input);
-
     const user = await db
       .selectFrom("user")
-      .selectAll()
+      .fullJoin("cart", "cart.user_id", "user.id")
+      .selectAll("user")
+      .select("cart.id as cart_id")
       .where("email", "=", input.email)
       .executeTakeFirst();
 
@@ -101,7 +111,7 @@ export class AuthService {
     const token = authUtils.signToken({
       id: user.id,
       roles: user.roles,
-      // cart_id: user.cart_id,
+      cart_id: user.cart_id,
     });
 
     const refreshToken = authUtils.signRefreshToken({
@@ -119,39 +129,63 @@ export class AuthService {
 
   async googleLogin(code: string) {
     const ticket = await authUtils.verifyGoogleIdToken(code);
-    const { name, email, sub } = ticket.getPayload();
-    const defaultUsername = name.replace(/ /g, "").toLowerCase();
+    const payload = ticket.getPayload();
+    if (!payload || !payload.email) {
+      throw new Error("Invalid Google token");
+    }
+    const { name, email, sub } = payload;
+    const defaultUsername =
+      name?.replace(/ /g, "").toLowerCase() ?? email?.split("@")[0] ?? "";
 
     let user = await db
       .selectFrom("user")
-      .selectAll()
-      .where("email", "=", email)
-      .executeTakeFirst();
+      .fullJoin("cart", "cart.user_id", "user.id")
+      .selectAll("user")
+      .select("cart.id as cart_id")
+      .where("email", "=", email ?? "")
+      .executeTakeFirstOrThrow();
 
     if (!user?.google_id) {
       user = await db
         .insertInto("user")
+        .columns(["google_id", "username", "email", "fullname"])
         .values({
           google_id: sub,
           username: defaultUsername,
           email,
-          fullname: name,
+          fullname: name ?? defaultUsername,
         })
         .onConflict((oc) =>
           oc.column("email").doUpdateSet({ google_id: sub, fullname: name })
         )
         .returningAll()
-        .executeTakeFirst();
+        .returning((eb) => [
+          eb
+            .selectFrom("user")
+            .innerJoin("cart", "cart.user_id", "user.id")
+            .select(["cart.id"])
+            .as("cart_id"),
+        ])
+        .executeTakeFirstOrThrow();
+
+      if (user.email && user.fullname) {
+        signupMail(user?.email, user?.fullname.split(" ")[0]);
+      }
     }
 
-    if (!user) {
-      throw new Error("Something went wrong");
+    let cart;
+    if (!user.cart_id && user.id) {
+      cart = await db
+        .insertInto("cart")
+        .values({ user_id: user.id })
+        .returning("id")
+        .executeTakeFirstOrThrow();
     }
 
     const token = authUtils.signToken({
       id: user.id,
       roles: user.roles,
-      // cart_id: user.cart_id,
+      cart_id: user.cart_id ?? cart?.id,
     });
 
     const refreshToken = authUtils.signRefreshToken({
@@ -166,7 +200,6 @@ export class AuthService {
       refreshToken,
     };
   }
-
   async forgotPassword(email: string) {
     const user = await db
       .selectFrom("user")
@@ -175,7 +208,7 @@ export class AuthService {
       .executeTakeFirst();
 
     if (!user) {
-      throw new Error("User not found");
+      return;
     }
 
     await db
@@ -198,7 +231,7 @@ export class AuthService {
       })
       .execute();
 
-    // TODO: send email
+    await forgotPasswordMail(fpSalt, email);
   }
 
   async verifyPasswordResetToken(token: string, email: string) {
@@ -244,14 +277,16 @@ export class AuthService {
       .where("email", "=", email)
       .execute();
 
-    // TODO: send email
+    resetPasswordMail(email);
   }
 
   async refreshAuthToken(refreshToken: string) {
     const payload = authUtils.verifyRefreshToken(refreshToken);
     const user = await db
       .selectFrom("user")
-      .selectAll()
+      .innerJoin("cart", "cart.user_id", "user.id")
+      .selectAll("user")
+      .select("cart.id as cart_id")
       .where("id", "=", payload.id)
       .executeTakeFirst();
 
@@ -262,7 +297,7 @@ export class AuthService {
     const token = authUtils.signToken({
       id: user.id,
       roles: user.roles,
-      // cart_id: user.cart_id,
+      cart_id: user.cart_id,
     });
 
     const newRefreshToken = authUtils.signRefreshToken({

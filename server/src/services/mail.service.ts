@@ -1,19 +1,15 @@
-import dotenv from "dotenv";
 import { google } from "googleapis";
 import nodemailer, { Transporter } from "nodemailer";
 import env from "~/env";
-import { ErrorHandler } from "../helpers/error";
 import { logger } from "../utils/logger";
-
-dotenv.config();
 
 const OAuth2 = google.auth.OAuth2;
 
 export const createTransporter = async (): Promise<Transporter | null> => {
   try {
     const oauth2Client = new OAuth2(
-      env.CLIENT_ID as string,
-      env.CLIENT_SECRET as string,
+      env.CLIENT_ID,
+      env.CLIENT_SECRET,
       "https://developers.google.com/oauthplayground"
     );
 
@@ -35,11 +31,11 @@ export const createTransporter = async (): Promise<Transporter | null> => {
       service: "gmail",
       auth: {
         type: "OAuth2",
-        user: env.SMTP_USER as string,
+        user: env.SMTP_USER,
         accessToken,
-        clientId: env.CLIENT_ID as string,
-        clientSecret: env.CLIENT_SECRET as string,
-        refreshToken: env.REFRESH_TOKEN as string,
+        clientId: env.CLIENT_ID,
+        clientSecret: env.CLIENT_SECRET,
+        refreshToken: env.REFRESH_TOKEN,
       },
     });
     return transporter;
@@ -52,12 +48,12 @@ export const createTransporter = async (): Promise<Transporter | null> => {
 const url =
   env.NODE_ENV === "production"
     ? "https://pern-store.netlify.app"
-    : "http://localhost:3000";
+    : "http://localhost:5173";
 
 const signupMail = async (to: string, name: string): Promise<void> => {
   try {
     const message = {
-      from: "pernstore.shop@gmail.com",
+      from: env.SMTP_FROM,
       to,
       subject: "Welcome to PERN Store",
       html: `
@@ -104,7 +100,7 @@ const forgotPasswordMail = async (
     await emailTransporter?.sendMail(message);
   } catch (error) {
     logger.error(error);
-    throw new ErrorHandler(500, error.message);
+    throw error;
   }
 };
 
@@ -121,7 +117,7 @@ const resetPasswordMail = async (email: string): Promise<void> => {
     await emailTransporter?.sendMail(message);
   } catch (error) {
     logger.error(error);
-    throw new ErrorHandler(500, error.message);
+    throw error;
   }
 };
 

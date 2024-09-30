@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { isAxiosError } from "axios";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
@@ -6,11 +7,12 @@ import Button from "~/components/ui/Button";
 import Heading from "~/components/ui/heading";
 import Label from "~/components/ui/label";
 import TextInput from "~/components/ui/text-input";
+import { addServerErrors } from "~/utils";
 import { SignupInput, signupInputSchema } from "../auth-schema";
 import { useSignup } from "../hooks/useSignup";
 
 export function SignupForm() {
-  const [error, setError] = useState("");
+  const [error, setServerError] = useState("");
   // const { state } = useLocation();
   const mutation = useSignup();
 
@@ -18,26 +20,23 @@ export function SignupForm() {
     register,
     formState: { errors },
     handleSubmit,
+    setError,
   } = useForm<SignupInput>({
     resolver: zodResolver(signupInputSchema),
   });
 
   const onSubmit: SubmitHandler<SignupInput> = (data) => {
-    mutation.mutate(data);
-    // setError("");
-    // setIsLoading(!isLoading);
-    // .then(({ data }) => {
-    //   setError("");
-    //   toast.success("Account created successfully.");
-    //   setTimeout(() => {
-    //     // setUserState(data);
-    //     setIsLoading(!isLoading);
-    //   }, 1000);
-    // })
-    // .catch(({ response }) => {
-    //   setIsLoading(false);
-    //   setError(response.data.message);
-    // });
+    mutation.mutate(data, {
+      onError: (error) => {
+        if (isAxiosError(error)) {
+          if (error.response?.data.status === "FIELD_ERROR") {
+            addServerErrors(error.response.data.formFields, setError);
+          }
+        } else {
+          setServerError("An error occurred. Please try again.");
+        }
+      },
+    });
   };
 
   return (
