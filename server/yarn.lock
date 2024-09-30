@@ -657,6 +657,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/nodemailer@npm:^6.4.16":
+  version: 6.4.16
+  resolution: "@types/nodemailer@npm:6.4.16"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/63a9e9ad8916675aeb0828dd969e6def6e24344c1bd2b93674ad1933160d532c6d9c2a56ec3f2efc1a866cacaa468a2969be33447304fb94af507d6cd3b94e83
+  languageName: node
+  linkType: hard
+
 "@types/pg@npm:^8.11.9":
   version: 8.11.9
   resolution: "@types/pg@npm:8.11.9"
@@ -4554,6 +4563,7 @@ __metadata:
     "@types/jsonwebtoken": "npm:^9.0.7"
     "@types/morgan": "npm:^1.9.9"
     "@types/node": "npm:^22.5.4"
+    "@types/nodemailer": "npm:^6.4.16"
     "@types/pg": "npm:^8.11.9"
     "@types/pino": "npm:^7.0.5"
     babel-eslint: "npm:^10.1.0"

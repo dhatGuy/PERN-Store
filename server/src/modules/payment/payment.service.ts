@@ -16,7 +16,7 @@ export class PaymentService {
       typescript: true,
     });
   }
-  payment = async (amount: number, email: string) => {
+  createStripePayment = async (amount: number, email: string) => {
     return await this.stripe.paymentIntents.create({
       amount,
       currency: "ngn",

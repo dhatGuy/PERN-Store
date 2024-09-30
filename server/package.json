@@ -61,6 +61,7 @@
     "@types/jsonwebtoken": "^9.0.7",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.5.4",
+    "@types/nodemailer": "^6.4.16",
     "@types/pg": "^8.11.9",
     "@types/pino": "^7.0.5",
     "babel-eslint": "^10.1.0",

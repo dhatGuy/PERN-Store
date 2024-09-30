@@ -4,6 +4,6 @@ import { PaymentController } from "./payment.controller";
 const router = express.Router();
 const paymentController = new PaymentController();
 
-router.route("/").post(paymentController.makePayment);
+router.route("/stripe").post(paymentController.createStripePayment);
 
 export default router;
