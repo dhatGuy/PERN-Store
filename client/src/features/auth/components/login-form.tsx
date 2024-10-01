@@ -26,7 +26,7 @@ export function LoginForm() {
       gLoginMutation.mutate(codeResponse.code, {
         onSuccess: () => {
           toast.success("Login successful 🔓");
-          // navigate("/", { replace: true });
+          navigate("/", { replace: true });
         },
         onError: (error) => {
           // console.log("Login Failed:", error)

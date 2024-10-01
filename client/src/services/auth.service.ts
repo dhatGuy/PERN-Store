@@ -1,5 +1,5 @@
 import API, { publicAPI } from "~/api/axios.config";
-import { LoginInput, SignupInput } from "~/features/auth/auth-schema";
+import { LoginInput, ResetPasswordInput, SignupInput } from "~/features/auth/auth-schema";
 
 class AuthService {
   async login(data: LoginInput) {
@@ -28,20 +28,17 @@ class AuthService {
     return res.data;
   }
 
-  checkToken(token, email) {
+  checkToken({ token, email }: { token: string; email: string }) {
     return API.post("auth/check-token", {
       token,
       email,
     });
   }
 
-  resetPassword(token, email, password, password2) {
-    return API.post("auth/reset-password", {
-      token,
-      email,
-      password,
-      password2,
-    });
+  async resetPassword(inputs: ResetPasswordInput) {
+    const res = await publicAPI.post("auth/reset-password", inputs);
+
+    return res.data;
   }
 
   signup = async (data: SignupInput) => {

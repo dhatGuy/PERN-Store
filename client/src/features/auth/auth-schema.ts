@@ -21,3 +21,17 @@ export const loginInputSchema = z.object({
 });
 
 export type LoginInput = z.infer<typeof loginInputSchema>;
+
+export const resetPasswordSchema = z
+  .object({
+    token: z.string(),
+    email: z.string().email(),
+    password: z.string().min(8),
+    password2: z.string(),
+  })
+  .refine((data) => data.password === data.password2, {
+    path: ["password2"],
+    message: "Passwords do not match",
+  });
+
+export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
