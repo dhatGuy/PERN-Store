@@ -1,6 +1,5 @@
 import { QueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { router } from "~/routes";
 
 const baseURL = import.meta.env.PROD ? import.meta.env.VITE_API_URL : "http://localhost:9000/api";
 const queryClient = new QueryClient();
@@ -38,7 +37,7 @@ API.interceptors.response.use(
     const originalRequest = error.config;
     if (error.response.status === 401 && originalRequest.url === "/auth/refresh-token") {
       return new Promise((_resolve, reject) => {
-        router.navigate("/login");
+        // router.navigate("/login");
         queryClient.clear();
         localStorage.removeItem("token");
 

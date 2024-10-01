@@ -7,8 +7,8 @@ class AuthService {
     return res.data;
   }
 
-  async googleLogin(code) {
-    const { data } = await API.post("/auth/google", {
+  async googleLogin(code: string) {
+    const { data } = await publicAPI.post("/auth/google", {
       code,
     });
     return data;
@@ -20,10 +20,12 @@ class AuthService {
     localStorage.removeItem("expiresAt");
   }
 
-  forgotPassword(email) {
-    return API.post("/auth/forgot-password", {
+  async forgotPassword({ email }: { email: string }) {
+    const res = await publicAPI.post("/auth/forgot-password", {
       email,
     });
+
+    return res.data;
   }
 
   checkToken(token, email) {

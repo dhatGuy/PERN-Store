@@ -143,7 +143,7 @@ export class AuthService {
       .selectAll("user")
       .select("cart.id as cart_id")
       .where("email", "=", email ?? "")
-      .executeTakeFirstOrThrow();
+      .executeTakeFirst();
 
     if (!user?.google_id) {
       user = await db
@@ -164,6 +164,7 @@ export class AuthService {
             .selectFrom("user")
             .innerJoin("cart", "cart.user_id", "user.id")
             .select(["cart.id"])
+            .where("user.email", "=", email)
             .as("cart_id"),
         ])
         .executeTakeFirstOrThrow();
