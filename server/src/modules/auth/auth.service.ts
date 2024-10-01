@@ -287,7 +287,7 @@ export class AuthService {
       .innerJoin("cart", "cart.user_id", "user.id")
       .selectAll("user")
       .select("cart.id as cart_id")
-      .where("id", "=", payload.id)
+      .where("user.id", "=", payload.id)
       .executeTakeFirst();
 
     if (!user) {

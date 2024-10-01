@@ -3,7 +3,7 @@ import { Toaster } from "react-hot-toast";
 import { RouterProvider } from "react-router-dom";
 import Spinner from "~/components/Spinner";
 import { ContentLayout } from "./components/layouts";
-import router from "./routes";
+import { router } from "./routes";
 
 function App() {
   return (

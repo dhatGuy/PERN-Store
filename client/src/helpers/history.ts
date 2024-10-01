@@ -1,6 +1,11 @@
+import { Location, NavigateFunction } from "react-router-dom";
+
 const history = {
   navigate: null,
-  push: (page, ...rest) => History.navigate(page, ...rest),
+  location: null,
+} as {
+  navigate: NavigateFunction | null;
+  location: Location | null;
 };
 
 export default history;
