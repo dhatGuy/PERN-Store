@@ -312,4 +312,12 @@ export class AuthService {
       refreshToken: newRefreshToken,
     };
   }
+
+  async getCurrentUser(id: string) {
+    return await db
+      .selectFrom("user")
+      .selectAll()
+      .where("id", "=", id)
+      .executeTakeFirst();
+  }
 }

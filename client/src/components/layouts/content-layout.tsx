@@ -1,6 +1,7 @@
 import { PropsWithChildren } from "react";
 import { Helmet } from "react-helmet-async";
 import Spinner from "~/components/Spinner";
+import Nav from "../Nav";
 
 export const ContentLayout = ({
   children,
@@ -51,7 +52,7 @@ export const ContentLayout = ({
     `}</style>
       </Helmet>
       <div className="min-h-screen flex flex-col">
-        {/* <Nav /> */}
+        <Nav />
         {loading ? (
           <>
             <Spinner size={100} loading />

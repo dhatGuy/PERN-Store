@@ -1,5 +1,6 @@
 import express from "express";
 import validateRequest from "~/middlewares/validateSchema";
+import verifyToken from "~/middlewares/verifyToken";
 import { AuthController } from "./auth.controller";
 import { loginSchema, signUpSchema } from "./auth.schema";
 
@@ -19,4 +20,5 @@ router.post("/reset-password", authController.resetPassword);
 
 router.post("/refresh-token", authController.refreshToken);
 
+router.get("/me", verifyToken, authController.getCurrentUser);
 export default router;

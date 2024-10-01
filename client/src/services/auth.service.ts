@@ -1,12 +1,10 @@
-import API from "~/api/axios.config";
+import API, { publicAPI } from "~/api/axios.config";
+import { LoginInput, SignupInput } from "~/features/auth/auth-schema";
 
 class AuthService {
-  async login(email, password) {
-    const { data } = await API.post("/auth/login", {
-      email,
-      password,
-    });
-    return data;
+  async login(data: LoginInput) {
+    const res = await publicAPI.post("/auth/login", data);
+    return res.data;
   }
 
   async googleLogin(code) {
@@ -44,16 +42,16 @@ class AuthService {
     });
   }
 
-  register(username, email, password) {
-    return API.post("auth/signup", {
-      username,
-      email,
-      password,
-    });
-  }
+  signup = async (data: SignupInput) => {
+    const res = await publicAPI.post("/auth/signup", data);
 
-  getCurrentUser() {
-    return API.get("/users/profile");
+    return res.data;
+  };
+
+  async getCurrentUser() {
+    const res = await API.get("/auth/me");
+
+    return res.data.data;
   }
 }
 

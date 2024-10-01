@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { isAxiosError } from "axios";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import Button from "~/components/ui/Button";
 import Heading from "~/components/ui/heading";
@@ -32,9 +33,9 @@ export function SignupForm() {
           if (error.response?.data.status === "FIELD_ERROR") {
             addServerErrors(error.response.data.formFields, setError);
           }
-        } else {
-          setServerError("An error occurred. Please try again.");
         }
+        setServerError("An error occurred. Please try again.");
+        toast.error("An error occurred. Please try again.");
       },
     });
   };

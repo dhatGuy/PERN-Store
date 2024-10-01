@@ -20,12 +20,12 @@ export class AuthController {
         username,
       });
 
-      // res.header("auth-token", user.token);
-      // res.cookie("refreshToken", user.refreshToken, {
-      //   httpOnly: true,
-      //   sameSite: env.NODE_ENV === "development" ? true : "none",
-      //   secure: env.NODE_ENV === "development" ? false : true,
-      // });
+      res.header("auth-token", user.token);
+      res.cookie("refreshToken", user.refreshToken, {
+        httpOnly: true,
+        sameSite: env.NODE_ENV === "development" ? true : "none",
+        secure: env.NODE_ENV === "development" ? false : true,
+      });
 
       res.json(ApiResponse.success("Account created successfully", user));
     } catch (error) {
@@ -114,6 +114,15 @@ export class AuthController {
     try {
       const result = await this.authService.resetPassword(req.body);
       res.json(ApiResponse.success("Password reset", result));
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getCurrentUser = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const user = await this.authService.getCurrentUser(req.user!.id);
+      res.json(ApiResponse.success("User retrieved", user));
     } catch (error) {
       next(error);
     }

@@ -1,19 +1,17 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
 import { meQueryOption } from "~/lib/queryOptions";
 import authService from "~/services/auth.service";
 
-export const useSignup = () => {
+export const useLogin = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: authService.signup,
+    mutationFn: authService.login,
     onSuccess: async (data, _variables) => {
-      localStorage.setItem("token", JSON.stringify(data.token));
+      localStorage.setItem("token", JSON.stringify(data.data.token));
       await queryClient.fetchQuery(meQueryOption);
-      toast.success("Account created successfully.");
     },
     onError: (error) => {
-      console.error("Signup failed:", error);
+      console.error("Login failed:", error);
     },
   });
 };
