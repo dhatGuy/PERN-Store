@@ -1,12 +1,13 @@
 import { useLoaderData } from "react-router-dom";
-import { ContentLayout } from "~/components/layouts";
+import { SEOHelmet } from "~/components/SEOHelmet";
 import ResetPasswordForm from "~/features/auth/components/reset-password-form";
 
 const ResetPassword = () => {
   const showForm = useLoaderData();
 
   return (
-    <ContentLayout title="Reset Password">
+    <>
+      <SEOHelmet title="Reset Password" />
       {showForm ? (
         <div className="pt-12">
           <div className="mx-auto max-w-lg shadow-2xl p-8 md:p-10">
@@ -18,7 +19,7 @@ const ResetPassword = () => {
           <p className="text-2xl font-medium">Password reset link has expired or is invalid</p>
         </div>
       )}
-    </ContentLayout>
+    </>
   );
 };
 

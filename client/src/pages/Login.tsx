@@ -1,13 +1,12 @@
-import { ContentLayout } from "~/components/layouts";
+import { SEOHelmet } from "~/components/SEOHelmet";
 import { LoginForm } from "~/features/auth/components/login-form";
 
 const Login = () => {
   return (
-    <ContentLayout title="Login">
-      <div className="flex items-center justify-center m-auto mt-20">
-        <LoginForm />
-      </div>
-    </ContentLayout>
+    <div className="flex items-center justify-center m-auto mt-20">
+      <SEOHelmet title="Login" />
+      <LoginForm />
+    </div>
   );
 };
 

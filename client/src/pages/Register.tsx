@@ -1,13 +1,12 @@
-import { ContentLayout } from "~/components/layouts";
+import { SEOHelmet } from "~/components/SEOHelmet";
 import { SignupForm } from "~/features/auth/components/signup-form";
 
 const Register = () => {
   return (
-    <ContentLayout title="Create account">
-      <div className="flex items-center justify-center mx-auto mt-20">
-        <SignupForm />
-      </div>
-    </ContentLayout>
+    <div className="flex items-center justify-center mx-auto mt-20">
+      <SEOHelmet title="Create an account" />
+      <SignupForm />
+    </div>
   );
 };
 
