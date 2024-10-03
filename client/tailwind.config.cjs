@@ -1,14 +1,9 @@
-/** @type {import('tailwindcss').Config} */
+const flowbite = require("flowbite-react/tailwind");
+
 module.exports = {
-  darkMode: "class",
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-    "node_modules/@windmill/react-ui/lib/defaultTheme.js",
-    "node_modules/@windmill/react-ui/dist/index.js",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}", flowbite.content()],
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [flowbite.plugin()],
 };
