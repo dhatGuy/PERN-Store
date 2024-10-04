@@ -1,15 +1,7 @@
 import { Navbar } from "flowbite-react";
-import { PropsWithChildren } from "react";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
-export const AuthLayout = ({
-  children,
-  title,
-  loading,
-}: PropsWithChildren<{
-  title?: string;
-  loading?: boolean;
-}>) => {
+export const AuthLayout = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar className="shadow-lg fixed w-full bg-white top-0 z-10">
@@ -18,7 +10,9 @@ export const AuthLayout = ({
         </Navbar.Brand>
       </Navbar>
       <div className="text-gray-700 mt-16 mx-auto px-2 lg:px-56 flex-grow h-full w-full">
-        <main className="h-full">{children}</main>
+        <main className="h-full">
+          <Outlet />
+        </main>
       </div>
 
       <footer className="mt-auto flex justify-center py-2">

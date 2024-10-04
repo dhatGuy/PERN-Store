@@ -13,7 +13,9 @@ class ProductService {
         .leftJoin("review", "product.id", "review.product_id")
         .selectAll("product")
         .select((_eb) => [
-          sql<number>`TRUNC(AVG(review.rating))`.as("avgRating"),
+          sql<number>`COALESCE(TRUNC(AVG(review.rating), 1), 0)`.as(
+            "avgRating"
+          ),
           sql<number>`COUNT(DISTINCT review.*)::INT`.as("reviewCount"),
         ])
         .groupBy("product.id")
@@ -96,7 +98,7 @@ class ProductService {
       .leftJoin("review", "product.id", "review.product_id")
       .selectAll("product")
       .select((_eb) => [
-        sql<number>`TRUNC(AVG(review.rating), 1)`.as("avgRating"),
+        sql<number>`COALESCE(TRUNC(AVG(review.rating), 1), 0)`.as("avgRating"),
         sql<number>`COUNT(DISTINCT review.*)::INT`.as("reviewCount"),
       ])
       .where("product.id", "=", id)
@@ -112,7 +114,7 @@ class ProductService {
       .leftJoin("review", "product.id", "review.product_id")
       .selectAll("product")
       .select((_eb) => [
-        sql<number>`TRUNC(AVG(review.rating), 1)`.as("avgRating"),
+        sql<number>`COALESCE(TRUNC(AVG(review.rating), 1), 0)`.as("avgRating"),
         sql<number>`COUNT(DISTINCT review.*)::INT`.as("reviewCount"),
       ])
       .where("product.slug", "=", slug)
@@ -128,7 +130,7 @@ class ProductService {
       .leftJoin("review", "product.id", "review.product_id")
       .selectAll("product")
       .select((_eb) => [
-        sql<number>`TRUNC(AVG(review.rating), 1)`.as("avgRating"),
+        sql<number>`COALESCE(TRUNC(AVG(review.rating), 1), 0)`.as("avgRating"),
         sql<number>`COUNT(DISTINCT review.*)::INT`.as("reviewCount"),
       ])
       .where("product.name", "=", name)

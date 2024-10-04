@@ -1,22 +1,16 @@
-import { QueryClient } from "@tanstack/react-query";
-import { createBrowserRouter, Outlet } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
+import ErrorPage from "~/components/error-page";
 import { AuthLayout } from "~/components/layouts/auth-layout";
+import { DefaultLayout } from "~/components/layouts/default-layout";
 import { rootLoader } from "~/lib/loaders";
-import { Login, Register, ResetPassword } from "~/pages";
+import { productBySlugQueryOptions, productsQueryOptions } from "~/lib/queryOptions";
+import { Login, ProductDetails, ProductList, Register, ResetPassword } from "~/pages";
+import { queryClient } from "~/queryClient";
 import authService from "~/services/auth.service";
-const queryClient = new QueryClient();
-
-const TestComp = () => {
-  return (
-    <AuthLayout>
-      <Outlet />
-    </AuthLayout>
-  );
-};
 
 const router = createBrowserRouter([
   {
-    element: <TestComp />,
+    element: <AuthLayout />,
     children: [
       {
         path: "/signup",
@@ -48,7 +42,39 @@ const router = createBrowserRouter([
   {
     path: "/",
     loader: rootLoader,
-    children: [],
+    element: <DefaultLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        // path: "/products",
+        index: true,
+        element: <ProductList />,
+        loader: async ({ request }) => {
+          const page = Number(new URL(request.url).searchParams.get("page") || 1);
+          const data = await queryClient.ensureQueryData(productsQueryOptions({ page }));
+          return data;
+        },
+      },
+      {
+        path: "/products/:slug",
+        element: <ProductDetails />,
+        loader: async ({ params }) => {
+          const { slug } = params;
+          const data = await queryClient.ensureQueryData(productBySlugQueryOptions({ slug }));
+          console.log("🚀 ~ file: router.tsx:64 ~ loader: ~ data:", data);
+
+          if (!data) {
+            throw new Response("Not found", { status: 404 });
+          }
+
+          return data;
+        },
+      },
+      {
+        path: "/orders",
+        element: <div>orders</div>,
+      },
+    ],
   },
 ]);
 

@@ -44,6 +44,11 @@ export class ProductController {
   getProduct = async (req: Request, res: Response) => {
     const { id } = req.params;
     const product = await this.productService.getProduct({ id: Number(id) });
+
+    if (!product) {
+      return res.status(404).json(ApiResponse.notFound("Product not found"));
+    }
+
     res
       .status(200)
       .json(ApiResponse.success("Product fetched successfully", product));
@@ -52,6 +57,11 @@ export class ProductController {
   getProductBySlug = async (req: Request, res: Response) => {
     const slug = req.params.slug;
     const product = await this.productService.getProductBySlug({ slug });
+
+    if (!product) {
+      return res.status(404).json(ApiResponse.notFound("Product not found"));
+    }
+
     res
       .status(200)
       .json(ApiResponse.success("Product fetched successfully", product));
@@ -60,6 +70,11 @@ export class ProductController {
   getProductByName = async (req: Request, res: Response) => {
     const { name } = req.params;
     const product = await this.productService.getProductByName({ name });
+
+    if (!product) {
+      return res.status(404).json(ApiResponse.notFound("Product not found"));
+    }
+
     res
       .status(200)
       .json(ApiResponse.success("Product fetched successfully", product));

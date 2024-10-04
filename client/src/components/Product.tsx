@@ -4,18 +4,17 @@ import { ShoppingCart } from "react-feather";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
-import { useCart } from "~/context/CartContext";
 import { formatCurrency } from "../helpers/formatCurrency";
 
 const Product = ({ product }) => {
-  const { addItem } = useCart();
+  // const { addItem } = useCart();
   const [isLoading, setIsLoading] = useState(false);
 
   const addToCart = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await addItem(product, 1);
+      // await addItem(product, 1);
       toast.success("Added to cart");
     } catch (error) {
       console.log(error);
@@ -30,7 +29,7 @@ const Product = ({ product }) => {
         <span className="block relative h-48 rounded overflow-hidden">
           <img
             className="w-full h-full object-contain object-center"
-            src={product.image_url}
+            src={product.imageUrl}
             alt={product.name}
             loading="lazy"
             decoding="async"

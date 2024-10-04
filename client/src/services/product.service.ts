@@ -1,17 +1,24 @@
-import API from "~/api/axios.config";
+import API, { publicAPI } from "~/api/axios.config";
 
 class ProductService {
-  getProducts(page) {
-    return API.get(`/products?page=${page}`);
+  async getProducts(page: number) {
+    const res = await publicAPI.get(`/products?page=${page}`);
+
+    return res.data;
   }
   getProductsAdmin(page) {
     return API.get(`/admin/products?page=${page}`);
   }
+  async getProductBySlug(slug: string) {
+    const res = await publicAPI.get(`/products/slug/${slug}`);
+
+    return res.data;
+  }
   getProduct(slug) {
-    return API.get(`/products/${slug}`);
+    return publicAPI.get(`/products/${slug}`);
   }
   getProductByName(name) {
-    return API.get(`/products/${name}`);
+    return publicAPI.get(`/products/${name}`);
   }
 }
 

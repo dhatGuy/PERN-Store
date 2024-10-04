@@ -1,9 +1,6 @@
-import { QueryClient } from "@tanstack/react-query";
+import { queryClient } from "~/queryClient";
 import { meQueryOption } from "./queryOptions";
-
-const queryClient = new QueryClient();
-
 export const rootLoader = async () => {
-  await queryClient.prefetchQuery(meQueryOption);
+  await queryClient.ensureQueryData(meQueryOption);
   return null;
 };
