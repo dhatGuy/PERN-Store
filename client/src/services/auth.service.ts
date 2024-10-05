@@ -1,17 +1,20 @@
 import API, { publicAPI } from "~/api/axios.config";
+import { apiResponseSchema } from "~/enitities/apiResponse";
+import { loginResponseSchema, signupResponseSchema } from "~/enitities/auth";
+import { userSchema } from "~/enitities/user";
 import { LoginInput, ResetPasswordInput, SignupInput } from "~/features/auth/auth-schema";
 
 class AuthService {
   async login(data: LoginInput) {
     const res = await publicAPI.post("/auth/login", data);
-    return res.data;
+    return loginResponseSchema.parse(res.data);
   }
 
   async googleLogin(code: string) {
     const { data } = await publicAPI.post("/auth/google", {
       code,
     });
-    return data;
+    return loginResponseSchema.parse(data);
   }
 
   logout() {
@@ -29,7 +32,7 @@ class AuthService {
   }
 
   checkToken({ token, email }: { token: string; email: string }) {
-    return API.post("auth/check-token", {
+    return publicAPI.post("auth/check-token", {
       token,
       email,
     });
@@ -44,13 +47,13 @@ class AuthService {
   signup = async (data: SignupInput) => {
     const res = await publicAPI.post("/auth/signup", data);
 
-    return res.data;
+    return signupResponseSchema.parse(res.data);
   };
 
   async getCurrentUser() {
     const res = await API.get("/auth/me");
 
-    return res.data.data;
+    return apiResponseSchema(userSchema.omit({ password: true })).parse(res.data);
   }
 }
 

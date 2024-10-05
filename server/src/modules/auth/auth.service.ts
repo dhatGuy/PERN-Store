@@ -75,8 +75,10 @@ export class AuthService {
 
     signupMail(user.email, user.fullname.split(" ")[0]);
 
+    const { password, ...userWithoutPassword } = user;
+
     return {
-      user,
+      user: userWithoutPassword,
       token,
       refreshToken,
     };
@@ -108,6 +110,8 @@ export class AuthService {
       throw new Error("Email or password incorrect");
     }
 
+    const { password, ...userWithoutPassword } = user;
+
     const token = authUtils.signToken({
       id: user.id,
       roles: user.roles,
@@ -121,12 +125,11 @@ export class AuthService {
     });
 
     return {
-      user,
+      user: userWithoutPassword,
       token,
       refreshToken,
     };
   }
-
   async googleLogin(code: string) {
     const ticket = await authUtils.verifyGoogleIdToken(code);
     const payload = ticket.getPayload();
@@ -195,8 +198,10 @@ export class AuthService {
       // cart_id: user.cart_id,
     });
 
+    const { password, ...userWithoutPassword } = user;
+
     return {
-      user,
+      user: userWithoutPassword,
       token,
       refreshToken,
     };
@@ -307,18 +312,26 @@ export class AuthService {
       // cart_id: user.cart_id,
     });
 
+    const { password, ...userWithoutPassword } = user;
+
     return {
-      user,
+      user: userWithoutPassword,
       token,
       refreshToken: newRefreshToken,
     };
   }
 
   async getCurrentUser(id: string) {
-    return await db
+    const user = await db
       .selectFrom("user")
-      .selectAll()
-      .where("id", "=", id)
-      .executeTakeFirst();
+      .innerJoin("cart", "cart.user_id", "user.id")
+      .selectAll("user")
+      .select("cart.id as cart_id")
+      .where("user.id", "=", id)
+      .executeTakeFirstOrThrow();
+
+    const { password, ...userWithoutPassword } = user;
+
+    return userWithoutPassword;
   }
 }

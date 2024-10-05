@@ -1,5 +1,4 @@
 import { createBrowserRouter } from "react-router-dom";
-import ErrorPage from "~/components/error-page";
 import { AuthLayout } from "~/components/layouts/auth-layout";
 import { DefaultLayout } from "~/components/layouts/default-layout";
 import { rootLoader } from "~/lib/loaders";
@@ -43,7 +42,7 @@ const router = createBrowserRouter([
     path: "/",
     loader: rootLoader,
     element: <DefaultLayout />,
-    errorElement: <ErrorPage />,
+    // errorElement: <ErrorPage />,
     children: [
       {
         // path: "/products",

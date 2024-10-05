@@ -22,10 +22,11 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react"],
+  "plugins": ["react", "react-refresh"],
   "rules": {
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
-    "react/jsx-curly-brace-presence": ["error", { "props": "never", "children": "never" }]
+    "react/jsx-curly-brace-presence": ["error", { "props": "never", "children": "never" }],
+    "react-refresh/only-export-components": "warn"
   }
 }

@@ -13,7 +13,7 @@ router.post("/google", authController.googleLogin);
 
 router.post("/forgot-password", authController.forgotPassword);
 
-// token for reset password
+// check token for reset password if the token is valid
 router.post("/check-token", authController.verifyPasswordResetToken);
 
 router.post("/reset-password", authController.resetPassword);

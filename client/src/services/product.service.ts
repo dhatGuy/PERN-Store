@@ -1,10 +1,12 @@
 import API, { publicAPI } from "~/api/axios.config";
+import { apiResponseSchema } from "~/enitities/apiResponse";
+import { paginatedProductsSchema, productSchema } from "~/enitities/product";
 
 class ProductService {
   async getProducts(page: number) {
     const res = await publicAPI.get(`/products?page=${page}`);
 
-    return res.data;
+    return paginatedProductsSchema.parse(res.data);
   }
   getProductsAdmin(page) {
     return API.get(`/admin/products?page=${page}`);
@@ -12,13 +14,17 @@ class ProductService {
   async getProductBySlug(slug: string) {
     const res = await publicAPI.get(`/products/slug/${slug}`);
 
-    return res.data;
+    return apiResponseSchema(productSchema).parse(res.data);
   }
-  getProduct(slug) {
-    return publicAPI.get(`/products/${slug}`);
+  async getProduct(id: number) {
+    const res = await publicAPI.get(`/products/${id}`);
+
+    return apiResponseSchema(productSchema).parse(res.data);
   }
-  getProductByName(name) {
-    return publicAPI.get(`/products/${name}`);
+  async getProductByName(name: string) {
+    const res = await publicAPI.get(`/products/${name}`);
+
+    return apiResponseSchema(productSchema).parse(res.data);
   }
 }
 

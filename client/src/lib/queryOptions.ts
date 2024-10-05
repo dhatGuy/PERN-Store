@@ -1,5 +1,4 @@
 import { queryOptions } from "@tanstack/react-query";
-import { isAxiosError } from "axios";
 import authService from "~/services/auth.service";
 import productService from "~/services/product.service";
 
@@ -8,12 +7,16 @@ export const meQueryOption = queryOptions({
   queryFn: authService.getCurrentUser,
   staleTime: Infinity,
   refetchOnWindowFocus: false,
-  retry(failureCount, error) {
-    if (isAxiosError(error) && error.response?.status === 401) {
-      return false;
-    }
-    return failureCount < 3;
+  enabled() {
+    const token = localStorage.getItem("token");
+    if (!token) return false;
+
+    const parsedToken = JSON.parse(token);
+    if (!parsedToken) return false;
+
+    return true;
   },
+  retry: false,
 });
 
 export const productsQueryOptions = ({ page }: { page: number }) =>

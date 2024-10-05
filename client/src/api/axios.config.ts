@@ -1,8 +1,14 @@
-import { QueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const baseURL = import.meta.env.PROD ? import.meta.env.VITE_API_URL : "http://localhost:9000/api";
-const queryClient = new QueryClient();
+
+function handleSessionExpiration() {
+  toast.error("Session Expired");
+  localStorage.removeItem("token");
+  localStorage.removeItem("refreshToken");
+  window.location.href = "/login";
+}
 export const publicAPI = axios.create({
   baseURL,
   withCredentials: true,
@@ -23,6 +29,7 @@ API.interceptors.request.use(
       }
     } catch (error) {
       console.error("🚀 ~ file: axios.config.ts:19 ~ error:", error);
+      // will try to refresh token if expired
     }
     return req;
   },
@@ -37,9 +44,7 @@ API.interceptors.response.use(
     const originalRequest = error.config;
     if (error.response.status === 401 && originalRequest.url === "/auth/refresh-token") {
       return new Promise((_resolve, reject) => {
-        // router.navigate("/login");
-        queryClient.clear();
-        localStorage.removeItem("token");
+        handleSessionExpiration();
 
         reject(error);
       });
@@ -52,9 +57,7 @@ API.interceptors.response.use(
         localStorage.setItem("token", JSON.stringify(res.data.data.token));
         return API(originalRequest);
       } catch (error) {
-        localStorage.removeItem("token");
-        queryClient.clear();
-        // router.navigate("/login");
+        handleSessionExpiration();
       }
     }
     return Promise.reject(error);

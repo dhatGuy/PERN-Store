@@ -1,7 +1,13 @@
+import { QueryClient } from "@tanstack/react-query";
 import { PropsWithChildren } from "react";
 import { Outlet } from "react-router-dom";
+import { meQueryOption } from "~/lib/queryOptions";
 import Nav from "../Nav";
 
+export const defaultLayoutLoader = (queryClient: QueryClient) => async () => {
+  await queryClient.ensureQueryData(meQueryOption);
+  return null;
+};
 export const DefaultLayout = ({
   children,
   title,
