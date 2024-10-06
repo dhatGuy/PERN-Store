@@ -1,5 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import authService from "~/services/auth.service";
+import cartService from "~/services/cart.service";
 import productService from "~/services/product.service";
 
 export const meQueryOption = queryOptions({
@@ -29,4 +30,16 @@ export const productBySlugQueryOptions = ({ slug }: { slug: string }) =>
   queryOptions({
     queryKey: ["product", slug],
     queryFn: () => productService.getProductBySlug(slug),
+  });
+
+export const cartQueryOptions = (isLoggedIn: boolean) =>
+  queryOptions({
+    queryKey: ["cart"],
+    queryFn: async () => {
+      if (isLoggedIn) {
+        return await cartService.getCart();
+      } else {
+        // return { data: { items: localCart.getItems() } };
+      }
+    },
   });

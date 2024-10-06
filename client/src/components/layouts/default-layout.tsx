@@ -1,11 +1,13 @@
 import { QueryClient } from "@tanstack/react-query";
 import { PropsWithChildren } from "react";
 import { Outlet } from "react-router-dom";
+import { getCartQueryOptions } from "~/api/cart/get-cart";
 import { meQueryOption } from "~/lib/queryOptions";
 import Nav from "../Nav";
 
 export const defaultLayoutLoader = (queryClient: QueryClient) => async () => {
   await queryClient.ensureQueryData(meQueryOption);
+  await queryClient.ensureQueryData(getCartQueryOptions());
   return null;
 };
 export const DefaultLayout = ({
@@ -20,11 +22,9 @@ export const DefaultLayout = ({
     <>
       <div className="min-h-screen flex flex-col">
         <Nav />
-        <div className="text-gray-700 mt-16 mx-auto px-2 lg:px-56 flex-grow h-full w-full">
-          <main className="h-full">
-            <Outlet />
-          </main>
-        </div>
+        <main className="px-4 lg:px-0 text-gray-700 mt-16 mx-auto flex-grow h-full container">
+          <Outlet />
+        </main>
 
         <footer className="mt-auto flex justify-center py-2">
           <p className="text-sm text-gray-600 sm:ml-4 sm:pl-4 sm:py-2 sm:mt-0 mt-4">

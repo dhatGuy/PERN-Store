@@ -46,6 +46,10 @@ export const createAppRouter = (queryClient: QueryClient) =>
       path: "/",
       element: <DefaultLayout />,
       errorElement: <ErrorPage />,
+      loader: async () => {
+        const { defaultLayoutLoader } = await import("../components/layouts/default-layout");
+        return defaultLayoutLoader(queryClient)();
+      },
       children: [
         {
           // path: "/products",
@@ -70,10 +74,13 @@ export const createAppRouter = (queryClient: QueryClient) =>
             return productLoader(queryClient)(args);
           },
         },
-        //     {
-        //       path: "/orders",
-        //       element: <div>orders</div>,
-        //     },
+        {
+          path: "/cart",
+          lazy: async () => {
+            const { CartRoute } = await import("./routes/cart/cart");
+            return { Component: CartRoute };
+          },
+        },
       ],
     },
   ]);

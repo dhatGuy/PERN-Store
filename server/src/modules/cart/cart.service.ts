@@ -19,32 +19,26 @@ export class CartService {
     return cart;
   };
   getCart = async (userId: string) => {
-    const cart = db
+    const cart = await db
       .selectFrom("cart")
-      .fullJoin("user", "cart.user_id", "user.id")
-      .fullJoin("cart_item", "cart.id", "cart_item.cart_id")
-      .fullJoin("product", "cart_item.product_id", "product.id")
+      .innerJoin("user", "cart.user_id", "user.id")
+      .innerJoin("cart_item", "cart.id", "cart_item.cart_id")
+      .innerJoin("product", "cart_item.product_id", "product.id")
       .selectAll("product")
       .select([
         "cart_item.quantity",
-        sql<number>`round(products.price * cart_item.quantity)::numeric, 2`.as(
+        sql<number>`round(CAST(product.price * cart_item.quantity AS numeric), 2)`.as(
           "subtotal"
         ),
       ])
       .where("user_id", "=", userId)
-      .executeTakeFirstOrThrow();
+      .orderBy("cart_item.created_at", "desc")
+      .execute();
 
     return cart;
   };
 
   updateCart = async (data: CartUpdateSchema) => {
-    if (!data.cartId) {
-      const newCart = await this.createCart(data.userId);
-      if (!newCart) throw new Error("Cart not created");
-
-      data.cartId = newCart.id;
-    }
-
     if (data.quantity === 0) {
       await db
         .deleteFrom("cart_item")
@@ -61,7 +55,7 @@ export class CartService {
         })
         .onConflict((oc) =>
           oc.columns(["cart_id", "product_id"]).doUpdateSet({
-            quantity: sql<number>`cart_item.quantity + ${data.quantity ?? 1}`,
+            quantity: sql<number>`${data.quantity ?? 1}`,
           })
         )
         .execute();
@@ -73,7 +67,7 @@ export class CartService {
       .selectAll("product")
       .select([
         "cart_item.quantity",
-        sql<number>`round(products.price * cart_item.quantity)::numeric, 2`.as(
+        sql<number>`round(CAST(product.price * cart_item.quantity AS numeric), 2)`.as(
           "subtotal"
         ),
       ])

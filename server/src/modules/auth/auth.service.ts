@@ -64,7 +64,7 @@ export class AuthService {
     const token = authUtils.signToken({
       id: user.id,
       roles: user.roles,
-      cart_id: cart.id,
+      cartId: cart.id,
     });
 
     const refreshToken = authUtils.signRefreshToken({
@@ -89,7 +89,7 @@ export class AuthService {
       .selectFrom("user")
       .fullJoin("cart", "cart.user_id", "user.id")
       .selectAll("user")
-      .select("cart.id as cart_id")
+      .select("cart.id as cartId")
       .where("email", "=", input.email)
       .executeTakeFirst();
 
@@ -113,9 +113,9 @@ export class AuthService {
     const { password, ...userWithoutPassword } = user;
 
     const token = authUtils.signToken({
-      id: user.id,
-      roles: user.roles,
-      cart_id: user.cart_id,
+      id: user.id!,
+      cartId: user.cartId!,
+      roles: user.roles!,
     });
 
     const refreshToken = authUtils.signRefreshToken({
@@ -144,7 +144,7 @@ export class AuthService {
       .selectFrom("user")
       .fullJoin("cart", "cart.user_id", "user.id")
       .selectAll("user")
-      .select("cart.id as cart_id")
+      .select("cart.id as cartId")
       .where("email", "=", email ?? "")
       .executeTakeFirst();
 
@@ -168,7 +168,7 @@ export class AuthService {
             .innerJoin("cart", "cart.user_id", "user.id")
             .select(["cart.id"])
             .where("user.email", "=", email)
-            .as("cart_id"),
+            .as("cartId"),
         ])
         .executeTakeFirstOrThrow();
 
@@ -178,7 +178,7 @@ export class AuthService {
     }
 
     let cart;
-    if (!user.cart_id && user.id) {
+    if (!user.cartId && user.id) {
       cart = await db
         .insertInto("cart")
         .values({ user_id: user.id })
@@ -187,9 +187,9 @@ export class AuthService {
     }
 
     const token = authUtils.signToken({
-      id: user.id,
-      roles: user.roles,
-      cart_id: user.cart_id ?? cart?.id,
+      id: user.id!,
+      roles: user.roles!,
+      cartId: user.cartId! ?? cart?.id,
     });
 
     const refreshToken = authUtils.signRefreshToken({
@@ -292,7 +292,7 @@ export class AuthService {
       .selectFrom("user")
       .innerJoin("cart", "cart.user_id", "user.id")
       .selectAll("user")
-      .select("cart.id as cart_id")
+      .select("cart.id as cartId")
       .where("user.id", "=", payload.id)
       .executeTakeFirst();
 
@@ -302,8 +302,8 @@ export class AuthService {
 
     const token = authUtils.signToken({
       id: user.id,
+      cartId: user.cartId,
       roles: user.roles,
-      cart_id: user.cart_id,
     });
 
     const newRefreshToken = authUtils.signRefreshToken({

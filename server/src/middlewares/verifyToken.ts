@@ -10,7 +10,10 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    const verified = jwt.verify(token, env.SECRET) as { id: string };
+    const verified = jwt.verify(token, env.SECRET) as {
+      id: string;
+      cartId: number;
+    };
     req.user = verified;
     next();
   } catch (error) {

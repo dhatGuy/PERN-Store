@@ -1,13 +1,27 @@
 import { Button } from "flowbite-react";
 import { MouseEventHandler } from "react";
 import { ShoppingCart } from "react-feather";
+import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import { useUpdateQuantity } from "~/api/cart/update-quantity";
 import { Product } from "~/enitities/product";
 import { formatCurrency } from "~/helpers/formatCurrency";
 
 export const ProductItem = ({ product }: { product: Product }) => {
+  const updateCartMutation = useUpdateQuantity();
   const addToCart: MouseEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
+    toast.promise(
+      updateCartMutation.mutateAsync({
+        product,
+        quantity: 1,
+      }),
+      {
+        loading: `Adding ${product.name} to cart`,
+        success: `Added ${product.name} to cart`,
+        error: "Error adding to cart",
+      }
+    );
   };
 
   return (
@@ -33,6 +47,7 @@ export const ProductItem = ({ product }: { product: Product }) => {
           <Button
             className="mt-4 transition duration-200 ease-out lg:bg-opacity-0 group-hover:bg-opacity-100"
             onClick={addToCart}
+            isProcessing={updateCartMutation.isPending}
           >
             <ShoppingCart className="mr-2" />
             Add to Cart

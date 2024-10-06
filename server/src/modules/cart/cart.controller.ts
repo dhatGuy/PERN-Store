@@ -27,7 +27,7 @@ export class CartController {
       quantity,
       cartId,
     });
-    res.json(ApiResponse.success("Cart updated successfully", { items: cart }));
+    res.json(ApiResponse.success("Cart updated successfully", cart));
   };
 
   deleteItem = async (req: Request, res: Response) => {

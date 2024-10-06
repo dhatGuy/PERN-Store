@@ -22,7 +22,7 @@ export const unauthorizedSchema = z.object({
   status: z.literal("UNAUTHORIZED"),
   message: z.string().optional(),
 });
-export function apiResponseSchema<T extends z.AnyZodObject>(schema: T) {
+export function apiResponseSchema<T extends z.AnyZodObject | z.ZodTypeAny>(schema: T) {
   return z.object({
     status: z.enum(["OK", "FIELD_ERROR", "UNAUTHORIZED", "SERVER_ERROR", "NOT_FOUND"]),
     message: z.string(),

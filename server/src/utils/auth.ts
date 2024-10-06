@@ -25,9 +25,9 @@ export async function verifyGoogleIdToken(code: string) {
   return ticket;
 }
 
-export function signToken(data: any) {
+export function signToken(data: { id: string; roles: string; cartId: number }) {
   try {
-    return jwt.sign(data, env.SECRET, { expiresIn: "60s" });
+    return jwt.sign(data, env.SECRET, { expiresIn: "60s" }); // TODO: use env
   } catch (error) {
     logger.error(error);
     // throw new ErrorHandler(500, "An error occurred");

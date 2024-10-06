@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import localCart from "~/helpers/localStorage";
+import localCart from "~/helpers/localCart";
 import cartService from "~/services/cart.service";
 import { useUser } from "./UserContext";
 
