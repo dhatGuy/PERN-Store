@@ -40,7 +40,9 @@ export class CartService {
   updateCart = async (data: CartUpdateSchema) => {
     if (!data.cartId) {
       const newCart = await this.createCart(data.userId);
-      data.cartId = newCart!.id;
+      if (!newCart) throw new Error("Cart not created");
+
+      data.cartId = newCart.id;
     }
 
     if (data.quantity === 0) {

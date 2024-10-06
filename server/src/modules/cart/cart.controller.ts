@@ -18,14 +18,16 @@ export class CartController {
 
   updateCart = async (req: Request, res: Response) => {
     const userId = req.user!.id;
+    const cartId = req.user!.cartId;
     const { productId, quantity } = req.body;
 
     const cart = await this.cartService.updateCart({
       userId,
       productId,
       quantity,
+      cartId,
     });
-    res.json({ items: cart });
+    res.json(ApiResponse.success("Cart updated successfully", { items: cart }));
   };
 
   deleteItem = async (req: Request, res: Response) => {

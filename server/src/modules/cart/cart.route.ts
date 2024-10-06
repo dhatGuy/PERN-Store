@@ -8,12 +8,12 @@ const cartController = new CartController();
 router.use(verifyToken);
 
 // get cart items
-router.route("/").get(cartController.getCart);
-
-// add item to cart
-router.route("/update").post(cartController.updateCart);
-
-// delete item from cart
-router.route("/delete").delete(cartController.deleteItem);
+router
+  .route("/")
+  .get(cartController.getCart)
+  // add item to cart
+  .put(cartController.updateCart)
+  // delete item from cart
+  .delete(cartController.deleteItem);
 
 export default router;
