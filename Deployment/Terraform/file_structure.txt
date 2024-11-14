@@ -1,0 +1,54 @@
+project-root/
+├── main.tf               
+├── variables.tf        
+├── outputs.tf             
+├── terraform.tfvars       
+├── provider.tf            
+├── env/
+│   ├── dev/               
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   ├── outputs.tf
+│   │   └── backend.tf    
+│   ├── staging/
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   ├── outputs.tf
+│   │   └── backend.tf
+│   └── prod/
+│       ├── main.tf
+│       ├── variables.tf
+│       ├── outputs.tf
+│       └── backend.tf
+├── modules/              
+│   ├── network/           
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   ├── compute/           
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   ├── load_balancer/     
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   ├── database/          
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   ├── security/          
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   ├── monitoring/        
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   └── ci_cd/             
+│       ├── main.tf
+│       ├── variables.tf
+│       └── outputs.tf
+└── scripts/               
+    ├── init.sh
+    └── deploy.sh
