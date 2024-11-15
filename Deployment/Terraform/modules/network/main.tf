@@ -2,56 +2,60 @@ provider "aws" {
   region = var.region
 }
 
+# Create VPC
 resource "aws_vpc" "main" {
-  cidr_block           = "10.0.0.0/16"
+  cidr_block           = var.vpc_cidr[var.environment]
   enable_dns_support   = true
   enable_dns_hostnames = true
 
   tags = {
-    Name = "VPC_PERN_Store"
+    Name = "${var.environment}-VPC"
   }
 }
 
+# Create Subnets (public and private)
 resource "aws_subnet" "subnets" {
-  for_each             = var.subnets
+  for_each = var.subnets[var.environment]
+
   vpc_id               = aws_vpc.main.id
   cidr_block           = each.value.cidr_block
   map_public_ip_on_launch = each.value.map_public_ip
   availability_zone    = each.value.availability_zone
 
   tags = {
-    Name = each.value.name
+    Name = "${var.environment}-${each.value.name}"
   }
 }
 
+# Create Internet Gateway
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "main-igw"
+    Name = "${var.environment}-IGW"
   }
 }
 
-
+# Elastic IP for NAT Gateway
 resource "aws_eip" "nat_eip" {
   domain = "vpc"
-  
+
   tags = {
-    Name = "nat-eip"
+    Name = "${var.environment}-EIP"
   }
 }
 
-
+# Create NAT Gateway
 resource "aws_nat_gateway" "nat_gw" {
   allocation_id = aws_eip.nat_eip.id
   subnet_id     = aws_subnet.subnets["public_az_1a"].id
 
   tags = {
-    Name = "nat-gateway"
+    Name = "${var.environment}-NAT-Gateway"
   }
 }
 
-
+# Create Route Tables
 resource "aws_route_table" "public_rt" {
   vpc_id = aws_vpc.main.id
   route {
@@ -59,8 +63,13 @@ resource "aws_route_table" "public_rt" {
     gateway_id = aws_internet_gateway.igw.id
   }
 
+ route {
+    cidr_block = var.vpc_cidr[var.environment]  
+    gateway_id = "local"
+  }
+
   tags = {
-    Name = "public-route-table"
+    Name = "${var.environment}-Public-Route-Table"
   }
 }
 
@@ -71,21 +80,20 @@ resource "aws_route_table" "private_rt" {
     nat_gateway_id = aws_nat_gateway.nat_gw.id
   }
 
+   route {
+    cidr_block = var.vpc_cidr[var.environment]  
+    gateway_id = "local"
+  }
+
   tags = {
-    Name = "private-route-table"
+    Name = "${var.environment}-Private-Route-Table"
   }
 }
 
+# Associate Route Tables with Subnets
+resource "aws_route_table_association" "route_association" {
+  for_each = var.subnets[var.environment]
 
-resource "aws_route_table_association" "public" {
-  for_each = { for k, v in var.subnets : k => v if v.map_public_ip }
   subnet_id      = aws_subnet.subnets[each.key].id
-  route_table_id = aws_route_table.public_rt.id
-}
-
-
-resource "aws_route_table_association" "private" {
-  for_each = { for k, v in var.subnets : k => v if !v.map_public_ip }
-  subnet_id      = aws_subnet.subnets[each.key].id
-  route_table_id = aws_route_table.private_rt.id
+  route_table_id = each.value.map_public_ip ? aws_route_table.public_rt.id : aws_route_table.private_rt.id
 }
