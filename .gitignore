@@ -8,3 +8,5 @@ client/.eslintcache
 db
 dist
 client/public/sitemap.xml
+.terraform/
+.terraform.lock.hcl
