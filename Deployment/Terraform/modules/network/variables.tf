@@ -128,3 +128,22 @@ variable "subnets" {
     }
   }
 }
+
+variable "ami" {
+  type = string
+  description = "ami id for basiton host "
+  default = "ami-0866a3c8686eaeeba"
+  
+}
+
+variable "instance_type" {
+ type = string
+ description = "vm type for basiton host "
+ default = "t2.micro" 
+
+}
+
+variable "bastion_sg_id" {
+  description = "Security group ID for the Bastion host"
+  type        = string
+}

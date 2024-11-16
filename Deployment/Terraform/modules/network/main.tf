@@ -97,3 +97,27 @@ resource "aws_route_table_association" "route_association" {
   subnet_id      = aws_subnet.subnets[each.key].id
   route_table_id = each.value.map_public_ip ? aws_route_table.public_rt.id : aws_route_table.private_rt.id
 }
+
+# Bastion Host Configuration
+resource "aws_instance" "bastion_host" {
+  ami           = var.ami
+  instance_type = var.instance_type
+  subnet_id     = aws_subnet.subnets["public_az_1a"].id 
+  security_groups = [ var.bastion_sg_id ]
+
+  user_data = <<-EOF
+    #!/bin/bash
+    yum update -y
+    yum install -y httpd
+    systemctl enable httpd
+    systemctl start httpd
+    echo "<html><head><title>Bastion Status</title></head><body><h1>Bastion is working fine</h1></body></html>" > /var/www/html/index.html
+    chmod 644 /var/www/html/index.html
+    systemctl restart httpd
+  EOF
+  
+  tags = {
+    Name = "${var.environment}-bastion-host"
+  }
+}
+
