@@ -8,3 +8,12 @@ output "Basiton_Instance_Id" {
   value = aws_instance.bastion_host.id
   description = "id needed for ssm"
 }
+
+output "subnet_id" {
+  value = aws_subnet.subnets["public_az_1a"].id 
+}
+
+
+output "availability_zone" {
+  value = aws_subnet.subnets["public_az_1a"].availability_zone
+}

@@ -132,7 +132,7 @@ variable "subnets" {
 variable "ami" {
   type = string
   description = "ami id for basiton host "
-  default = "ami-0866a3c8686eaeeba"
+ 
   
 }
 

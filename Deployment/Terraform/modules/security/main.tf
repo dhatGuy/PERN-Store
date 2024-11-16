@@ -3,24 +3,14 @@ resource "aws_security_group" "bastion_sg" {
   description = "Security group for Bastion host"
   vpc_id      = var.vpc_id
 
-  ingress {
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  ingress {
-    from_port = 80
-    to_port = 80
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port = 443
-    to_port = 443
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+  dynamic "ingress" {
+    for_each = var.bastion_ingress_rules
+    content {
+      from_port   = ingress.value.from_port
+      to_port     = ingress.value.to_port
+      protocol    = ingress.value.protocol
+      cidr_blocks = ingress.value.cidr_blocks
+    }
   }
 
   egress {
@@ -35,6 +25,32 @@ resource "aws_security_group" "bastion_sg" {
   }
 }
 
+resource "aws_security_group" "sonar_sg" {
+  name        = "${var.environment}-sonar-sg"
+  description = "Security group for SonarQube"
+  vpc_id      = var.vpc_id
+
+  dynamic "ingress" {
+    for_each = var.sonar_ingress_rules
+    content {
+      from_port   = ingress.value.from_port
+      to_port     = ingress.value.to_port
+      protocol    = ingress.value.protocol
+      cidr_blocks = ingress.value.cidr_blocks
+    }
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${var.environment}-sonar-sg"
+  }
+}
 
 resource "aws_iam_role" "bastion_ssm_role" {
   name = "${var.environment}-bastion-ssm-role"
@@ -58,5 +74,6 @@ resource "aws_iam_policy_attachment" "bastion_ssm_attach" {
   roles      = [aws_iam_role.bastion_ssm_role.name]
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
+
 
 
