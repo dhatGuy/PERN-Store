@@ -121,3 +121,10 @@ resource "aws_instance" "bastion_host" {
   }
 }
 
+resource "aws_iam_instance_profile" "basiton_ssm_profile" {
+  name = "${var.environment}-bastion-ssm-profile"
+  role = var.bastion_ssm_role_name
+}
+
+
+

@@ -147,3 +147,8 @@ variable "bastion_sg_id" {
   description = "Security group ID for the Bastion host"
   type        = string
 }
+
+variable "bastion_ssm_role_name" {
+  type = string
+  description = "role name that is used for session mmanager"
+}
