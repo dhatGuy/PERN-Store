@@ -1,9 +1,9 @@
 resource "aws_instance" "sonarqube_instance" {
   ami             = var.ami
   instance_type   = "t2.medium"
-  subnet_id       = var.subnet_id
+  subnet_id       = var.sonar-subnet_id
   security_groups = [var.sonar_sg_id]
-
+  key_name = var.key_name
 
   user_data = <<-EOF
 #!/bin/bash
@@ -131,20 +131,16 @@ resource "aws_instance" "jenkins_server" {
   ami           = var.ami # Amazon Linux 2 AMI
   instance_type = var.instance_type              # Change instance type as needed
   count = 2
-  subnet_id          = var.subnet_id
+  subnet_id          = var.jenkins_subnet_id
 security_groups = [ var.jenkins_sg ]
 
 key_name      = var.key_name
 
   user_data = <<-EOF
-
 #!/bin/bash
-
-# Update system and install necessary dependencies
 sudo apt update -y
 sudo apt install -y fontconfig openjdk-17-jre wget gnupg
 
-# Add Jenkins repository key and source list
 sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
   https://pkg.jenkins.io/debian/jenkins.io-2023.key
 
@@ -152,35 +148,25 @@ echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
   https://pkg.jenkins.io/debian binary/" | sudo tee \
   /etc/apt/sources.list.d/jenkins.list > /dev/null
 
-# Install Jenkins
 sudo apt-get update -y
 sudo apt-get install jenkins -y
 
-# Enable Jenkins service to start on boot
 sudo systemctl enable jenkins 
 
-# Install Nginx if not already installed
 sudo apt install nginx -y
 
-# Nginx configuration for Jenkins reverse proxy
 echo -n "server {
       listen 80;
-      server_name _;
+      server_name jenkins;
 
       location / {
           proxy_pass http://127.0.0.1:8080;  # Forward to Jenkins
       }
   }
 " | sudo tee /etc/nginx/sites-available/default > /dev/null
-
-# Reload Nginx to apply configuration changes
 sudo systemctl restart nginx
-
-# Enable Nginx to start on boot
 sudo systemctl enable nginx
-
 EOF
-
   tags = {
     Name = "${var.environment}Jenkins-Server"
   }

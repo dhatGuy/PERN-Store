@@ -9,7 +9,11 @@ variable "instance_type" {
   default = "t2.micro" 
 }
 
-variable "subnet_id" {
+variable "sonar-subnet_id" {
+  type = string
+  description = "subnet id where the sonarqube instance is deployed "
+}
+variable "jenkins_subnet_id" {
   type = string
   description = "subnet id where the sonarqube instance is deployed "
 }
