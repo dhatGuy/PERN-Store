@@ -9,7 +9,8 @@ module "cicd" {
   key_name = var.key_name
   instance_type = var.instance_type
   availability_zone = module.network.availability_zone
-  subnet_id = module.network.subnet_id
+  sonar-subnet_id = module.network.sonar-subnet_id
+  jenkins_subnet_id = module.network.jenkins_subnet_id
   jenkins_sg = module.security.jenkins_sg
   sonar_sg_id = module.security.sonar_sg_id
 }
