@@ -22,6 +22,7 @@ module "network" {
   key_name = var.key_name
   ami = var.ami
   instance_type = var.instance_type
+  region = var.region
 }
 
 module "security" {

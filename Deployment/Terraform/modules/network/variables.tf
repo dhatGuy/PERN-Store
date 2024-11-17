@@ -2,14 +2,12 @@
 variable "region" {
   description = "AWS region"
   type        = string
-  default     = "us-east-1"
 }
 
 # Environment Name (dev, staging, prod)
 variable "environment" {
   description = "Environment name (dev, staging, prod)"
   type        = string
-  default     = "dev"
 }
 
 # VPC CIDR Blocks for different environments

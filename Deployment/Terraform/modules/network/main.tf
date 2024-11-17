@@ -107,13 +107,13 @@ resource "aws_instance" "bastion_host" {
 
   user_data = <<-EOF
     #!/bin/bash
-    yum update -y
-    yum install -y httpd
-    systemctl enable httpd
-    systemctl start httpd
+    sudo apt update -y
+    sudo apt install -y httpd
+    sudo systemctl enable httpd
+    sudo systemctl start httpd
     echo "<html><head><title>Bastion Status</title></head><body><h1>Bastion is working fine</h1></body></html>" > /var/www/html/index.html
     chmod 644 /var/www/html/index.html
-    systemctl restart httpd
+    sudo systemctl restart httpd
   EOF
   
   tags = {
