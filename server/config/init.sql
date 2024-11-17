@@ -50,6 +50,7 @@ CREATE TABLE public.products
     price real NOT NULL,
     description text NOT NULL,
     image_url character varying,
+    createdAt timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (product_id)
 );
 
