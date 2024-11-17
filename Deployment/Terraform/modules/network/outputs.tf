@@ -9,8 +9,12 @@ output "Basiton_Instance_Id" {
   description = "id needed for ssm"
 }
 
-output "subnet_id" {
+output "sonar-subnet_id" {
   value = aws_subnet.subnets["public_az_1a"].id 
+}
+
+output "jenkins_subnet_id" {
+  value = aws_subnet.subnets["private_az_1a"].id 
 }
 
 

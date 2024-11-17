@@ -1,9 +1,9 @@
 resource "aws_instance" "sonarqube_instance" {
   ami             = var.ami
   instance_type   = "t2.medium"
-  subnet_id       = var.subnet_id
+  subnet_id       = var.sonar-subnet_id
   security_groups = [var.sonar_sg_id]
-
+  key_name = var.key_name
 
   user_data = <<-EOF
 #!/bin/bash
@@ -125,3 +125,50 @@ resource "aws_volume_attachment" "sonarqube_volume_attachment" {
   volume_id   = aws_ebs_volume.sonarqube_volume.id
   instance_id = aws_instance.sonarqube_instance.id
 }
+
+
+resource "aws_instance" "jenkins_server" {
+  ami           = var.ami # Amazon Linux 2 AMI
+  instance_type = var.instance_type              # Change instance type as needed
+  count = 2
+  subnet_id          = var.jenkins_subnet_id
+security_groups = [ var.jenkins_sg ]
+
+key_name      = var.key_name
+
+  user_data = <<-EOF
+#!/bin/bash
+sudo apt update -y
+sudo apt install -y fontconfig openjdk-17-jre wget gnupg
+
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian/jenkins.io-2023.key
+
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian binary/" | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+sudo apt-get update -y
+sudo apt-get install jenkins -y
+
+sudo systemctl enable jenkins 
+
+sudo apt install nginx -y
+
+echo -n "server {
+      listen 80;
+      server_name jenkins;
+
+      location / {
+          proxy_pass http://127.0.0.1:8080;  # Forward to Jenkins
+      }
+  }
+" | sudo tee /etc/nginx/sites-available/default > /dev/null
+sudo systemctl restart nginx
+sudo systemctl enable nginx
+EOF
+  tags = {
+    Name = "${var.environment}Jenkins-Server"
+  }
+}
+

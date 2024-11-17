@@ -104,16 +104,14 @@ resource "aws_instance" "bastion_host" {
   instance_type = var.instance_type
   subnet_id     = aws_subnet.subnets["public_az_1a"].id 
   security_groups = [ var.bastion_sg_id ]
-
+  key_name = var.key_name
   user_data = <<-EOF
     #!/bin/bash
-    yum update -y
-    yum install -y httpd
-    systemctl enable httpd
-    systemctl start httpd
-    echo "<html><head><title>Bastion Status</title></head><body><h1>Bastion is working fine</h1></body></html>" > /var/www/html/index.html
-    chmod 644 /var/www/html/index.html
-    systemctl restart httpd
+    sudo apt update -y
+    sudo apt install -y nginx
+    sudo systemctl enable nginx
+    sudo systemctl start nginx
+    sudo systemctl restart nginx
   EOF
   
   tags = {

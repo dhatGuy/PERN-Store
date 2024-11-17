@@ -1,8 +1,6 @@
 variable "ami" {
   type = string
   description = "the ami id used for sonarqube instance"
-  
-
 }
 
 variable "instance_type" {
@@ -11,7 +9,11 @@ variable "instance_type" {
   default = "t2.micro" 
 }
 
-variable "subnet_id" {
+variable "sonar-subnet_id" {
+  type = string
+  description = "subnet id where the sonarqube instance is deployed "
+}
+variable "jenkins_subnet_id" {
   type = string
   description = "subnet id where the sonarqube instance is deployed "
 }
@@ -30,4 +32,15 @@ variable "sonar_sg_id" {
 variable "availability_zone" {
   type = string
   description = "availablity zone for ebs of sonarqube"
+}
+
+
+variable "jenkins_sg" {
+  type = string
+}
+
+
+variable "key_name" {
+  
+  type = string
 }

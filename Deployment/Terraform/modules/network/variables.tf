@@ -2,14 +2,12 @@
 variable "region" {
   description = "AWS region"
   type        = string
-  default     = "us-east-1"
 }
 
 # Environment Name (dev, staging, prod)
 variable "environment" {
   description = "Environment name (dev, staging, prod)"
   type        = string
-  default     = "dev"
 }
 
 # VPC CIDR Blocks for different environments
@@ -33,6 +31,7 @@ variable "subnets" {
     name              = string
   })))
 
+  
   default = {
     dev = {
       public_az_1a = {
@@ -64,65 +63,65 @@ variable "subnets" {
       }
     
     }
-    prod = {
+    stage = {
     
       public_az_1a = {
         cidr_block        = "10.1.1.0/24"
         map_public_ip     = true
         availability_zone = "us-east-1a"
-        name              = "prod-public-subnet-az-1a"
+        name              = "stage-public-subnet-az-1a"
       }
 
       public_az_1b = {
         cidr_block        = "10.1.2.0/24"
         map_public_ip     = true
         availability_zone = "us-east-1b"
-        name              = "prod-public-subnet-az-1b"
+        name              = "stage-public-subnet-az-1b"
       }
 
       private_az_1a = {
         cidr_block        = "10.1.3.0/24"
         map_public_ip     = false
         availability_zone = "us-east-1a"
-        name              = "prod-public-subnet-az-1a"
+        name              = "stage-private-subnet-az-1a"
       }
     
       private_az_1b = {
         cidr_block        = "10.1.4.0/24"
         map_public_ip     = false
         availability_zone = "us-east-1b"
-        name              = "prod-public-subnet-az-1b"
+        name              = "stage-private-subnet-az-1b"
       }
     }
 
-    stage = {
+    prod = {
     
       public_az_1a = {
         cidr_block        = "10.2.1.0/24"
         map_public_ip     = true
         availability_zone = "us-east-1a"
-        name              = "stage-public-subnet-az-1a"
+        name              = "prod-public-subnet-az-1a"
       }
 
       public_az_1b = {
         cidr_block        = "10.2.2.0/24"
         map_public_ip     = true
         availability_zone = "us-east-1b"
-        name              = "stage-public-subnet-az-1b"
+        name              = "prod-public-subnet-az-1b"
       }
 
       private_az_1a = {
         cidr_block        = "10.2.3.0/24"
         map_public_ip     = false
         availability_zone = "us-east-1a"
-        name              = "stage-public-subnet-az-1a"
+        name              = "prod-private-subnet-az-1a"
       }
     
       private_az_1b = {
         cidr_block        = "10.2.4.0/24"
         map_public_ip     = false
         availability_zone = "us-east-1b"
-        name              = "stage-public-subnet-az-1b"
+        name              = "prod-private-subnet-az-1b"
       }
     
     }
@@ -132,15 +131,17 @@ variable "subnets" {
 variable "ami" {
   type = string
   description = "ami id for basiton host "
- 
   
+}
+
+variable "key_name" {
+  
+  type = string
 }
 
 variable "instance_type" {
  type = string
  description = "vm type for basiton host "
- default = "t2.micro" 
-
 }
 
 variable "bastion_sg_id" {
