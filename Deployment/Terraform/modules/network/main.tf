@@ -108,12 +108,10 @@ resource "aws_instance" "bastion_host" {
   user_data = <<-EOF
     #!/bin/bash
     sudo apt update -y
-    sudo apt install -y httpd
-    sudo systemctl enable httpd
-    sudo systemctl start httpd
-    echo "<html><head><title>Bastion Status</title></head><body><h1>Bastion is working fine</h1></body></html>" > /var/www/html/index.html
-    chmod 644 /var/www/html/index.html
-    sudo systemctl restart httpd
+    sudo apt install -y nginx
+    sudo systemctl enable nginx
+    sudo systemctl start nginx
+    sudo systemctl restart nginx
   EOF
   
   tags = {
