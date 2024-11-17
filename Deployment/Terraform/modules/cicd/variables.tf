@@ -1,8 +1,6 @@
 variable "ami" {
   type = string
   description = "the ami id used for sonarqube instance"
-  
-
 }
 
 variable "instance_type" {
@@ -30,4 +28,15 @@ variable "sonar_sg_id" {
 variable "availability_zone" {
   type = string
   description = "availablity zone for ebs of sonarqube"
+}
+
+
+variable "jenkins_sg" {
+  type = string
+}
+
+
+variable "key_name" {
+  
+  type = string
 }
