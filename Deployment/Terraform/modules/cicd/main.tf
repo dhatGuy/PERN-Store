@@ -128,8 +128,8 @@ resource "aws_volume_attachment" "sonarqube_volume_attachment" {
 
 
 resource "aws_instance" "jenkins_server" {
-  ami           = var.ami # Amazon Linux 2 AMI
-  instance_type = var.instance_type              # Change instance type as needed
+  ami           = var.ami 
+  instance_type = var.instance_type            
   count = 2
   subnet_id          = var.jenkins_subnet_id
 security_groups = [ var.jenkins_sg ]
