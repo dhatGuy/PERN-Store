@@ -13,11 +13,26 @@ output "sonar-subnet_id" {
   value = aws_subnet.subnets["public_az_1a"].id 
 }
 
+
 output "jenkins_subnet_id" {
   value = aws_subnet.subnets["private_az_1a"].id 
 }
+
+output "sonar_subnet_ids" {
+  
+  value = [
+    aws_subnet.subnets["public_az_1a"].id,
+    aws_subnet.subnets["public_az_1b"].id
+  ]
+}
+
 
 
 output "availability_zone" {
   value = aws_subnet.subnets["public_az_1a"].availability_zone
 }
+
+output "igw_id" {
+  value = aws_internet_gateway.igw.id
+}
+
