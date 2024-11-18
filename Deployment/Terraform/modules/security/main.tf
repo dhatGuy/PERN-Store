@@ -9,7 +9,7 @@ resource "aws_security_group" "bastion_sg" {
       from_port   = ingress.value.from_port
       to_port     = ingress.value.to_port
       protocol    = ingress.value.protocol
-      cidr_blocks = ingress.value.cidr_blocks
+      cidr_blocks = ingress.value.cidr_block
     }
   }
   egress {
@@ -35,7 +35,7 @@ resource "aws_security_group" "sonar_sg" {
       from_port   = ingress.value.from_port
       to_port     = ingress.value.to_port
       protocol    = ingress.value.protocol
-      cidr_blocks = ingress.value.cidr_blocks
+      cidr_blocks = ingress.value.cidr_block
     }
   }
 
@@ -79,36 +79,14 @@ resource "aws_security_group" "jenkins_sg" {
   description = "Security group for Jenkins-server"
   vpc_id      = var.vpc_id
 
-  egress {
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  ingress {
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  ingress {
-    from_port = 8080
-    to_port = 8080
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-ingress {
-    from_port = 80
-    to_port = 80
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  ingress {
-    from_port = 443
-    to_port = 443
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+  dynamic "ingress" {
+    for_each = var.jenkins_ingress_rules
+    content {
+      from_port = ingress.value.from_port
+      to_port = ingress.value.to_port
+      protocol = ingress.value.protocol
+      cidr_blocks = ingress.value.cidr_block
+    }
   }
 
   egress {
@@ -122,5 +100,38 @@ ingress {
     Name = "${var.environment}-jenkins-server"
   }
 }
+
+resource "aws_security_group" "sonar_alb_sg" {
+  name = "${var.environment}-sonar_alb_sg"
+  vpc_id = var.vpc_id
+  description = "for secure access from jenkins to sonarqube"
+
+  dynamic "ingress" {
+    for_each = var.sonar_ingress_rules
+    content {
+      from_port = ingress.value.from_port
+      to_port = ingress.value.to_port
+      protocol = ingress.value.protocol
+      cidr_blocks = ingress.value.cidr_block
+    }
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${var.environment}-sonar-alb-sg"
+  }
+}
+
+
+
+  
+
+  
+
 
 
