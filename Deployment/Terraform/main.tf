@@ -33,3 +33,14 @@ module "security" {
 
 }
 
+module "load_balancer" {
+  source = "./modules/load_balancers"
+  enviroment = var.environment
+  sonar_subnet_ids = module.network.sonar_subnet_ids
+  sonar_alb_sg = module.security.sonar_alb_sg
+  igw_id = module.network.igw_id
+  vpc_id = module.network.vpc_id
+  sonar_target_instance = module.cicd.sonar_target_instance
+
+}
+
