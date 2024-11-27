@@ -1,0 +1,99 @@
+pipeline {
+    agent any
+
+    environment {
+        GIT_REPO = 'https://github.com/Boora-Raman/PERN-Store.git'
+        GIT_BRANCH = 'main'
+        SONARQUBE_SERVER = 'SonarQube'
+        NEXUS_PROTOCOL = "https"
+        NEXUS_URL = "35.172.231.232:8082"
+        NEXUS_REPOSITORY = "docker"
+        NEXUS_CREDENTIAL_ID = "NexusCreds"
+        IMAGE_NAME = "pern-app"
+        IMAGE_TAG = "latest"
+        PATH = "/usr/bin:/usr/local/bin:$PATH"
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                script {
+                    deleteDir()
+                    echo "Cloning Git Repository..."
+                    checkout([$class: 'GitSCM', branches: [[name: "*/${GIT_BRANCH}"]],
+                              userRemoteConfigs: [[url: "${GIT_REPO}"]]])
+                }
+            }
+        }
+
+        stage('Verify Node.js Installation') {
+            steps {
+                sh 'node -v'
+                sh 'npm -v'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    echo "Installing dependencies..."
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    echo "Running SonarQube Analysis..."
+                    def scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+                    withSonarQubeEnv(SONARQUBE_SERVER) {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
+                }
+            }
+        }
+
+        stage('Verify Docker') {
+            steps {
+                sh 'docker --version'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    echo "Building Docker image..."
+                    sh """
+                    docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -f client/Dockerfile client
+                    """
+                }
+            }
+        }
+
+        stage('Push Docker Image to Nexus') {
+            steps {
+                script {
+                    echo "Pushing Docker Image to Nexus..."
+                    sh """
+                    docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${NEXUS_URL}/${IMAGE_NAME}:${IMAGE_TAG}
+                    docker push ${NEXUS_URL}/${IMAGE_NAME}:${IMAGE_TAG}
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Cleaning up...'
+            cleanWs()
+        }
+        success {
+            echo 'Build, test, and analysis succeeded!'
+        }
+        failure {
+            echo 'Build, test, or analysis failed.'
+        }
+    }
+}
