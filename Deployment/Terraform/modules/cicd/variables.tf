@@ -45,3 +45,7 @@ variable "key_name" {
   type = string
 }
 
+variable "jenkins_availablity_zone" {
+  type = string
+}
+
