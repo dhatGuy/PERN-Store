@@ -122,3 +122,49 @@ variable "sonar_alb_ingress_rules" {
     }
   }
 }
+
+variable "nexus_ingress_rules" {
+  type = map(object({
+    from_port = number
+    to_port = number
+    protocol = string
+    cidr_block = list(string) 
+  }))
+
+  default =  {
+    "http" = {
+      from_port = 80
+      to_port = 80
+      protocol = "tcp"
+      cidr_block = ["0.0.0.0/0"]
+    }
+    "nexus" = {
+      from_port = 8081
+      to_port = 8081
+      protocol = "tcp"
+      cidr_block = ["0.0.0.0/0"]
+    }
+
+    "push_port" = {
+      from_port = 8082
+      to_port = 8082
+      protocol = "tcp"
+      cidr_block = ["0.0.0.0/0"]
+    }
+
+    "pull_port" = {
+      from_port = 8083
+      to_port = 8083
+      protocol = "tcp"
+      cidr_block = ["0.0.0.0/0"]
+    }
+
+    "ssh" = {
+      from_port = 22
+      to_port = 22
+      protocol = "tcp"
+      cidr_block = ["0.0.0.0/0"]
+    }
+
+  }
+}
