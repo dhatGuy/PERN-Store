@@ -129,10 +129,11 @@ resource "aws_volume_attachment" "sonarqube_volume_attachment" {
 
 resource "aws_instance" "jenkins_server" {
   ami           = var.ami
-  instance_type = var.instance_type
+  instance_type = "t2.large"
   subnet_id     = var.jenkins_subnet_id
   security_groups = [var.jenkins_sg]
   key_name      = var.key_name
+  
 
   user_data = <<-EOF
 #!/bin/bash
@@ -155,4 +156,19 @@ EOF
   tags = {
     Name = "${var.environment}-Jenkins-Server"
   }
+}
+
+
+resource "aws_ebs_volume" "jenkins_ebs" {
+  availability_zone = var.jenkins_availablity_zone
+  size = 20
+  tags = {
+    Name = "${var.environment}-Jenkins-ebs"
+  }
+}
+
+resource "aws_volume_attachment" "jenkins-ebs-attach" {
+  device_name = "/dev/xvdg"
+  volume_id = aws_ebs_volume.jenkins_ebs.id
+  instance_id = aws_instance.jenkins_server.id
 }
