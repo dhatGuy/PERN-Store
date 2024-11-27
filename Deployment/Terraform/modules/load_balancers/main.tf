@@ -15,6 +15,7 @@ resource "aws_lb" "sonar-lb" {
 resource "aws_lb_target_group" "sonar_lb_tg" {
   name = "${var.enviroment}-sonar-lb-tg"
   vpc_id = var.vpc_id
+  
   target_type = "instance"
   protocol_version = "HTTP1"
   health_check {
