@@ -17,3 +17,7 @@ output "sonar_alb_sg" {
   value = aws_security_group.sonar_alb_sg.id
 }
 
+
+output "nexus_sg" {
+  value = aws_security_group.nexus_sg.id
+}
