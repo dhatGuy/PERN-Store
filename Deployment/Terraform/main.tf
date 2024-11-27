@@ -13,6 +13,7 @@ module "cicd" {
   jenkins_subnet_id = module.network.jenkins_subnet_id
   jenkins_sg = module.security.jenkins_sg
   sonar_sg_id = module.security.sonar_sg_id
+  jenkins_availablity_zone = module.network.jenkins_availablity_zone
 }
 
 module "network" {
@@ -43,4 +44,14 @@ module "load_balancer" {
   sonar_target_instance = module.cicd.sonar_target_instance
 
 }
+module "artifact" {
+  source = "./modules/artifacts"
+  key_name = var.key_name
+  nexus_sg = module.security.nexus_sg
+  nexus_subnet = module.network.nexus_subnet
+  enviroment = var.environment
+  ami = var.ami
+}
+
+
 
