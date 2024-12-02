@@ -8,3 +8,7 @@ output "sonar_id" {
   description = "it will be used while creating the ssh keys "
 }
 
+
+output "sonar_target_instance" {
+  value = aws_instance.sonarqube_instance.id
+}
