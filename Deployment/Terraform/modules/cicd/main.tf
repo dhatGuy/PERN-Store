@@ -128,13 +128,12 @@ resource "aws_volume_attachment" "sonarqube_volume_attachment" {
 
 
 resource "aws_instance" "jenkins_server" {
-  ami           = var.ami # Amazon Linux 2 AMI
-  instance_type = var.instance_type              # Change instance type as needed
-  count = 2
-  subnet_id          = var.jenkins_subnet_id
-security_groups = [ var.jenkins_sg ]
-
-key_name      = var.key_name
+  ami           = var.ami
+  instance_type = "t2.large"
+  subnet_id     = var.jenkins_subnet_id
+  security_groups = [var.jenkins_sg]
+  key_name      = var.key_name
+  
 
   user_data = <<-EOF
 #!/bin/bash
@@ -152,23 +151,24 @@ sudo apt-get update -y
 sudo apt-get install jenkins -y
 
 sudo systemctl enable jenkins 
-
-sudo apt install nginx -y
-
-echo -n "server {
-      listen 80;
-      server_name jenkins;
-
-      location / {
-          proxy_pass http://127.0.0.1:8080;  # Forward to Jenkins
-      }
-  }
-" | sudo tee /etc/nginx/sites-available/default > /dev/null
-sudo systemctl restart nginx
-sudo systemctl enable nginx
 EOF
+
   tags = {
-    Name = "${var.environment}Jenkins-Server"
+    Name = "${var.environment}-Jenkins-Server"
   }
 }
 
+
+resource "aws_ebs_volume" "jenkins_ebs" {
+  availability_zone = var.jenkins_availablity_zone
+  size = 20
+  tags = {
+    Name = "${var.environment}-Jenkins-ebs"
+  }
+}
+
+resource "aws_volume_attachment" "jenkins-ebs-attach" {
+  device_name = "/dev/xvdg"
+  volume_id = aws_ebs_volume.jenkins_ebs.id
+  instance_id = aws_instance.jenkins_server.id
+}

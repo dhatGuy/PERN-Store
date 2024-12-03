@@ -105,15 +105,6 @@ resource "aws_instance" "bastion_host" {
   subnet_id     = aws_subnet.subnets["public_az_1a"].id 
   security_groups = [ var.bastion_sg_id ]
   key_name = var.key_name
-  user_data = <<-EOF
-    #!/bin/bash
-    sudo apt update -y
-    sudo apt install -y nginx
-    sudo systemctl enable nginx
-    sudo systemctl start nginx
-    sudo systemctl restart nginx
-  EOF
-  
   tags = {
     Name = "${var.environment}-bastion-host"
   }

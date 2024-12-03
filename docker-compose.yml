@@ -11,10 +11,10 @@ services:
     env_file:
       - ./server/.env
     environment:
-      - POSTGRES_HOST=pern-store-db
+      - POSTGRES_HOST=3.84.191.228
       - POSTGRES_DB=pernstore
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=adminuser
+      - POSTGRES_PASSWORD=newpassword
     volumes:
       # Maps the server directory to
       # the working directory in the container
@@ -25,8 +25,10 @@ services:
       - /usr/src/app/node_modules
     ports:
       - 9000:9000
-    depends_on:
-      - database
+    networks:
+      - pernstore
+    # depends_on:
+    #   - database
   client:
     image: pern-store-client
     container_name: pern-store-client
@@ -37,38 +39,43 @@ services:
       context: ./client
       dockerfile: Dockerfile
     ports:
-      - 3000:3000
+      - 3001:3000
     volumes:
       - ./client:/usr/src/app
       - /usr/src/app/node_modules
     depends_on:
       - server
-  database:
-    container_name: pern-store-db
-    image: postgres
-    restart: always
-    env_file:
-      - ./server/.env
-    environment:
-      # other environment variables is in ./server/.env file
-      - POSTGRES_PASSWORD=adminuser
-    ports:
-      - 7890:5432
-    volumes:
-      - ./db:/var/lib/postgresql/data
-      # When the PostgreSQL container is started it will run any scripts
-      # provided in the `docker-entrypoint-initdb.d` directory
-      # seed the database with the init.sql file
-      - ./server/config/init.sql:/docker-entrypoint-initdb.d/init.sql
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "dhatguy@mail.com"
-      PGADMIN_DEFAULT_PASSWORD: "qwertyuiop"
-    ports:
-      - "16543:80"
-    depends_on:
-      - database
+    networks:
+      - pernstore
+  # database:
+  #   container_name: pern-store-db
+  #   image: postgres
+  #   restart: always
+  #   env_file:
+  #     - ./server/.env
+  #   environment:
+  #     # other environment variables is in ./server/.env file
+  #     - POSTGRES_PASSWORD=adminuser
+  #   ports:
+  #     - 7890:5432
+  #   volumes:
+  #     - ./db:/var/lib/postgresql/data
+  #     # When the PostgreSQL container is started it will run any scripts
+  #     # provided in the `docker-entrypoint-initdb.d` directory
+  #     # seed the database with the init.sql file
+  #     - ./server/config/init.sql:/docker-entrypoint-initdb.d/init.sql
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: "dhatguy@mail.com"
+  #     PGADMIN_DEFAULT_PASSWORD: "qwertyuiop"
+  #   ports:
+  #     - "16543:80"
+  #   depends_on:
+  #     - database
+networks:
+  pernstore: 
+    driver: bridge
 volumes:
   db:
     driver: local
