@@ -10,6 +10,7 @@ const {
   createProductReview,
   updateProductReview,
   getProductBySlug,
+  getAllProductsAdmin,
 } = require("../controllers/products.controller");
 const verifyAdmin = require("../middleware/verifyAdmin");
 const verifyToken = require("../middleware/verifyToken");
@@ -32,5 +33,8 @@ router
   .get(getProductReviews)
   .post(verifyToken, createProductReview)
   .put(verifyToken, updateProductReview);
+
+// admin routes
+router.use(verifyToken, verifyAdmin).route("/admin").get(getAllProductsAdmin);
 
 module.exports = router;

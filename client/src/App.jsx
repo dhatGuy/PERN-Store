@@ -1,4 +1,5 @@
 import Spinner from "components/Spinner";
+import AdminLayout from "layout/AdminLayout";
 import Layout from "layout/Layout";
 import {
   Account,
@@ -14,6 +15,8 @@ import {
   Register,
   ResetPassword,
 } from "pages";
+import { AdminProductList } from "pages/admin";
+import Dashboard from "pages/admin/Dashboard";
 import { Suspense } from "react";
 import { Toaster } from "react-hot-toast";
 import { Route, Routes } from "react-router-dom";
@@ -36,6 +39,15 @@ function App() {
           <Route path="/cart/success" element={<Confirmation />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/orders/:id/" element={<OrderDetails />} />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="/admin/products" element={<AdminProductList />} />
+            <Route path="/admin/products/:slug" element={<ProductDetails />} />
+            <Route path="/admin/orders" element={<Orders />} />
+            <Route path="/admin/orders/:id" element={<OrderDetails />} />
+            <Route path="/admin/account" element={<Account />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
         </Route>
 
         <Route path="/signup" element={<Register />} />

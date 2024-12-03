@@ -1,15 +1,51 @@
 const pool = require("../config");
 
 const getAllProductsDb = async ({ limit, offset }) => {
-  const { rows } = await pool.query(
-    `select products.*, trunc(avg(reviews.rating)) as avg_rating, count(reviews.*) from products
+  const [productsQueryResult, totalProductsQueryResult] = await Promise.all([
+    pool.query(
+      `select products.*, trunc(avg(reviews.rating)) as avg_rating, count(reviews.*)::int from products
         LEFT JOIN reviews
         ON products.product_id = reviews.product_id
         group by products.product_id limit $1 offset $2 `,
-    [limit, offset]
-  );
-  const products = [...rows].sort(() => Math.random() - 0.5);
-  return products;
+      [limit, offset]
+    ),
+    pool.query(`SELECT COUNT(*) FROM products`),
+  ]);
+
+  const { rows: products } = productsQueryResult;
+
+  const totalProducts = totalProductsQueryResult.rows[0].count;
+
+  return {
+    products,
+    totalProducts,
+  };
+};
+
+const getAllProductsAdminDb = async ({ limit, offset }) => {
+  const [productsQueryResult, totalProductsQueryResult] = await Promise.all([
+    pool.query(
+      `select products.*, coalesce(trunc(avg(reviews.rating), 1), 0) as "avgRating", 
+    count(order_item.*)::int as "totalOrders",
+    count(reviews.*)::int as "totalReviews" from products
+        LEFT JOIN reviews
+        ON products.product_id = reviews.product_id
+        LEFT JOIN order_item
+        ON products.product_id = order_item.product_id
+        group by products.product_id limit $1 offset $2 `,
+      [limit, offset]
+    ),
+    pool.query(`SELECT COUNT(*) FROM products`),
+  ]);
+
+  const { rows: products } = productsQueryResult;
+
+  const totalProducts = totalProductsQueryResult.rows[0].count;
+
+  return {
+    products,
+    totalProducts,
+  };
 };
 
 const createProductDb = async ({ name, price, description, image_url }) => {
@@ -74,6 +110,7 @@ const deleteProductDb = async ({ id }) => {
 
 module.exports = {
   getProductDb,
+  getAllProductsAdminDb,
   getProductByNameDb,
   createProductDb,
   updateProductDb,

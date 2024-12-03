@@ -6,6 +6,7 @@ const {
   deleteProductDb,
   getProductByNameDb,
   getProductBySlugDb,
+  getAllProductsAdminDb,
 } = require("../db/product.db");
 const { ErrorHandler } = require("../helpers/error");
 
@@ -15,6 +16,16 @@ class ProductService {
     const offset = (page - 1) * limit;
     try {
       return await getAllProductsDb({ limit, offset });
+    } catch (error) {
+      throw new ErrorHandler(error.statusCode, error.message);
+    }
+  };
+
+  getAllProductsAdmin = async (page) => {
+    const limit = 12;
+    const offset = (page - 1) * limit;
+    try {
+      return await getAllProductsAdminDb({ limit, offset });
     } catch (error) {
       throw new ErrorHandler(error.statusCode, error.message);
     }
