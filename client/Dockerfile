@@ -1,15 +1,25 @@
-FROM node:16
+FROM node:18-alpine
 
+# Set working directory
 WORKDIR /usr/src/app
 
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy source code
 COPY . .
 
-RUN npm ci --no-audit --legacy-peer-deps || npm ci --no-audit --legacy-peer-deps --maxsockets 1
-
+# Build the application
 RUN npm run build
 
+# Install serve to run the built app
 RUN npm install -g serve
 
+# Expose port
 EXPOSE 3000
 
-CMD ["serve", "dist"]
+# Start the application
+CMD ["serve", "-s", "dist", "-l", "3000"]

@@ -1,18 +1,16 @@
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/590f1314804d489eb8461fc4d294a363)](https://app.codacy.com/gh/dhatGuy/PERN-Store?utm_source=github.com&utm_medium=referral&utm_content=dhatGuy/PERN-Store&utm_campaign=Badge_Grade_Settings)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/af46234b-6fba-43f2-808f-e2bbe4b2adf1/deploy-status)](https://app.netlify.com/sites/pern-store/deploys)
-[![wakatime](https://wakatime.com/badge/github/dhatGuy/PERN-Store.svg)](https://wakatime.com/badge/github/dhatGuy/PERN-Store)
+# E-COMMERCE STORE
 
-# PERN STORE
+A modern full-stack e-commerce platform built with PostgreSQL, Express, React and Node.js.
 
-A full-stack e-commerce project built with Postgres, Express, React and Node.
+## Features
 
-## Swagger API Documentation
-
-[Documentation](https://pern-store.onrender.com/api/docs/)
-
-## Demo
-
-[Run demo](https://pern-store.netlify.app)
+- User authentication (JWT + Google OAuth)
+- Product catalog with search and filtering
+- Shopping cart functionality
+- Order management
+- Payment processing (Stripe integration)
+- Admin dashboard
+- Responsive design
 
 ## Screenshots
 
@@ -27,13 +25,13 @@ A full-stack e-commerce project built with Postgres, Express, React and Node.
 Clone the project
 
 ```bash
-  git clone https://github.com/dhatguy/PERN-Store.git
+  git clone <your-repository-url>
 ```
 
 Go to the project directory
 
 ```bash
-  cd PERN-Store
+  cd e-commerce-store
 ```
 
 Install dependencies
@@ -72,23 +70,28 @@ Start both client and server concurrently from the root directory
   npm run dev
 ```
 
-## Running with docker
-
-Make sure you have Docker installed
-
-### Run the development environment
-
-```bash
-docker-compose -f docker-compose.dev.yml up
-```
-
-### Run the production environment
-
-```bash
-docker-compose up
-```
-
 Go to http://localhost:3000 to view the app running on your browser.
+
+## Running with Docker
+
+Make sure you have Docker and Docker Compose installed.
+
+### Development Environment
+
+```bash
+docker-compose -f docker-compose.dev.yml up --build
+```
+
+### Production Environment
+
+```bash
+docker-compose up --build
+```
+
+The application will be available at:
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:9000
+- **Database**: localhost:5432
 
 ## Deployment
 

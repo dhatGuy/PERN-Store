@@ -1,11 +1,19 @@
-FROM node:16
+FROM node:18-alpine
 
+# Set working directory
 WORKDIR /usr/src/app
 
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy source code
 COPY . .
 
-RUN npm ci --no-audit || npm ci --no-audit --maxsockets 1
-
+# Expose port
 EXPOSE 9000
 
-CMD [ "npm", "start" ]
+# Start the application
+CMD ["npm", "start"]

@@ -1,0 +1,5 @@
+aws_region      = "eu-north-1"
+ssh_key_name    = ""
+public_key_path = "/Users/marvintowett/.ssh/mklord.pub"
+allow_ssh_cidr  = "105.161.85.56/32"
+instance_type   = "t3.micro"
