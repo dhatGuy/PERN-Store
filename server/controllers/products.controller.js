@@ -94,13 +94,17 @@ const createProductReview = async (req, res) => {
 
 const updateProductReview = async (req, res) => {
   const { content, rating, id } = req.body;
+  const user_id = req.user.id;
 
   try {
     const result = await pool.query(
-      `UPDATE reviews set content = $1, rating = $2 where id = $3 returning *
+      `UPDATE reviews set content = $1, rating = $2 where id = $3 and user_id = $4 returning *
       `,
-      [content, rating, id]
+      [content, rating, id, user_id]
     );
+    if (result.rowCount === 0) {
+      return res.status(403).json({ message: "Not authorized to update this review" });
+    }
     res.json(result.rows);
   } catch (error) {
     res.status(500).json(error);
